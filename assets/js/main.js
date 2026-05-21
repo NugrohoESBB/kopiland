@@ -140,6 +140,60 @@ const coffeeData = [
 	},
 ];
 
+// ==================== PRODUK UNGGULAN DINAS ====================
+const produkDinas = [
+    {
+        nama: "Biji Kopi Robusta Memuko",
+        emoji: "💪",
+        deskripsi: "Kopi robusta unggulan Jawa Barat dari perkebunan Memuko. Cita rasa pahit tegas dengan body penuh, cocok untuk espresso dan kopi susu.",
+        asal: "Perkebunan Memuko, Jawa Barat",
+        jenis: "Robusta",
+        warna: "#E8F5E9",
+        aksen: "#2E7D32",
+        keunggulan: ["Tahan hama & penyakit", "Produktivitas tinggi", "Harga kompetitif"]
+    },
+    {
+        nama: "Kopi Arabika Jawa Barat",
+        emoji: "🏔️",
+        deskripsi: "Kopi arabika pilihan dari dataran tinggi Jawa Barat. Dikenal dengan keasaman citrus yang menyenangkan dan aroma floral yang khas.",
+        asal: "Garut, Cianjur, Bandung Selatan",
+        jenis: "Arabika",
+        warna: "#FFF8E1",
+        aksen: "#FF8F00",
+        keunggulan: ["Kualitas premium ekspor", "Aroma floral khas", "Profil rasa kompleks"]
+    },
+    {
+        nama: "Teh Putih",
+        emoji: "🍵",
+        deskripsi: "Teh putih premium Jawa Barat dipetik dari pucuk daun muda yang belum mekar. Rasa lembut dengan aroma halus yang menyegarkan.",
+        asal: "Perkebunan Teh Jawa Barat",
+        jenis: "Teh",
+        warna: "#F3E5F5",
+        aksen: "#7B1FA2",
+        keunggulan: ["Antioksidan tinggi", "Rasa lembut", "Proses minimal"]
+    },
+    {
+        nama: "Teh Orange Pekoe",
+        emoji: "🟠",
+        deskripsi: "Teh hitam grade orange pekoe dari perkebunan Jawa Barat. Warna seduhan merah keemasan dengan rasa kuat dan aroma malt yang khas.",
+        asal: "Perkebunan Teh Jawa Barat",
+        jenis: "Teh",
+        warna: "#FFF3E0",
+        aksen: "#E65100",
+        keunggulan: ["Grade ekspor terpilih", "Warna seduhan premium", "Aroma khas malt"]
+    },
+    {
+        nama: "Teh Hitam",
+        emoji: "🫖",
+        deskripsi: "Teh hitam klasik Jawa Barat dengan proses fermentasi penuh. Rasa bold dan kuat, cocok untuk teh susu maupun diseduh langsung.",
+        asal: "Perkebunan Teh Jawa Barat",
+        jenis: "Teh",
+        warna: "#FFEBEE",
+        aksen: "#B71C1C",
+        keunggulan: ["Rasa bold & kuat", "Cocok berbagai sajian", "Produksi lokal unggulan"]
+    }
+];
+
 // ==================== QUIZ DATA ====================
 const quizData = {
 	easy: [
@@ -201,6 +255,7 @@ let simTime = 0;
 window.onload = () => {
 	createFloatingBeans();
 	renderCoffeeCards();
+	renderProdukDinas();
 	startQuiz();
 };
 
@@ -259,6 +314,33 @@ function renderCoffeeCards() {
   `,
 		)
 		.join("");
+}
+
+function renderProdukDinas() {
+    const grid = document.getElementById("produkGrid");
+    grid.innerHTML = produkDinas.map(p => `
+        <div class="coffee-card" style="cursor:default;">
+            <div class="coffee-card-banner" style="background:${p.warna};">
+                <span style="font-size:3.5rem">${p.emoji}</span>
+                <span class="coffee-badge" style="background:${p.aksen}; color:white;">Produk Dinas</span>
+            </div>
+            <div class="coffee-card-body">
+                <div class="coffee-card-name">${p.nama}</div>
+                <div class="coffee-card-latin" style="color:${p.aksen}">📍 ${p.asal}</div>
+                <div class="coffee-card-desc">${p.deskripsi}</div>
+                <div style="margin-top: 10px;">
+                    ${p.keunggulan.map(k => `
+                        <div style="display:flex; align-items:center; gap:8px; font-size:0.82rem; color:#444; margin-bottom:5px;">
+                            <span style="color:${p.aksen}; font-weight:800;">✓</span> ${k}
+                        </div>
+                    `).join("")}
+                </div>
+                <div style="margin-top:12px; background:var(--cream); border-radius:10px; padding:8px 12px; font-size:0.78rem; font-weight:700; color:var(--coffee-mid); border-left: 3px solid ${p.aksen};">
+                    Jenis: ${p.jenis}
+                </div>
+            </div>
+        </div>
+    `).join("");
 }
 
 function openCoffeeModal(id) {

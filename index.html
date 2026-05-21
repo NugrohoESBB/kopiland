@@ -75,6 +75,7 @@
 				<button class="nav-btn" onclick="showPanel('simulasi')" id="navSim"><span class="nav-icon">🌱</span> Simulasi</button>
 				<button class="nav-btn" onclick="showPanel('quiz')" id="navQuiz"><span class="nav-icon">❓</span> Kuis</button>
 				<button class="nav-btn" onclick="showPanel('edukasi')" id="navEdu"><span class="nav-icon">🎓</span> Edukasi</button>
+				<button class="nav-btn" onclick="showPanel('produk')" id="navProduk"><span class="nav-icon">🏛️</span> Produk Dinas</button>
 			</nav>
 
 			<!-- Content -->
@@ -272,6 +273,27 @@
 				</div>
 			</div>
 			<!-- /content-area -->
+
+			<!-- ===== PRODUK DINAS ===== -->
+			<div class="panel" id="panelProduk">
+				<div class="section-header">
+					<div class="section-tag">🏛️ Dinas Perkebunan Jawa Barat</div>
+					<h2 class="section-title">Produk Unggulan Kami</h2>
+					<p class="section-desc">Produk-produk terbaik perkebunan Jawa Barat yang dipromosikan oleh Dinas Perkebunan</p>
+				</div>
+
+				<!-- Banner dinas -->
+				<div style="background: linear-gradient(135deg, #2d5016, #4a7c1f); border-radius: 20px; padding: 24px; margin-bottom: 28px; color: white; display: flex; align-items: center; gap: 16px">
+					<div style="font-size: 3rem">🏛️</div>
+					<div>
+						<div style="font-family: &quot;Baloo 2&quot;, sans-serif; font-size: 1.2rem; font-weight: 800">Dinas Perkebunan Provinsi Jawa Barat</div>
+						<div style="font-size: 0.85rem; opacity: 0.85; margin-top: 4px">Mendukung pengembangan komoditas perkebunan unggulan untuk kesejahteraan masyarakat Jawa Barat</div>
+					</div>
+				</div>
+
+				<!-- Grid produk -->
+				<div id="produkGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px"></div>
+			</div>
 		</div>
 		<!-- /mainGame -->
 
