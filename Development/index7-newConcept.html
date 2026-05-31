@@ -196,7 +196,6 @@
 				flex-direction: column;
 				font-size: 7px;
 				transition: right 0.2s;
-				z-index: 8;
 			}
 			#side.open {
 				right: 0;
@@ -404,18 +403,11 @@
 				font-size: 8px;
 				color: #6a5020;
 				border-radius: 2px 0 0 2px;
-				z-index: 15;
+				z-index: 5;
 				writing-mode: vertical-rl;
 			}
 			#panel-toggle:hover {
 				color: #c0a040;
-			}
-			#panel-toggle.shifted {
-				right: 216px;
-				transition: right 0.2s;
-			}
-			#panel-toggle {
-				transition: right 0.2s;
 			}
 			#intro {
 				position: absolute;
@@ -480,257 +472,15 @@
 					opacity: 0.3;
 				}
 			}
-
-			/* ════ MOBILE CONTROLS ════ */
-			#mobile-controls {
-				display: none;
-				position: absolute;
-				bottom: 44px;
-				left: 0;
-				right: 0;
-				height: 140px;
-				pointer-events: none;
-				z-index: 10;
-			}
-			@media (max-width: 768px), (pointer: coarse) {
-				#mobile-controls {
-					display: block;
-				}
-				#nextday-btn {
-					padding: 5px 10px;
-				}
-			}
-
-			/* Joystick */
-			#joystick-zone {
-				position: absolute;
-				left: 12px;
-				bottom: 8px;
-				width: 120px;
-				height: 120px;
-				pointer-events: all;
-			}
-			#joystick-base {
-				position: absolute;
-				left: 10px;
-				top: 10px;
-				width: 100px;
-				height: 100px;
-				background: rgba(255, 255, 255, 0.08);
-				border: 3px solid rgba(255, 200, 80, 0.35);
-				border-radius: 50%;
-			}
-			#joystick-thumb {
-				position: absolute;
-				left: 30px;
-				top: 30px;
-				width: 40px;
-				height: 40px;
-				background: radial-gradient(circle at 35% 35%, rgba(255, 220, 100, 0.9), rgba(180, 120, 20, 0.85));
-				border: 2px solid rgba(255, 200, 80, 0.7);
-				border-radius: 50%;
-				box-shadow: 0 0 12px rgba(255, 180, 20, 0.4);
-				transition:
-					left 0.05s,
-					top 0.05s;
-			}
-
-			/* Action Buttons */
-			#action-btns {
-				position: absolute;
-				right: 14px;
-				bottom: 8px;
-				width: 150px;
-				height: 120px;
-				pointer-events: all;
-			}
-			.act-btn {
-				position: absolute;
-				width: 48px;
-				height: 48px;
-				border-radius: 50%;
-				border: none;
-				font-family: "Press Start 2P", monospace;
-				font-size: 7px;
-				cursor: pointer;
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-				gap: 2px;
-				line-height: 1.3;
-				box-shadow:
-					0 4px 0 rgba(0, 0, 0, 0.5),
-					0 0 10px rgba(0, 0, 0, 0.3);
-				-webkit-tap-highlight-color: transparent;
-				transition:
-					transform 0.08s,
-					box-shadow 0.08s;
-				pointer-events: all;
-			}
-			.act-btn:active {
-				transform: scale(0.9) translateY(2px);
-				box-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
-			}
-			.act-btn .bi {
-				font-size: 16px;
-				line-height: 1;
-			}
-
-			/* Posisi tiap tombol (layout diamond) */
-			#btn-act-dig {
-				bottom: 60px;
-				left: 0px;
-				background: radial-gradient(circle at 35% 30%, #7a5a28, #4a3010);
-				color: #f0d060;
-				border: 2px solid #c0901030;
-			}
-			#btn-act-sow {
-				bottom: 60px;
-				right: 0px;
-				background: radial-gradient(circle at 35% 30%, #286030, #103a18);
-				color: #80e040;
-				border: 2px solid #40c02030;
-			}
-			#btn-act-water {
-				bottom: 110px;
-				left: 50px;
-				background: radial-gradient(circle at 35% 30%, #204878, #102840);
-				color: #60c0ff;
-				border: 2px solid #4090d030;
-			}
-			#btn-act-harvest {
-				bottom: 8px;
-				left: 50px;
-				background: radial-gradient(circle at 35% 30%, #784020, #401808);
-				color: #ffb040;
-				border: 2px solid #e0802030;
-			}
-			#btn-act-action {
-				bottom: 60px;
-				left: 50px;
-				width: 54px;
-				height: 54px;
-				background: radial-gradient(circle at 35% 30%, #782020, #400808);
-				color: #ff8080;
-				border: 3px solid #e0404060;
-				font-size: 6px;
-				box-shadow:
-					0 4px 0 rgba(0, 0, 0, 0.5),
-					0 0 16px rgba(220, 60, 60, 0.3);
-			}
-			#btn-act-action .bi {
-				font-size: 18px;
-			}
-
-			/* ════ FULLSCREEN BUTTON ════ */
-			#fullscreen-bar {
-				width: 100%;
-				display: flex;
-				justify-content: flex-end;
-				align-items: center;
-				background: #0a0804;
-				border-bottom: 2px solid #2a1808;
-				padding: 4px 8px;
-				gap: 8px;
-			}
-			#fs-btn {
-				font-family: "Press Start 2P", monospace;
-				font-size: 7px;
-				background: #151008;
-				border: 1px solid #3a2808;
-				color: #7a5820;
-				padding: 4px 10px;
-				cursor: pointer;
-				border-radius: 2px;
-				display: flex;
-				align-items: center;
-				gap: 5px;
-				transition: all 0.1s;
-			}
-			#fs-btn:hover {
-				color: #f0d060;
-				border-color: #7a5820;
-				background: #1a1208;
-			}
-			#fs-title {
-				font-family: "Press Start 2P", monospace;
-				font-size: 7px;
-				color: #3a2810;
-				flex: 1;
-				text-align: left;
-				padding-left: 4px;
-			}
-
-			/* Fullscreen mode */
-			#screen:-webkit-full-screen {
-				width: 100vw !important;
-				height: 100vh !important;
-				border: none !important;
-			}
-			#screen:-moz-full-screen {
-				width: 100vw !important;
-				height: 100vh !important;
-				border: none !important;
-			}
-			#screen:fullscreen {
-				width: 100vw !important;
-				height: 100vh !important;
-				border: none !important;
-			}
-
-			/* Landscape lock hint */
-			#rotate-hint {
-				display: none;
-				position: fixed;
-				inset: 0;
-				background: #000;
-				z-index: 9999;
-				flex-direction: column;
-				align-items: center;
-				justify-content: center;
-				gap: 16px;
-				font-family: "Press Start 2P", monospace;
-				font-size: 10px;
-				color: #f0d060;
-				text-align: center;
-				padding: 20px;
-			}
-			#rotate-hint .rh-icon {
-				font-size: 48px;
-				animation: spin90 1.2s ease-in-out infinite alternate;
-			}
-			@keyframes spin90 {
-				from {
-					transform: rotate(0deg);
-				}
-				to {
-					transform: rotate(90deg);
-				}
-			}
-			@media (max-width: 768px) and (orientation: portrait) {
-				#rotate-hint {
-					display: flex;
-				}
-			}
 		</style>
 	</head>
 	<body>
 		<div id="wrapper">
 			<div id="screen" style="position: relative">
-				<!-- FULLSCREEN BAR -->
-				<div id="fullscreen-bar">
-					<span id="fs-title">KOPI FARM</span>
-					<button id="fs-btn" onclick="toggleFullscreen()">
-						<span id="fs-icon">⛶</span>
-						<span id="fs-label">FULLSCREEN</span>
-					</button>
-				</div>
-
 				<!-- INTRO -->
 				<div id="intro">
 					<canvas id="intro-canvas" width="320" height="240"></canvas>
-					<div class="intro-title">KOPI FARM</div>
+					<div class="intro-title">☕ KOPI FARM</div>
 					<div class="intro-sub">Pixel Edition · Scrolling World<br />Tanam · Rawat · Panen · Jual ke NPC</div>
 					<button id="start-btn" onclick="startGame()">▶ MULAI BERTANI</button>
 				</div>
@@ -764,60 +514,6 @@
 					</div>
 					<div id="panel-body"></div>
 				</div>
-
-				<!-- MOBILE CONTROLS -->
-				<div id="mobile-controls">
-					<!-- Joystick kiri -->
-					<div id="joystick-zone">
-						<div id="joystick-base"></div>
-						<div id="joystick-thumb"></div>
-					</div>
-					<!-- Tombol aksi kanan -->
-					<div id="action-btns">
-						<button
-							class="act-btn"
-							id="btn-act-water"
-							onclick="
-								setTool('water');
-								doAction();
-							"
-						>
-							<span class="bi">💧</span>SIRAM
-						</button>
-						<button
-							class="act-btn"
-							id="btn-act-dig"
-							onclick="
-								setTool('dig');
-								doAction();
-							"
-						>
-							<span class="bi">⛏</span>GALI
-						</button>
-						<button
-							class="act-btn"
-							id="btn-act-sow"
-							onclick="
-								setTool('sow');
-								doAction();
-							"
-						>
-							<span class="bi">🌱</span>TANAM
-						</button>
-						<button
-							class="act-btn"
-							id="btn-act-harvest"
-							onclick="
-								setTool('harvest');
-								doAction();
-							"
-						>
-							<span class="bi">🧺</span>PANEN
-						</button>
-						<button class="act-btn" id="btn-act-action" id="btn-act-e"><span class="bi">⚡</span>AKSI</button>
-					</div>
-				</div>
-
 				<!-- TOOLBAR -->
 				<div id="toolbar">
 					<button class="tb on" id="btn-dig" onclick="setTool('dig')"><span class="ti">⛏</span>GALI</button>
@@ -836,13 +532,6 @@
 					</div>
 				</div>
 			</div>
-		</div>
-
-		<!-- ROTATE HINT (mobile portrait) -->
-		<div id="rotate-hint">
-			<div class="rh-icon">📱</div>
-			<div>Putar layar</div>
-			<div style="font-size: 7px; color: #a08040; margin-top: 4px">untuk pengalaman terbaik</div>
 		</div>
 
 		<script>
@@ -2109,17 +1798,7 @@
 			}
 			function togglePanel() {
 				panelOpen = !panelOpen;
-				const side = document.getElementById("side");
-				const tog = document.getElementById("panel-toggle");
-				if (panelOpen) {
-					side.classList.add("open");
-					tog.classList.add("shifted");
-					tog.textContent = "PANEL ◂";
-				} else {
-					side.classList.remove("open");
-					tog.classList.remove("shifted");
-					tog.textContent = "PANEL ▸";
-				}
+				document.getElementById("side").classList.toggle("open", panelOpen);
 			}
 			function qBar(val, max, col) {
 				const p = Math.round(Math.min(val / max, 1) * 100);
@@ -2497,283 +2176,11 @@
 				updateHUD();
 				refreshPanel();
 				showToast("🔄 Reset!");
-				panelOpen = false;
-				document.getElementById("side").classList.remove("open");
-				document.getElementById("panel-toggle").classList.remove("shifted");
-				document.getElementById("panel-toggle").textContent = "PANEL ▸";
 			}
 			function startGame() {
 				document.getElementById("intro").style.display = "none";
 				showToast("← → jalan · E/Klik=aksi · Jalan ke KANAN untuk ke Pasar NPC!", 4000);
 			}
-
-			// ════════ MOBILE JOYSTICK ════════
-			(function () {
-				const zone = document.getElementById("joystick-zone");
-				const base = document.getElementById("joystick-base");
-				const thumb = document.getElementById("joystick-thumb");
-				const actBtn = document.getElementById("btn-act-action");
-
-				if (!zone) return;
-
-				const RADIUS = 35; // max geser thumb
-				let active = false,
-					startX = 0,
-					startY = 0;
-				let jDir = { x: 0, y: 0 };
-				let jMoveInterval = null;
-
-				function getCenter() {
-					const r = base.getBoundingClientRect();
-					return { cx: r.left + r.width / 2, cy: r.top + r.height / 2 };
-				}
-
-				function setThumb(dx, dy) {
-					const dist = Math.sqrt(dx * dx + dy * dy);
-					const clamped = Math.min(dist, RADIUS);
-					const angle = Math.atan2(dy, dx);
-					const tx = Math.cos(angle) * clamped;
-					const ty = Math.sin(angle) * clamped;
-					// thumb center di base center
-					const bw = base.offsetWidth,
-						bh = base.offsetHeight;
-					thumb.style.left = bw / 2 - thumb.offsetWidth / 2 + tx + "px";
-					thumb.style.top = bh / 2 - thumb.offsetHeight / 2 + ty + "px";
-					// Arah dominan
-					jDir.x = Math.abs(tx) > 10 ? Math.sign(tx) : 0;
-					jDir.y = Math.abs(ty) > 10 ? Math.sign(ty) : 0;
-					// Prioritas horizontal/vertikal
-					if (Math.abs(tx) >= Math.abs(ty)) jDir.y = 0;
-					else jDir.x = 0;
-				}
-
-				function resetThumb() {
-					const bw = base.offsetWidth,
-						bh = base.offsetHeight;
-					thumb.style.left = bw / 2 - thumb.offsetWidth / 2 + "px";
-					thumb.style.top = bh / 2 - thumb.offsetHeight / 2 + "px";
-					jDir.x = 0;
-					jDir.y = 0;
-				}
-
-				function startMove() {
-					if (jMoveInterval) return;
-					jMoveInterval = setInterval(() => {
-						if (!active || (jDir.x === 0 && jDir.y === 0)) return;
-						const nx = player.x + jDir.x;
-						const ny = player.y + jDir.y;
-						if (nx >= 0 && nx < WORLD_COLS && ny >= 0 && ny < WORLD_ROWS) {
-							player.x = nx;
-							player.y = ny;
-						}
-						// Set anim arah
-						if (jDir.x > 0) {
-							player.dir = "right";
-							setAnim("walk_right");
-						} else if (jDir.x < 0) {
-							player.dir = "left";
-							setAnim("walk_left");
-						} else if (jDir.y < 0) {
-							player.dir = "up";
-							setAnim("walk_up");
-						} else if (jDir.y > 0) {
-							player.dir = "down";
-							setAnim("walk_down");
-						}
-						player.moving = true;
-						lastMoveT = Date.now();
-						updateCamera();
-						updateHUD();
-					}, 150);
-				}
-
-				function stopMove() {
-					clearInterval(jMoveInterval);
-					jMoveInterval = null;
-					resetThumb();
-					player.moving = false;
-					setAnim("idle_down");
-				}
-
-				// Touch events joystick
-				zone.addEventListener(
-					"touchstart",
-					(e) => {
-						e.preventDefault();
-						active = true;
-						const t = e.touches[0];
-						startX = t.clientX;
-						startY = t.clientY;
-						startMove();
-					},
-					{ passive: false },
-				);
-
-				zone.addEventListener(
-					"touchmove",
-					(e) => {
-						e.preventDefault();
-						if (!active) return;
-						const t = e.touches[0];
-						setThumb(t.clientX - startX, t.clientY - startY);
-					},
-					{ passive: false },
-				);
-
-				zone.addEventListener(
-					"touchend",
-					(e) => {
-						e.preventDefault();
-						active = false;
-						stopMove();
-					},
-					{ passive: false },
-				);
-
-				// Mouse fallback (untuk test di desktop)
-				zone.addEventListener("mousedown", (e) => {
-					active = true;
-					startX = e.clientX;
-					startY = e.clientY;
-					startMove();
-					const onMove = (ev) => setThumb(ev.clientX - startX, ev.clientY - startY);
-					const onUp = () => {
-						active = false;
-						stopMove();
-						document.removeEventListener("mousemove", onMove);
-						document.removeEventListener("mouseup", onUp);
-					};
-					document.addEventListener("mousemove", onMove);
-					document.addEventListener("mouseup", onUp);
-				});
-
-				// Tombol AKSI (E) — jual ke NPC terdekat atau lakukan aksi
-				actBtn.addEventListener(
-					"touchstart",
-					(e) => {
-						e.preventDefault();
-						const nearNPC = NPC_TEMPLATES.find((n) => Math.abs(player.x - n.worldX) <= 3 && Math.abs(player.y - (n.worldY + 3)) <= 2);
-						if (nearNPC) openNPCSellDialog(nearNPC);
-						else doAction();
-					},
-					{ passive: false },
-				);
-				actBtn.addEventListener("click", () => {
-					const nearNPC = NPC_TEMPLATES.find((n) => Math.abs(player.x - n.worldX) <= 3 && Math.abs(player.y - (n.worldY + 3)) <= 2);
-					if (nearNPC) openNPCSellDialog(nearNPC);
-					else doAction();
-				});
-
-				// Inisialisasi posisi thumb di tengah
-				resetThumb();
-			})();
-
-			// ════════ FULLSCREEN ════════
-			function toggleFullscreen() {
-				const el = document.getElementById("screen");
-				const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || "ontouchstart" in window || window.innerWidth <= 768;
-
-				const isFS = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
-
-				if (!isFS) {
-					// ── Masuk fullscreen ──
-					if (isMobile) {
-						// Mobile: fullscreen seluruh document agar bisa rotate
-						const req = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen || document.documentElement.mozRequestFullScreen;
-						if (req) {
-							req.call(document.documentElement)
-								.then(() => {
-									// Paksa landscape setelah fullscreen granted
-									if (screen.orientation && screen.orientation.lock) {
-										screen.orientation.lock("landscape").catch(() => {
-											// Fallback: pakai CSS transform rotate
-											forceLandscapeCSS(true);
-										});
-									} else {
-										// Browser lama: CSS transform
-										forceLandscapeCSS(true);
-									}
-								})
-								.catch(() => {
-									// Fullscreen ditolak: CSS rotate saja
-									forceLandscapeCSS(true);
-								});
-						} else {
-							forceLandscapeCSS(true);
-						}
-					} else {
-						// Desktop: fullscreen element biasa
-						const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen;
-						if (req) req.call(el);
-					}
-				} else {
-					// ── Keluar fullscreen ──
-					const ex = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen;
-					if (ex) ex.call(document);
-
-					if (screen.orientation && screen.orientation.unlock) {
-						screen.orientation.unlock();
-					}
-					forceLandscapeCSS(false);
-				}
-			}
-
-			// CSS rotate fallback untuk browser yang tolak screen.orientation.lock
-			function forceLandscapeCSS(on) {
-				const wrapper = document.getElementById("wrapper");
-				const hint = document.getElementById("rotate-hint");
-				if (on) {
-					// Cek apakah memang portrait
-					if (window.innerHeight > window.innerWidth) {
-						wrapper.style.cssText = `
-                transform: rotate(90deg);
-                transform-origin: center center;
-                width: ${window.innerHeight}px;
-                height: ${window.innerWidth}px;
-                position: fixed;
-                top: ${(window.innerHeight - window.innerWidth) / 2}px;
-                left: -${(window.innerHeight - window.innerWidth) / 2}px;
-                overflow: hidden;
-            `;
-						if (hint) hint.style.display = "none"; // sembunyikan hint rotate
-					}
-				} else {
-					wrapper.style.cssText = "";
-					if (hint) hint.style.display = "";
-				}
-			}
-
-			// Update icon & label saat state fullscreen berubah
-			function onFSChange() {
-				const isFS = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
-				document.getElementById("fs-icon").textContent = isFS ? "✕" : "⛶";
-				document.getElementById("fs-label").textContent = isFS ? "EXIT" : "FULLSCREEN";
-
-				const screenEl = document.getElementById("screen");
-				if (isFS) {
-					screenEl.style.width = "100vw";
-					screenEl.style.height = "100vh";
-					screenEl.style.display = "flex";
-					screenEl.style.flexDirection = "column";
-					screenEl.style.alignItems = "center";
-					screenEl.style.justifyContent = "center";
-					// Scale canvas
-					const scaleX = window.innerWidth / CW;
-					const scaleY = window.innerHeight / CH;
-					const scale = Math.min(scaleX, scaleY) * 0.98;
-					gc.style.width = CW * scale + "px";
-					gc.style.height = CH * scale + "px";
-				} else {
-					gc.style.width = "";
-					gc.style.height = "";
-					screenEl.style.cssText = "";
-					forceLandscapeCSS(false);
-				}
-			}
-
-			document.addEventListener("fullscreenchange", onFSChange);
-			document.addEventListener("webkitfullscreenchange", onFSChange);
-			document.addEventListener("mozfullscreenchange", onFSChange);
 
 			// ════════ INIT ════════
 			initPlots();

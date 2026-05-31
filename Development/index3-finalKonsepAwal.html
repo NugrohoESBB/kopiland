@@ -1,0 +1,2777 @@
+<!doctype html>
+<html lang="id">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>KopiLand</title>
+		<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet" />
+		<style>
+			:root {
+				--coffee-dark: #3b1f0a;
+				--coffee-mid: #6f3d1e;
+				--coffee-warm: #c47b3a;
+				--coffee-light: #e8b97a;
+				--cream: #fff5e4;
+				--green-dark: #2d5016;
+				--green-mid: #4a7c1f;
+				--green-light: #7cb342;
+				--green-bright: #aed854;
+				--sky: #87ceeb;
+				--sky-light: #e0f4ff;
+				--red-accent: #e53935;
+				--yellow-accent: #ffd600;
+				--purple-accent: #7b1fa2;
+				--pink-accent: #e91e8c;
+				--white: #ffffff;
+				--shadow: 0 8px 32px rgba(59, 31, 10, 0.18);
+				--shadow-sm: 0 2px 12px rgba(59, 31, 10, 0.12);
+			}
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+			body {
+				font-family: "Nunito", sans-serif;
+				background: var(--cream);
+				min-height: 100vh;
+				overflow-x: hidden;
+				color: var(--coffee-dark);
+			}
+			.screen {
+				display: none;
+				min-height: 100vh;
+			}
+			.screen.active {
+				display: flex;
+				flex-direction: column;
+			}
+
+			/* FLOATING BEANS */
+			.floating-beans {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+				z-index: 0;
+				overflow: hidden;
+			}
+			.bean {
+				position: absolute;
+				animation: floatBean linear infinite;
+				opacity: 0.15;
+			}
+			@keyframes floatBean {
+				0% {
+					transform: translateY(100vh) rotate(0deg);
+					opacity: 0;
+				}
+				10% {
+					opacity: 0.15;
+				}
+				90% {
+					opacity: 0.15;
+				}
+				100% {
+					transform: translateY(-10vh) rotate(360deg);
+					opacity: 0;
+				}
+			}
+
+			/* HEADER */
+			.game-header {
+				background: linear-gradient(135deg, var(--coffee-dark) 0%, var(--coffee-mid) 100%);
+				padding: 12px 24px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				box-shadow: var(--shadow);
+				position: relative;
+				z-index: 10;
+			}
+			.logo-area {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+			.logo-icon {
+				font-size: 2rem;
+				animation: spinSlow 8s linear infinite;
+			}
+			@keyframes spinSlow {
+				from {
+					transform: rotate(0deg);
+				}
+				to {
+					transform: rotate(360deg);
+				}
+			}
+			.logo-text {
+				font-family: "Baloo 2", sans-serif;
+				color: var(--cream);
+				font-size: 1.4rem;
+				font-weight: 800;
+			}
+			.logo-sub {
+				font-size: 0.65rem;
+				color: var(--coffee-light);
+				font-weight: 600;
+				letter-spacing: 1px;
+				text-transform: uppercase;
+			}
+			.header-stats {
+				display: flex;
+				gap: 12px;
+			}
+			.stat-chip {
+				background: rgba(255, 255, 255, 0.12);
+				border-radius: 20px;
+				padding: 6px 14px;
+				color: var(--cream);
+				font-size: 0.85rem;
+				font-weight: 700;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				border: 1px solid rgba(255, 255, 255, 0.2);
+			}
+
+			/* NAV */
+			.main-nav {
+				background: linear-gradient(90deg, var(--green-dark), var(--green-mid));
+				display: flex;
+				gap: 0;
+				overflow-x: auto;
+				position: relative;
+				z-index: 9;
+			}
+			.nav-btn {
+				flex: 1;
+				min-width: 120px;
+				padding: 14px 8px;
+				background: none;
+				border: none;
+				cursor: pointer;
+				color: rgba(255, 255, 255, 0.7);
+				font-family: "Nunito", sans-serif;
+				font-size: 0.85rem;
+				font-weight: 700;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 4px;
+				transition: all 0.3s;
+				border-bottom: 3px solid transparent;
+			}
+			.nav-btn .nav-icon {
+				font-size: 1.4rem;
+			}
+			.nav-btn:hover {
+				background: rgba(255, 255, 255, 0.1);
+				color: white;
+			}
+			.nav-btn.active {
+				background: rgba(255, 255, 255, 0.15);
+				color: white;
+				border-bottom-color: var(--yellow-accent);
+			}
+			.nav-btn.active::after {
+				content: "";
+				position: absolute;
+				bottom: -1px;
+				left: 50%;
+				transform: translateX(-50%);
+				border: 6px solid transparent;
+				border-bottom-color: var(--cream);
+			}
+
+			/* PANELS */
+			.content-area {
+				flex: 1;
+				position: relative;
+				z-index: 1;
+				overflow-y: auto;
+			}
+			.panel {
+				display: none;
+				padding: 24px;
+				max-width: 960px;
+				margin: 0 auto;
+				width: 100%;
+			}
+			.panel.active {
+				display: block;
+				animation: slideIn 0.4s ease;
+			}
+			@keyframes slideIn {
+				from {
+					opacity: 0;
+					transform: translateY(20px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+
+			/* SPLASH */
+			#splash {
+				background: linear-gradient(160deg, #1a3a0a 0%, #2d5016 40%, #4a7c1f 100%);
+				align-items: center;
+				justify-content: center;
+				text-align: center;
+				position: relative;
+				overflow: hidden;
+			}
+			.splash-content {
+				position: relative;
+				z-index: 2;
+				padding: 40px 24px;
+			}
+			.splash-emoji {
+				font-size: 5rem;
+				display: block;
+				margin-bottom: 16px;
+				animation: bounce 2s ease infinite;
+			}
+			@keyframes bounce {
+				0%,
+				100% {
+					transform: translateY(0);
+				}
+				50% {
+					transform: translateY(-15px);
+				}
+			}
+			@keyframes twinkle {
+				0%,
+				100% {
+					opacity: 0.3;
+					transform: scale(0.8);
+				}
+				50% {
+					opacity: 1;
+					transform: scale(1.2);
+				}
+			}
+			.splash-title {
+				font-family: "Baloo 2", sans-serif;
+				font-size: clamp(2rem, 6vw, 3.5rem);
+				font-weight: 800;
+				color: var(--yellow-accent);
+				text-shadow:
+					3px 3px 0 var(--coffee-dark),
+					6px 6px 0 rgba(0, 0, 0, 0.2);
+				margin-bottom: 8px;
+			}
+			.splash-subtitle {
+				color: var(--green-bright);
+				font-size: 1rem;
+				font-weight: 700;
+				letter-spacing: 2px;
+				text-transform: uppercase;
+				margin-bottom: 12px;
+			}
+			.splash-desc {
+				color: rgba(255, 255, 255, 0.85);
+				font-size: 1rem;
+				max-width: 500px;
+				margin: 0 auto 32px;
+				line-height: 1.6;
+			}
+			.btn-start {
+				background: linear-gradient(135deg, var(--yellow-accent), #ff9800);
+				color: var(--coffee-dark);
+				font-family: "Baloo 2", sans-serif;
+				font-size: 1.3rem;
+				font-weight: 800;
+				padding: 16px 48px;
+				border: none;
+				border-radius: 50px;
+				cursor: pointer;
+				box-shadow:
+					0 6px 0 #b8860b,
+					0 10px 20px rgba(0, 0, 0, 0.3);
+				transition: all 0.15s;
+				text-transform: uppercase;
+				letter-spacing: 1px;
+			}
+			.btn-start:hover {
+				transform: translateY(-3px);
+				box-shadow:
+					0 9px 0 #b8860b,
+					0 14px 24px rgba(0, 0, 0, 0.3);
+			}
+			.btn-start:active {
+				transform: translateY(3px);
+				box-shadow: 0 3px 0 #b8860b;
+			}
+			.badge-jabar {
+				margin-top: 28px;
+				display: inline-flex;
+				align-items: center;
+				gap: 8px;
+				background: rgba(255, 255, 255, 0.1);
+				border-radius: 20px;
+				padding: 8px 20px;
+				color: rgba(255, 255, 255, 0.7);
+				font-size: 0.82rem;
+				font-weight: 600;
+				border: 1px solid rgba(255, 255, 255, 0.2);
+			}
+
+			/* SECTION HEADERS */
+			.section-header {
+				text-align: center;
+				margin-bottom: 28px;
+			}
+			.section-tag {
+				display: inline-block;
+				background: var(--green-mid);
+				color: white;
+				font-size: 0.72rem;
+				font-weight: 800;
+				letter-spacing: 2px;
+				text-transform: uppercase;
+				padding: 4px 16px;
+				border-radius: 20px;
+				margin-bottom: 10px;
+			}
+			.section-title {
+				font-family: "Baloo 2", sans-serif;
+				font-size: 2rem;
+				font-weight: 800;
+				color: var(--coffee-dark);
+				line-height: 1.2;
+			}
+			.section-desc {
+				color: var(--coffee-mid);
+				font-size: 0.95rem;
+				margin-top: 6px;
+			}
+
+			/* ===== STORY CARDS (INFO) ===== */
+			.story-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+				gap: 24px;
+				margin-bottom: 32px;
+			}
+			.story-card {
+				background: white;
+				border-radius: 24px;
+				overflow: hidden;
+				box-shadow: var(--shadow-sm);
+				cursor: pointer;
+				transition: all 0.3s;
+				border: 3px solid transparent;
+				position: relative;
+			}
+			.story-card:hover {
+				transform: translateY(-8px) scale(1.02);
+				box-shadow: var(--shadow);
+				border-color: var(--coffee-warm);
+			}
+			.story-banner {
+				height: 160px;
+				position: relative;
+				overflow: hidden;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.story-character {
+				font-size: 5rem;
+				position: relative;
+				z-index: 2;
+				filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.2));
+				transition: transform 0.3s;
+			}
+			.story-card:hover .story-character {
+				transform: scale(1.15) rotate(-5deg);
+			}
+			.story-badge {
+				position: absolute;
+				top: 12px;
+				right: 12px;
+				background: var(--yellow-accent);
+				color: var(--coffee-dark);
+				font-size: 0.68rem;
+				font-weight: 800;
+				padding: 4px 12px;
+				border-radius: 20px;
+				text-transform: uppercase;
+				z-index: 3;
+			}
+			.story-card-body {
+				padding: 18px;
+			}
+			.story-card-name {
+				font-family: "Baloo 2", sans-serif;
+				font-size: 1.3rem;
+				font-weight: 800;
+				color: var(--coffee-dark);
+				margin-bottom: 3px;
+			}
+			.story-card-latin {
+				font-size: 0.78rem;
+				color: var(--coffee-warm);
+				font-style: italic;
+				margin-bottom: 10px;
+			}
+			.story-teaser {
+				font-size: 0.88rem;
+				color: #555;
+				line-height: 1.55;
+				margin-bottom: 14px;
+			}
+			.story-tags {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 6px;
+			}
+			.tag {
+				background: var(--cream);
+				color: var(--coffee-mid);
+				font-size: 0.72rem;
+				font-weight: 700;
+				padding: 3px 10px;
+				border-radius: 20px;
+				border: 1.5px solid var(--coffee-light);
+			}
+			.story-stats-row {
+				display: flex;
+				gap: 8px;
+				margin-top: 12px;
+			}
+			.story-stat {
+				flex: 1;
+				background: var(--cream);
+				border-radius: 10px;
+				padding: 8px 10px;
+			}
+			.story-stat-label {
+				color: var(--coffee-warm);
+				font-weight: 700;
+				font-size: 0.72rem;
+				margin-bottom: 2px;
+			}
+			.story-stat-val {
+				color: var(--coffee-dark);
+				font-weight: 800;
+				font-size: 0.8rem;
+			}
+
+			/* STORY MODAL */
+			.modal-overlay {
+				display: none;
+				position: fixed;
+				inset: 0;
+				background: rgba(0, 0, 0, 0.65);
+				z-index: 1000;
+				align-items: center;
+				justify-content: center;
+				padding: 20px;
+			}
+			.modal-overlay.open {
+				display: flex;
+			}
+			.story-modal {
+				background: white;
+				border-radius: 28px;
+				max-width: 620px;
+				width: 100%;
+				max-height: 90vh;
+				overflow-y: auto;
+				animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+				box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+			}
+			@keyframes modalPop {
+				from {
+					opacity: 0;
+					transform: scale(0.7);
+				}
+				to {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+			.modal-banner-big {
+				height: 200px;
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				overflow: hidden;
+			}
+			.modal-char-big {
+				font-size: 7rem;
+				position: relative;
+				z-index: 2;
+				animation: charFloat 3s ease infinite;
+			}
+			@keyframes charFloat {
+				0%,
+				100% {
+					transform: translateY(0) rotate(-3deg);
+				}
+				50% {
+					transform: translateY(-12px) rotate(3deg);
+				}
+			}
+			.modal-close-btn {
+				position: absolute;
+				top: 16px;
+				right: 16px;
+				background: rgba(255, 255, 255, 0.9);
+				border: none;
+				cursor: pointer;
+				width: 38px;
+				height: 38px;
+				border-radius: 50%;
+				font-size: 1.2rem;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 10;
+				transition: all 0.2s;
+			}
+			.modal-close-btn:hover {
+				background: white;
+				transform: rotate(90deg);
+			}
+			.modal-body-story {
+				padding: 24px 28px 32px;
+			}
+			.modal-name {
+				font-family: "Baloo 2", sans-serif;
+				font-size: 2rem;
+				font-weight: 800;
+				color: var(--coffee-dark);
+			}
+			.modal-latin {
+				font-style: italic;
+				color: var(--coffee-warm);
+				margin-bottom: 20px;
+			}
+
+			/* CHAPTER SYSTEM */
+			.chapter-tabs {
+				display: flex;
+				gap: 8px;
+				margin-bottom: 20px;
+				flex-wrap: wrap;
+			}
+			.chap-tab {
+				padding: 8px 18px;
+				border-radius: 20px;
+				border: 2px solid var(--cream);
+				background: var(--cream);
+				cursor: pointer;
+				font-family: "Nunito", sans-serif;
+				font-size: 0.82rem;
+				font-weight: 800;
+				color: var(--coffee-mid);
+				transition: all 0.2s;
+			}
+			.chap-tab.active {
+				background: var(--coffee-warm);
+				border-color: var(--coffee-warm);
+				color: white;
+			}
+			.chapter-content {
+				display: none;
+				animation: fadeIn 0.3s ease;
+			}
+			.chapter-content.active {
+				display: block;
+			}
+			@keyframes fadeIn {
+				from {
+					opacity: 0;
+					transform: translateY(-8px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+			.chapter-title {
+				font-weight: 800;
+				font-size: 1rem;
+				color: var(--coffee-mid);
+				text-transform: uppercase;
+				letter-spacing: 1px;
+				margin-bottom: 12px;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			.chapter-text {
+				font-size: 0.9rem;
+				line-height: 1.7;
+				color: #444;
+			}
+			.fact-boxes {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 10px;
+				margin-top: 14px;
+			}
+			.fact-box {
+				background: var(--cream);
+				border-radius: 12px;
+				padding: 12px;
+				border-left: 4px solid var(--coffee-warm);
+			}
+			.fact-key {
+				font-size: 0.72rem;
+				color: var(--coffee-warm);
+				font-weight: 700;
+				text-transform: uppercase;
+			}
+			.fact-val {
+				font-size: 0.9rem;
+				font-weight: 800;
+				color: var(--coffee-dark);
+				margin-top: 2px;
+			}
+			.story-quote {
+				background: linear-gradient(135deg, var(--cream), #fff9f0);
+				border-left: 4px solid var(--coffee-warm);
+				border-radius: 0 12px 12px 0;
+				padding: 14px 18px;
+				margin: 14px 0;
+				font-style: italic;
+				font-size: 0.92rem;
+				color: var(--coffee-mid);
+				line-height: 1.6;
+			}
+
+			/* ===== SIMULASI dengan KARAKTER ===== */
+			.sim-wrap {
+				background: #f5f0e8;
+				border-radius: 20px;
+				overflow: hidden;
+				border: 2px solid #d4c9b0;
+				margin-bottom: 20px;
+			}
+			.scene {
+				position: relative;
+				height: 320px;
+				overflow: visible;
+				background: #87ceeb;
+			}
+			.sky-bg {
+				position: absolute;
+				inset: 0;
+				background: linear-gradient(180deg, #87ceeb 0%, #b8e4f7 100%);
+			}
+			.sun-wrap {
+				position: absolute;
+				top: 18px;
+				right: 60px;
+				animation: simSunPulse 3s ease infinite;
+			}
+			@keyframes simSunPulse {
+				0%,
+				100% {
+					transform: scale(1);
+				}
+				50% {
+					transform: scale(1.07);
+				}
+			}
+			.cloud {
+				position: absolute;
+				background: white;
+				border-radius: 30px;
+				opacity: 0.9;
+			}
+			.sim-cloud-a {
+				width: 80px;
+				height: 26px;
+				top: 24px;
+				animation: simCloudDrift 20s linear infinite;
+				left: -90px;
+			}
+			.sim-cloud-b {
+				width: 56px;
+				height: 20px;
+				top: 46px;
+				animation: simCloudDrift 28s linear infinite -10s;
+				left: -70px;
+			}
+			@keyframes simCloudDrift {
+				from {
+					left: -90px;
+				}
+				to {
+					left: 110%;
+				}
+			}
+			.sim-bird {
+				position: absolute;
+				top: 30px;
+				left: 70px;
+				animation: simBirdFly 4s ease-in-out infinite;
+			}
+			@keyframes simBirdFly {
+				0%,
+				100% {
+					transform: translateY(0);
+				}
+				50% {
+					transform: translateY(-7px);
+				}
+			}
+			.scene-label {
+				position: absolute;
+				top: 10px;
+				left: 50%;
+				transform: translateX(-50%);
+				background: rgba(255, 255, 255, 0.82);
+				border-radius: 20px;
+				padding: 4px 14px;
+				font-size: 11px;
+				font-weight: 700;
+				color: var(--coffee-mid);
+				white-space: nowrap;
+			}
+			.sim-ground {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				height: 160px;
+				background: #6a9e2f;
+				border-radius: 60% 60% 0 0 / 20px 20px 0 0;
+			}
+			.sim-soil {
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				height: 60px;
+				background: #5d4037;
+			}
+			.tree-wrap {
+				position: absolute;
+				bottom: 55px;
+				left: 50%;
+				transform: translateX(-50%);
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				transition: all 0.5s;
+			}
+			.farmer-wrap {
+				position: absolute;
+				bottom: 55px;
+				left: 50px;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+			.sim-bubble {
+				position: absolute;
+				bottom: calc(100% + 6px);
+				left: 50%;
+				transform: translateX(-50%);
+				background: white;
+				border: 2px solid var(--coffee-light);
+				border-radius: 12px;
+				padding: 5px 12px;
+				font-size: 11px;
+				font-weight: 700;
+				color: var(--coffee-dark);
+				white-space: nowrap;
+				box-shadow: var(--shadow-sm);
+				animation: simBubblePop 0.3s ease;
+			}
+			@keyframes simBubblePop {
+				from {
+					opacity: 0;
+					transform: translateX(-50%) scale(0.7);
+				}
+				to {
+					opacity: 1;
+					transform: translateX(-50%) scale(1);
+				}
+			}
+			.sim-bubble::after {
+				content: "";
+				position: absolute;
+				top: 100%;
+				left: 50%;
+				transform: translateX(-50%);
+				border: 6px solid transparent;
+				border-top-color: white;
+			}
+			.farmer-shadow {
+				width: 36px;
+				height: 7px;
+				background: rgba(0, 0, 0, 0.18);
+				border-radius: 50%;
+				margin-top: 2px;
+			}
+			.sim-info-bar {
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				background: white;
+				padding: 14px 18px;
+				border-bottom: 1px solid #e8e0d0;
+			}
+			.sim-stage-ico {
+				width: 44px;
+				text-align: center;
+			}
+			.sim-stage-txt {
+				flex: 1;
+			}
+			.sim-stage-name {
+				font-family: "Baloo 2", sans-serif;
+				font-size: 15px;
+				font-weight: 800;
+				color: var(--coffee-dark);
+			}
+			.sim-stage-desc {
+				font-size: 12px;
+				color: #888;
+				margin-top: 2px;
+			}
+			.sim-tip-pill {
+				background: var(--cream);
+				border: 1px solid var(--coffee-light);
+				border-radius: 20px;
+				padding: 5px 12px;
+				font-size: 11px;
+				color: var(--coffee-mid);
+				font-weight: 700;
+				flex-shrink: 0;
+			}
+			.sim-bars {
+				padding: 14px 18px;
+				background: white;
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+				border-bottom: 1px solid #e8e0d0;
+			}
+			.sim-bar-row {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+			.sim-bar-lbl {
+				font-size: 12px;
+				color: #888;
+				width: 90px;
+				flex-shrink: 0;
+			}
+			.sim-bar-track {
+				flex: 1;
+				height: 10px;
+				background: #eeebe4;
+				border-radius: 10px;
+				overflow: hidden;
+			}
+			.sim-bar-fill {
+				height: 100%;
+				border-radius: 10px;
+				transition: width 0.5s;
+			}
+			.sim-bar-val {
+				font-size: 12px;
+				font-weight: 700;
+				color: var(--coffee-dark);
+				width: 36px;
+				text-align: right;
+			}
+			.sim-btns {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				gap: 10px;
+				padding: 14px 18px;
+				background: white;
+				border-bottom: 1px solid #e8e0d0;
+			}
+			.sim-btn2 {
+				padding: 12px;
+				border-radius: 12px;
+				border: none;
+				font-family: "Nunito", sans-serif;
+				font-size: 13px;
+				font-weight: 800;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				transition: all 0.15s;
+				box-shadow: 0 3px 0 rgba(0, 0, 0, 0.15);
+			}
+			.sim-btn2:hover {
+				transform: translateY(-2px);
+			}
+			.sim-btn2:active {
+				transform: translateY(2px);
+				box-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+			}
+			.sim-btn2:disabled {
+				opacity: 0.4;
+				cursor: not-allowed;
+				transform: none;
+				box-shadow: none;
+			}
+			.sbtn-plant {
+				background: #4caf50;
+				color: white;
+			}
+			.sbtn-water {
+				background: #29b6f6;
+				color: white;
+			}
+			.sbtn-fert {
+				background: #ff9800;
+				color: white;
+			}
+			.sbtn-harvest {
+				background: #e91e63;
+				color: white;
+			}
+			.sim-log {
+				background: var(--coffee-dark);
+				padding: 12px 16px;
+				max-height: 110px;
+				overflow-y: auto;
+				font-family: "Courier New", monospace;
+				font-size: 11px;
+				color: var(--green-bright);
+				line-height: 1.8;
+			}
+			.sim-log-t {
+				color: var(--coffee-light);
+			}
+			.sim-pts {
+				position: absolute;
+				font-size: 13px;
+				font-weight: 800;
+				color: #ffd600;
+				text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+				pointer-events: none;
+				animation: simFloatUp 1.2s ease forwards;
+			}
+			@keyframes simFloatUp {
+				0% {
+					opacity: 1;
+					transform: translateY(0);
+				}
+				100% {
+					opacity: 0;
+					transform: translateY(-50px);
+				}
+			}
+			.sim-drop {
+				position: absolute;
+				width: 8px;
+				height: 12px;
+				background: #29b6f6;
+				border-radius: 50% 50% 60% 60%;
+				pointer-events: none;
+				animation: simDropFall 0.8s ease forwards;
+			}
+			@keyframes simDropFall {
+				0% {
+					opacity: 1;
+					transform: translateY(-20px);
+				}
+				100% {
+					opacity: 0;
+					transform: translateY(60px);
+				}
+			}
+			.sim-spark {
+				position: absolute;
+				pointer-events: none;
+				animation: simSparkOut 0.6s ease forwards;
+			}
+			@keyframes simSparkOut {
+				0% {
+					opacity: 1;
+					transform: scale(0);
+				}
+				60% {
+					opacity: 1;
+					transform: scale(1.4);
+				}
+				100% {
+					opacity: 0;
+					transform: scale(0) rotate(180deg);
+				}
+			}
+			.sim-farmer-wave {
+				animation: simFarmerWave 0.6s ease;
+			}
+			@keyframes simFarmerWave {
+				0%,
+				100% {
+					transform: rotate(0);
+				}
+				25% {
+					transform: rotate(-12deg);
+				}
+				75% {
+					transform: rotate(12deg);
+				}
+			}
+
+			/* ===== QUIZ ===== */
+			.quiz-area {
+				max-width: 640px;
+				margin: 0 auto;
+			}
+			.level-selector {
+				display: flex;
+				gap: 10px;
+				margin-bottom: 24px;
+				justify-content: center;
+				flex-wrap: wrap;
+			}
+			.level-btn {
+				padding: 10px 24px;
+				border-radius: 50px;
+				border: 2.5px solid;
+				font-family: "Nunito", sans-serif;
+				font-weight: 800;
+				font-size: 0.9rem;
+				cursor: pointer;
+				transition: all 0.2s;
+			}
+			.level-btn.easy {
+				border-color: #4caf50;
+				color: #2e7d32;
+				background: #f1f8e9;
+			}
+			.level-btn.easy.active,
+			.level-btn.easy:hover {
+				background: #4caf50;
+				color: white;
+			}
+			.level-btn.medium {
+				border-color: #ff9800;
+				color: #e65100;
+				background: #fff3e0;
+			}
+			.level-btn.medium.active,
+			.level-btn.medium:hover {
+				background: #ff9800;
+				color: white;
+			}
+			.level-btn.hard {
+				border-color: #e53935;
+				color: #c62828;
+				background: #ffebee;
+			}
+			.level-btn.hard.active,
+			.level-btn.hard:hover {
+				background: #e53935;
+				color: white;
+			}
+			.quiz-card {
+				background: white;
+				border-radius: 24px;
+				padding: 28px;
+				box-shadow: var(--shadow);
+				border: 3px solid var(--cream);
+				animation: slideIn 0.4s ease;
+			}
+			.quiz-progress {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 20px;
+			}
+			.quiz-num {
+				font-weight: 800;
+				color: var(--coffee-mid);
+				font-size: 0.88rem;
+			}
+			.quiz-dots {
+				display: flex;
+				gap: 6px;
+			}
+			.quiz-dot {
+				width: 10px;
+				height: 10px;
+				border-radius: 50%;
+				background: var(--cream);
+				transition: all 0.3s;
+			}
+			.quiz-dot.done {
+				background: var(--green-mid);
+			}
+			.quiz-dot.current {
+				background: var(--coffee-warm);
+				transform: scale(1.3);
+			}
+			.quiz-question {
+				font-family: "Baloo 2", sans-serif;
+				font-size: 1.2rem;
+				font-weight: 700;
+				color: var(--coffee-dark);
+				margin-bottom: 20px;
+				line-height: 1.4;
+			}
+			.quiz-options {
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+			}
+			.quiz-opt {
+				padding: 14px 18px;
+				border-radius: 14px;
+				border: 2.5px solid var(--cream);
+				background: white;
+				cursor: pointer;
+				font-family: "Nunito", sans-serif;
+				font-size: 0.93rem;
+				font-weight: 700;
+				text-align: left;
+				transition: all 0.2s;
+				display: flex;
+				align-items: center;
+				gap: 12px;
+				color: var(--coffee-dark);
+			}
+			.quiz-opt:hover {
+				border-color: var(--coffee-warm);
+				background: var(--cream);
+				transform: translateX(4px);
+			}
+			.quiz-opt.correct {
+				background: #e8f5e9;
+				border-color: #4caf50;
+				color: #2e7d32;
+			}
+			.quiz-opt.wrong {
+				background: #ffebee;
+				border-color: #e53935;
+				color: #c62828;
+			}
+			.quiz-opt.disabled {
+				pointer-events: none;
+			}
+			.opt-letter {
+				width: 28px;
+				height: 28px;
+				border-radius: 50%;
+				background: var(--cream);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 0.8rem;
+				font-weight: 800;
+				flex-shrink: 0;
+				transition: all 0.2s;
+			}
+			.quiz-opt.correct .opt-letter {
+				background: #4caf50;
+				color: white;
+			}
+			.quiz-opt.wrong .opt-letter {
+				background: #e53935;
+				color: white;
+			}
+			.quiz-feedback {
+				margin-top: 16px;
+				padding: 14px 18px;
+				border-radius: 14px;
+				font-size: 0.9rem;
+				font-weight: 700;
+				display: none;
+				animation: fadeIn 0.3s ease;
+			}
+			.quiz-feedback.show {
+				display: flex;
+				gap: 10px;
+				align-items: flex-start;
+			}
+			.quiz-feedback.correct {
+				background: #e8f5e9;
+				color: #2e7d32;
+				border: 2px solid #4caf50;
+			}
+			.quiz-feedback.wrong {
+				background: #ffebee;
+				color: #c62828;
+				border: 2px solid #e53935;
+			}
+			.quiz-actions {
+				display: flex;
+				justify-content: flex-end;
+				margin-top: 20px;
+			}
+			.btn-next {
+				padding: 12px 28px;
+				background: linear-gradient(135deg, var(--coffee-warm), var(--coffee-mid));
+				color: white;
+				border: none;
+				border-radius: 50px;
+				cursor: pointer;
+				font-family: "Nunito", sans-serif;
+				font-size: 0.95rem;
+				font-weight: 800;
+				box-shadow: 0 4px 0 var(--coffee-dark);
+				transition: all 0.15s;
+				display: none;
+			}
+			.btn-next.show {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+			}
+			.btn-next:hover {
+				transform: translateY(-2px);
+			}
+			.btn-next:active {
+				transform: translateY(2px);
+				box-shadow: 0 2px 0 var(--coffee-dark);
+			}
+			.score-board {
+				text-align: center;
+				padding: 32px;
+				background: white;
+				border-radius: 24px;
+				box-shadow: var(--shadow);
+				display: none;
+			}
+			.score-board.show {
+				display: block;
+				animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+			}
+			@keyframes popIn {
+				from {
+					opacity: 0;
+					transform: scale(0.5);
+				}
+				to {
+					opacity: 1;
+					transform: scale(1);
+				}
+			}
+			.score-trophy {
+				font-size: 5rem;
+				display: block;
+				margin-bottom: 16px;
+				animation: bounce 1.5s ease infinite;
+			}
+			.score-title {
+				font-family: "Baloo 2", sans-serif;
+				font-size: 2rem;
+				font-weight: 800;
+				color: var(--coffee-dark);
+			}
+			.score-val {
+				font-family: "Baloo 2", sans-serif;
+				font-size: 4rem;
+				font-weight: 800;
+				color: var(--coffee-warm);
+			}
+			.score-msg {
+				color: #666;
+				font-size: 0.95rem;
+				margin: 8px 0 24px;
+			}
+			.btn-retry {
+				padding: 14px 36px;
+				background: linear-gradient(135deg, var(--green-mid), var(--green-dark));
+				color: white;
+				border: none;
+				border-radius: 50px;
+				cursor: pointer;
+				font-family: "Nunito", sans-serif;
+				font-size: 1rem;
+				font-weight: 800;
+				box-shadow: 0 4px 0 var(--green-dark);
+				transition: all 0.15s;
+			}
+			.btn-retry:hover {
+				transform: translateY(-2px);
+			}
+			.score-stars {
+				font-size: 2rem;
+				margin: 12px 0;
+			}
+
+			/* EDUKASI */
+			.info-cards {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+				gap: 16px;
+				margin-bottom: 24px;
+			}
+			.info-card {
+				background: white;
+				border-radius: 18px;
+				padding: 20px;
+				box-shadow: var(--shadow-sm);
+				text-align: center;
+				border-top: 4px solid;
+				transition: all 0.3s;
+			}
+			.info-card:hover {
+				transform: translateY(-4px);
+				box-shadow: var(--shadow);
+			}
+			.info-card .ic-icon {
+				font-size: 2.5rem;
+				margin-bottom: 10px;
+			}
+			.info-card .ic-title {
+				font-family: "Baloo 2", sans-serif;
+				font-size: 1rem;
+				font-weight: 800;
+				color: var(--coffee-dark);
+				margin-bottom: 6px;
+			}
+			.info-card .ic-text {
+				font-size: 0.82rem;
+				color: #666;
+				line-height: 1.5;
+			}
+			.timeline {
+				background: white;
+				border-radius: 18px;
+				padding: 24px;
+				box-shadow: var(--shadow-sm);
+			}
+			.timeline-title {
+				font-family: "Baloo 2", sans-serif;
+				font-size: 1.3rem;
+				font-weight: 800;
+				color: var(--coffee-dark);
+				margin-bottom: 20px;
+			}
+			.timeline-item {
+				display: flex;
+				gap: 16px;
+				margin-bottom: 20px;
+				position: relative;
+			}
+			.timeline-item::before {
+				content: "";
+				position: absolute;
+				left: 20px;
+				top: 40px;
+				width: 2px;
+				height: calc(100% + 10px);
+				background: var(--cream);
+			}
+			.timeline-item:last-child::before {
+				display: none;
+			}
+			.tl-icon {
+				width: 42px;
+				height: 42px;
+				border-radius: 50%;
+				flex-shrink: 0;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.3rem;
+				box-shadow: var(--shadow-sm);
+			}
+			.tl-content {
+				flex: 1;
+			}
+			.tl-title {
+				font-weight: 800;
+				color: var(--coffee-dark);
+				margin-bottom: 4px;
+			}
+			.tl-time {
+				font-size: 0.78rem;
+				color: var(--coffee-warm);
+				font-weight: 700;
+				margin-bottom: 4px;
+			}
+			.tl-text {
+				font-size: 0.85rem;
+				color: #666;
+				line-height: 1.5;
+			}
+
+			/* TOAST */
+			.toast {
+				position: fixed;
+				bottom: 24px;
+				left: 50%;
+				transform: translateX(-50%) translateY(120px);
+				background: var(--coffee-dark);
+				color: white;
+				padding: 12px 24px;
+				border-radius: 50px;
+				font-weight: 700;
+				font-size: 0.9rem;
+				z-index: 2000;
+				transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+				display: flex;
+				align-items: center;
+				gap: 8px;
+				box-shadow: var(--shadow);
+				white-space: nowrap;
+			}
+			.toast.show {
+				transform: translateX(-50%) translateY(0);
+			}
+
+			/* CONFETTI */
+			.confetti-piece {
+				position: fixed;
+				width: 10px;
+				height: 10px;
+				pointer-events: none;
+				z-index: 9999;
+				animation: confettiFall var(--dur) var(--delay) ease forwards;
+			}
+			@keyframes confettiFall {
+				0% {
+					transform: translate(var(--x), -20px) rotate(0deg);
+					opacity: 1;
+				}
+				100% {
+					transform: translate(calc(var(--x) + var(--dx)), 100vh) rotate(720deg);
+					opacity: 0;
+				}
+			}
+
+			@media (max-width: 600px) {
+				.sim-controls {
+					grid-template-columns: 1fr 1fr;
+				}
+				.story-grid {
+					grid-template-columns: 1fr;
+				}
+				.logo-text {
+					font-size: 1.1rem;
+				}
+				.panel {
+					padding: 16px;
+				}
+				.fact-boxes {
+					grid-template-columns: 1fr;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div class="floating-beans" id="floatingBeans"></div>
+		<div class="toast" id="toast">🎉 Pesan</div>
+
+		<!-- ==================== SPLASH ==================== -->
+		<div class="screen active" id="splash">
+			<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; pointer-events: none">
+				<div style="position: absolute; bottom: 0; left: -5%; width: 40%; height: 180px; background: linear-gradient(180deg, #2d5016, #1a3a0a); border-radius: 50% 50% 0 0"></div>
+				<div style="position: absolute; bottom: 0; left: 25%; width: 50%; height: 220px; background: linear-gradient(180deg, #4a7c1f, #2d5016); border-radius: 50% 50% 0 0"></div>
+				<div style="position: absolute; bottom: 0; right: -5%; width: 40%; height: 160px; background: linear-gradient(180deg, #3a6b18, #1a3a0a); border-radius: 50% 50% 0 0"></div>
+				<div style="position: absolute; top: 15%; left: 15%; font-size: 1.5rem; animation: twinkle 2s ease infinite">⭐</div>
+				<div style="position: absolute; top: 25%; right: 20%; font-size: 1rem; animation: twinkle 2.5s ease infinite 0.5s">✨</div>
+				<div style="position: absolute; top: 10%; right: 35%; font-size: 1.2rem; animation: twinkle 1.8s ease infinite 1s">⭐</div>
+				<!-- Petani kecil di splash -->
+				<div style="position: absolute; bottom: 190px; left: 12%; font-size: 3rem; animation: bounce 2.2s ease infinite 0.3s">👨‍🌾</div>
+				<div style="position: absolute; bottom: 165px; right: 10%; font-size: 2.5rem; animation: bounce 1.8s ease infinite 0.8s">☕</div>
+			</div>
+			<style>
+				@keyframes twinkle {
+					0%,
+					100% {
+						opacity: 0.3;
+						transform: scale(0.8);
+					}
+					50% {
+						opacity: 1;
+						transform: scale(1.2);
+					}
+				}
+			</style>
+			<div class="splash-content">
+				<span class="splash-emoji">🌿</span>
+				<div class="splash-title">KopiLand</div>
+				<div class="splash-subtitle">🌱 Game Edukasi Budidaya Kopi</div>
+				<p class="splash-desc">Jelajahi kisah kopi Jawa Barat! Ikuti petualangan Pak Budi si petani kopi, pelajari jenis kopi lewat cerita seru, dan simulasikan budidaya dari benih hingga panen!</p>
+				<button class="btn-start" onclick="startGame()">▶ Mulai Petualangan!</button>
+				<div style="margin-top: 20px">
+					<div class="badge-jabar">🏛️ Dinas Perkebunan Jawa Barat &nbsp;|&nbsp; 🎓 Media Edukasi Interaktif</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ==================== MAIN GAME ==================== -->
+		<div class="screen" id="mainGame">
+			<div class="game-header">
+				<div class="logo-area">
+					<div class="logo-icon">☕</div>
+					<div>
+						<div class="logo-text">KopiLand</div>
+						<div class="logo-sub">Dinas Perkebunan Jawa Barat</div>
+					</div>
+				</div>
+				<div class="header-stats">
+					<div class="stat-chip"><span>⭐</span><span id="totalPoints">0</span> Poin</div>
+					<div class="stat-chip"><span>🏆</span><span id="levelDisplay">Pemula</span></div>
+				</div>
+			</div>
+
+			<nav class="main-nav" style="position: relative">
+				<button class="nav-btn active" onclick="showPanel('info')" id="navInfo"><span class="nav-icon">📚</span> Info Kopi</button>
+				<button class="nav-btn" onclick="showPanel('simulasi')" id="navSim"><span class="nav-icon">🌱</span> Simulasi</button>
+				<button class="nav-btn" onclick="showPanel('quiz')" id="navQuiz"><span class="nav-icon">❓</span> Kuis</button>
+				<button class="nav-btn" onclick="showPanel('edukasi')" id="navEdu"><span class="nav-icon">🎓</span> Edukasi</button>
+			</nav>
+
+			<div class="content-area">
+				<!-- ===== INFO / STORY KOPI ===== -->
+				<div class="panel active" id="panelInfo">
+					<div class="section-header">
+						<div class="section-tag">📖 Kisah & Ensiklopedia</div>
+						<h2 class="section-title">Jenis-Jenis Kopi Indonesia</h2>
+						<p class="section-desc">Klik kartu untuk membaca kisah lengkap setiap kopi!</p>
+					</div>
+					<div class="story-grid" id="storyGrid"></div>
+				</div>
+
+				<!-- ===== SIMULASI ===== -->
+				<div class="panel" id="panelSimulasi">
+					<div class="section-header">
+						<div class="section-tag">🌱 Mini Game</div>
+						<h2 class="section-title">Simulasi Budidaya Kopi</h2>
+						<p class="section-desc">Bantu Pak Budi merawat kebun kopinya!</p>
+					</div>
+
+					<div class="sim-wrap">
+						<div style="position: relative; overflow: hidden; border-radius: 0">
+							<div class="scene" id="scene">
+								<div class="sky-bg"></div>
+
+								<div class="sun-wrap">
+									<svg width="52" height="52" viewBox="0 0 52 52">
+										<circle cx="26" cy="26" r="13" fill="#FFD600" />
+										<g stroke="#FFD600" stroke-width="2.5" stroke-linecap="round">
+											<line x1="26" y1="4" x2="26" y2="11" />
+											<line x1="26" y1="41" x2="26" y2="48" />
+											<line x1="4" y1="26" x2="11" y2="26" />
+											<line x1="41" y1="26" x2="48" y2="26" />
+											<line x1="10" y1="10" x2="15" y2="15" />
+											<line x1="37" y1="37" x2="42" y2="42" />
+											<line x1="42" y1="10" x2="37" y2="15" />
+											<line x1="15" y1="37" x2="10" y2="42" />
+										</g>
+									</svg>
+								</div>
+
+								<div class="cloud sim-cloud-a"></div>
+								<div class="cloud sim-cloud-b"></div>
+
+								<div class="sim-bird">
+									<svg width="30" height="18" viewBox="0 0 30 18">
+										<path d="M2 11 Q8 2 15 8 Q22 2 28 11" stroke="#3a3a3a" stroke-width="2" fill="none" stroke-linecap="round" />
+									</svg>
+								</div>
+
+								<div class="scene-label">Kebun Kopi Pak Budi — Garut Selatan</div>
+
+								<div class="sim-ground">
+									<div class="sim-soil"></div>
+								</div>
+
+								<div class="farmer-wrap" id="farmerWrap">
+									<div style="position: relative">
+										<div id="farmerSVG">
+											<svg width="54" height="70" viewBox="0 0 54 70">
+												<ellipse cx="27" cy="17" rx="25" ry="7.5" fill="#8B6914" />
+												<ellipse cx="27" cy="15" rx="15" ry="9.5" fill="#A07820" />
+												<circle cx="27" cy="27" r="10.5" fill="#F5C97A" />
+												<circle cx="23" cy="26" r="1.4" fill="#3E2000" />
+												<circle cx="31" cy="26" r="1.4" fill="#3E2000" />
+												<path d="M23 31 Q27 34 31 31" stroke="#3E2000" stroke-width="1.5" fill="none" stroke-linecap="round" />
+												<rect x="18" y="37" width="18" height="18" rx="4" fill="#4a7c1f" />
+												<rect x="17" y="53" width="8" height="14" rx="2" fill="#5D4037" />
+												<rect x="29" y="53" width="8" height="14" rx="2" fill="#5D4037" />
+												<line x1="18" y1="43" x2="7" y2="50" stroke="#4a7c1f" stroke-width="4" stroke-linecap="round" />
+												<line x1="7" y1="50" x2="4" y2="62" stroke="#8B6914" stroke-width="2.5" stroke-linecap="round" />
+												<rect x="0" y="60" width="9" height="4" rx="1" fill="#444" />
+												<line x1="36" y1="43" x2="47" y2="50" stroke="#4a7c1f" stroke-width="4" stroke-linecap="round" />
+											</svg>
+										</div>
+										<div class="sim-bubble" id="bubble" style="display: none">Halo!</div>
+									</div>
+									<div class="farmer-shadow"></div>
+								</div>
+
+								<div id="fxLayer" style="position: absolute; inset: 0; pointer-events: none; overflow: hidden"></div>
+							</div>
+							
+							<div class="tree-wrap" id="treeWrap">
+								<div id="treeFoliage"></div>
+								<div
+									id="treeTrunk"
+									style="
+										width: 10px;
+										background: transparent;
+										border-radius: 5px;
+										margin: 0 auto;
+										transition:
+											height 0.7s,
+											background 0.7s;
+									"
+								></div>
+								<div id="treePot"></div>
+							</div>
+						</div>
+
+						<div class="sim-info-bar">
+							<div class="sim-stage-ico" id="sIco">
+								<svg width="32" height="32" viewBox="0 0 32 32">
+									<ellipse cx="16" cy="18" rx="10" ry="12" fill="#8B6914" />
+									<ellipse cx="16" cy="18" rx="6" ry="8" fill="#A07820" />
+									<path d="M16 6 Q18 2 16 0 Q14 2 16 6" fill="#4a7c1f" />
+								</svg>
+							</div>
+							<div class="sim-stage-txt">
+								<div class="sim-stage-name" id="sName">Siap Tanam</div>
+								<div class="sim-stage-desc" id="sDesc">Pilih lahan dan mulai menanam benih kopi.</div>
+							</div>
+							<div class="sim-tip-pill" id="sTip">Klik Tanam Benih!</div>
+						</div>
+
+						<div class="sim-bars">
+							<div class="sim-bar-row">
+								<div class="sim-bar-lbl">Kesehatan</div>
+								<div class="sim-bar-track"><div class="sim-bar-fill" id="bHealth" style="width: 100%; background: #4caf50"></div></div>
+								<div class="sim-bar-val" id="vHealth">100%</div>
+							</div>
+							<div class="sim-bar-row">
+								<div class="sim-bar-lbl">Pertumbuhan</div>
+								<div class="sim-bar-track"><div class="sim-bar-fill" id="bGrow" style="width: 0%; background: #ff9800"></div></div>
+								<div class="sim-bar-val" id="vGrow">0%</div>
+							</div>
+							<div class="sim-bar-row">
+								<div class="sim-bar-lbl">Kadar Air</div>
+								<div class="sim-bar-track"><div class="sim-bar-fill" id="bWater" style="width: 50%; background: #29b6f6"></div></div>
+								<div class="sim-bar-val" id="vWater">50%</div>
+							</div>
+						</div>
+
+						<div class="sim-btns">
+							<button class="sim-btn2 sbtn-plant" id="btnT" onclick="act('tanam')">
+								<svg width="18" height="18" viewBox="0 0 18 18">
+									<ellipse cx="9" cy="11" rx="6" ry="7" fill="rgba(255,255,255,.7)" />
+									<path d="M9 4 Q10 1 9 0 Q8 1 9 4" fill="rgba(255,255,255,.9)" />
+								</svg>
+								Tanam Benih
+							</button>
+							<button class="sim-btn2 sbtn-water" id="btnS" onclick="act('siram')" disabled>
+								<svg width="18" height="18" viewBox="0 0 18 18"><path d="M9 2 Q13 8 13 12 A4 4 0 0 1 5 12 Q5 8 9 2Z" fill="rgba(255,255,255,.8)" /></svg>
+								Siram
+							</button>
+							<button class="sim-btn2 sbtn-fert" id="btnP" onclick="act('pupuk')" disabled>
+								<svg width="18" height="18" viewBox="0 0 18 18">
+									<circle cx="9" cy="9" r="7" fill="none" stroke="rgba(255,255,255,.8)" stroke-width="1.5" />
+									<path d="M6 9 Q9 5 12 9 Q9 13 6 9Z" fill="rgba(255,255,255,.8)" />
+								</svg>
+								Beri Pupuk
+							</button>
+							<button class="sim-btn2 sbtn-harvest" id="btnH" onclick="act('panen')" disabled>
+								<svg width="18" height="18" viewBox="0 0 18 18">
+									<path d="M3 14 L5 5 L9 9 L13 5 L15 14Z" fill="rgba(255,255,255,.8)" />
+									<rect x="3" y="14" width="12" height="2" rx="1" fill="rgba(255,255,255,.8)" />
+								</svg>
+								Panen
+							</button>
+						</div>
+
+						<div class="sim-log" id="simLog">
+							<span style="color: #7cb342">Selamat datang di kebun Pak Budi!</span><br />
+							<span class="sim-log-t">00:00</span> Lahan siap — tanam benih untuk mulai!
+						</div>
+					</div>
+				</div>
+
+				<!-- ===== QUIZ ===== -->
+				<div class="panel" id="panelQuiz">
+					<div class="section-header">
+						<div class="section-tag">🎯 Uji Pengetahuan</div>
+						<h2 class="section-title">Kuis Interaktif</h2>
+						<p class="section-desc">Pilih level dan jawab pertanyaan!</p>
+					</div>
+					<div class="quiz-area">
+						<div class="level-selector">
+							<button class="level-btn easy active" onclick="selectLevel('easy', this)">🌱 Pemula</button>
+							<button class="level-btn medium" onclick="selectLevel('medium', this)">🌿 Menengah</button>
+							<button class="level-btn hard" onclick="selectLevel('hard', this)">🏆 Mahir</button>
+						</div>
+						<div id="quizCard" class="quiz-card"></div>
+						<div class="score-board" id="scoreBoard"></div>
+					</div>
+				</div>
+
+				<!-- ===== EDUKASI ===== -->
+				<div class="panel" id="panelEdukasi">
+					<div class="section-header">
+						<div class="section-tag">📖 Panduan Lengkap</div>
+						<h2 class="section-title">Edukasi Budidaya Kopi</h2>
+						<p class="section-desc">Dari kebun hingga cangkir — panduan lengkap Pak Budi!</p>
+					</div>
+
+					<!-- Intro Pak Budi -->
+					<div style="background: white; border-radius: 20px; padding: 20px; box-shadow: var(--shadow-sm); margin-bottom: 24px; display: flex; gap: 16px; align-items: flex-start">
+						<div style="font-size: 3.5rem; flex-shrink: 0">👨‍🌾</div>
+						<div>
+							<div style="font-family: &quot;Baloo 2&quot;, sans-serif; font-size: 1.1rem; font-weight: 800; color: var(--coffee-dark); margin-bottom: 6px">Pak Budi — Petani Kopi Garut</div>
+							<div style="font-size: 0.88rem; color: #555; line-height: 1.65; font-style: italic">"Kopi bukan sekadar tanaman — ia adalah warisan leluhur kami di tanah Priangan. Saya mewarisi kebun ini dari kakek saya yang mulai menanam sejak era kemerdekaan. Mari saya ajarkan rahasia merawat kopi yang baik!"</div>
+						</div>
+					</div>
+
+					<div class="info-cards">
+						<div class="info-card" style="border-top-color: #4caf50">
+							<div class="ic-icon">🌦️</div>
+							<div class="ic-title">Iklim Ideal</div>
+							<div class="ic-text">Kopi tumbuh optimal di suhu 18–24°C, curah hujan 1.500–2.500 mm/tahun, ketinggian 700–1.500 mdpl.</div>
+						</div>
+						<div class="info-card" style="border-top-color: #795548">
+							<div class="ic-icon">🪨</div>
+							<div class="ic-title">Jenis Tanah</div>
+							<div class="ic-text">Tanah vulkanik, andosol, atau latosol dengan pH 5,5–6,5. Drainase baik sangat penting untuk mencegah busuk akar.</div>
+						</div>
+						<div class="info-card" style="border-top-color: #2196f3">
+							<div class="ic-icon">💧</div>
+							<div class="ic-title">Irigasi</div>
+							<div class="ic-text">Siram 2–3 kali seminggu saat musim kemarau. Hindari genangan air yang bisa merusak akar tanaman kopi.</div>
+						</div>
+						<div class="info-card" style="border-top-color: #ff9800">
+							<div class="ic-icon">🌿</div>
+							<div class="ic-title">Pemupukan</div>
+							<div class="ic-text">Pupuk NPK setiap 3 bulan. Pupuk organik (kompos) sangat dianjurkan untuk menjaga kesuburan jangka panjang.</div>
+						</div>
+						<div class="info-card" style="border-top-color: #e91e63">
+							<div class="ic-icon">✂️</div>
+							<div class="ic-title">Pemangkasan</div>
+							<div class="ic-text">Pangkas cabang tidak produktif setiap tahun untuk meningkatkan sirkulasi udara dan hasil panen.</div>
+						</div>
+						<div class="info-card" style="border-top-color: #9c27b0">
+							<div class="ic-icon">☕</div>
+							<div class="ic-title">Panen & Proses</div>
+							<div class="ic-text">Panen buah yang sudah merah. Proses basah atau kering menghasilkan citarasa yang berbeda.</div>
+						</div>
+					</div>
+
+					<div class="timeline">
+						<div class="timeline-title">⏳ Perjalanan Kopi Arabika — Oleh Pak Budi</div>
+						<div class="timeline-item">
+							<div class="tl-icon" style="background: #e8f5e9">🌱</div>
+							<div class="tl-content">
+								<div class="tl-title">Pembibitan</div>
+								<div class="tl-time">Bulan 0–3</div>
+								<div class="tl-text">"Saya pilih benih terbaik — yang tenggelam saat direndam air. Itu tanda benih berisi dan sehat!" kata Pak Budi sambil menyemai di persemaian.</div>
+							</div>
+						</div>
+						<div class="timeline-item">
+							<div class="tl-icon" style="background: #fff8e1">🪴</div>
+							<div class="tl-content">
+								<div class="tl-title">Penanaman</div>
+								<div class="tl-time">Bulan 3–6</div>
+								<div class="tl-text">Bibit dipindah ke lahan dengan jarak 2,5 × 2,5 m. Pak Budi selalu menyiapkan lubang 2 minggu sebelumnya agar tanah dan pupuk kandang menyatu.</div>
+							</div>
+						</div>
+						<div class="timeline-item">
+							<div class="tl-icon" style="background: #e3f2fd">🌿</div>
+							<div class="tl-content">
+								<div class="tl-title">Pertumbuhan Vegetatif</div>
+								<div class="tl-time">Tahun 1–2</div>
+								<div class="tl-text">"Di fase ini, fokus ke akar dan daun. Gulma adalah musuh terbesar — saya babat setiap bulan!" Pemupukan rutin NPK sangat penting.</div>
+							</div>
+						</div>
+						<div class="timeline-item">
+							<div class="tl-icon" style="background: #fce4ec">🌸</div>
+							<div class="tl-content">
+								<div class="tl-title">Pembungaan</div>
+								<div class="tl-time">Tahun 2–3</div>
+								<div class="tl-text">Bunga kopi mekar setelah hujan pertama — aromanya seperti melati. "Ini momen favorit saya," kenang Pak Budi. "Seluruh kebun harum."</div>
+							</div>
+						</div>
+						<div class="timeline-item">
+							<div class="tl-icon" style="background: #ffebee">🍒</div>
+							<div class="tl-content">
+								<div class="tl-title">Pembuahan & Panen</div>
+								<div class="tl-time">Tahun 3–4</div>
+								<div class="tl-text">Buah merah cerah setelah 8–9 bulan dari pembungaan. Pak Budi hanya memetik yang benar-benar merah — "petik merah" untuk kualitas terbaik.</div>
+							</div>
+						</div>
+						<div class="timeline-item">
+							<div class="tl-icon" style="background: #f3e5f5">☕</div>
+							<div class="tl-content">
+								<div class="tl-title">Pasca Panen</div>
+								<div class="tl-time">Setelah panen</div>
+								<div class="tl-text">Proses wet-hulled khas Jawa Barat: pulping, fermentasi 24 jam, cuci bersih, jemur 10–14 hari, hulling, sortasi, lalu roasting. "Itulah rahasia Java Coffee yang mendunia!"</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- STORY MODAL -->
+		<div class="modal-overlay" id="storyModal" onclick="closeStoryModal(event)">
+			<div class="story-modal" id="storyModalContent"></div>
+		</div>
+
+		<script>
+			const coffeeChars = {
+				arabika: `<svg width="60" height="60" viewBox="0 0 60 60"><polygon points="30,8 55,52 5,52" fill="#A0791C"/><polygon points="30,16 50,52 10,52" fill="#C49A2A"/><circle cx="30" cy="40" r="6" fill="#fff" opacity=".6"/></svg>`,
+				robusta: `<svg width="60" height="60" viewBox="0 0 60 60"><rect x="18" y="20" width="24" height="30" rx="6" fill="#2E7D32"/><path d="M18 35 Q10 28 14 20 Q18 14 24 18" fill="#4CAF50"/><path d="M42 35 Q50 28 46 20 Q42 14 36 18" fill="#4CAF50"/><ellipse cx="30" cy="18" rx="8" ry="6" fill="#66BB6A"/></svg>`,
+				liberika: `<svg width="60" height="60" viewBox="0 0 60 60"><rect x="26" y="10" width="8" height="40" rx="3" fill="#8B6914"/><ellipse cx="30" cy="22" rx="22" ry="14" fill="#4CAF50"/><ellipse cx="14" cy="30" rx="12" ry="8" fill="#66BB6A"/><ellipse cx="46" cy="30" rx="12" ry="8" fill="#66BB6A"/></svg>`,
+				excelsa: `<svg width="60" height="60" viewBox="0 0 60 60"><polygon points="30,5 36,22 54,22 40,33 45,50 30,40 15,50 20,33 6,22 24,22" fill="#7B1FA2" opacity=".85"/></svg>`,
+				preanger: `<svg width="60" height="60" viewBox="0 0 60 60"><path d="M5 50 Q15 20 30 15 Q45 20 55 50Z" fill="#1A237E" opacity=".8"/><path d="M12 50 Q20 28 30 24 Q40 28 48 50Z" fill="#3949AB"/><ellipse cx="30" cy="48" rx="20" ry="5" fill="#5C6BC0" opacity=".5"/></svg>`,
+				luwak: `<svg width="60" height="60" viewBox="0 0 60 60"><ellipse cx="30" cy="34" rx="20" ry="14" fill="#795548"/><circle cx="30" cy="22" r="11" fill="#8D6E63"/><circle cx="25" cy="20" r="2" fill="#3E2000"/><circle cx="35" cy="20" r="2" fill="#3E2000"/><path d="M20 30 Q14 26 12 32" stroke="#795548" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M40 30 Q46 26 48 32" stroke="#795548" stroke-width="3" fill="none" stroke-linecap="round"/><ellipse cx="30" cy="24" rx="4" ry="2" fill="#6D4C41"/><path d="M26 26 Q30 28 34 26" stroke="#4E342E" stroke-width="1.2" fill="none"/></svg>`,
+			};
+			// ==================== DATA ====================
+			const coffeeData = [
+				{
+					id: "arabika",
+					name: "Kopi Arabika",
+					latin: "Coffea arabica",
+					// char: "🏔️",
+					char: coffeeChars.arabika,
+					badge: "Terpopuler",
+					bannerColor: "linear-gradient(135deg,#fff8e1 0%,#ffe0b2 100%)",
+					accent: "#FF8F00",
+					teaser: "Raja kopi dunia! Tumbuh di puncak gunung Jawa Barat dengan rasa asam manis yang menggoda.",
+					tags: ["Dataran Tinggi", "Premium", "Ekspor"],
+					stats: { ketinggian: "1.000–2.000 mdpl", rasa: "Asam, Fruity, Floral", kafein: "1,2–1,5%", panen: "Tahun ke 3–4" },
+					chapters: [
+						{
+							id: "sejarah",
+							label: "📜 Sejarah",
+							icon: "📜",
+							content: `<div class="chapter-title">📜 Kisah Si Ratu Kopi</div>
+      <div class="story-quote">"Di puncak Papandayan, nenek moyang kami menanam benih pertama Arabika — kiriman VOC dari Yaman pada 1699. Dari sini, Java Coffee menaklukkan seluruh dunia." — Pak Budi</div>
+      <div class="chapter-text">Arabika pertama masuk Nusantara di era VOC abad ke-17. Gubernur Jenderal Van Hoorn memerintahkan penanaman massal di dataran tinggi Priangan — Garut, Cianjur, dan Bandung.<br><br>Pada abad ke-18, <strong>Java Coffee</strong> menjadi merek paling bergengsi di Eropa. Orang Belanda bahkan menyebut kopi sebagai "Java" — nama yang masih dipakai sampai sekarang di Eropa dan Amerika.<br><br>Ketika wabah karat daun memusnahkan hampir semua perkebunan Arabika di abad ke-19, Jawa Barat berhasil mempertahankan varietas lokalnya di lembah-lembah terpencil Gunung Gede Pangrango.</div>`,
+						},
+						{
+							id: "karakter",
+							label: "🎨 Karakteristik",
+							icon: "🎨",
+							content: `<div class="chapter-title">🎨 Profil Rasa yang Menawan</div>
+      <div class="chapter-text">Arabika ibarat seorang seniman — kompleks, elegan, dan penuh nuansa.<br><br>Bijinya lebih lonjong dan rata dibanding Robusta, dengan garis tengah berliku yang khas. Permukaannya halus, warnanya hijau kebiruan sebelum roasting.</div>
+      <div class="fact-boxes">
+        <div class="fact-box"><div class="fact-key">🍋 Keasaman</div><div class="fact-val">Citrus & Apple</div></div>
+        <div class="fact-box"><div class="fact-key">🌸 Aroma</div><div class="fact-val">Floral & Buah Tropis</div></div>
+        <div class="fact-box"><div class="fact-key">🍫 Aftertaste</div><div class="fact-val">Caramel & Dark Choc</div></div>
+        <div class="fact-box"><div class="fact-key">💪 Body</div><div class="fact-val">Light to Medium</div></div>
+      </div>
+      <div class="story-quote">"Saat saya pertama kali mencicipi Arabika Garut yang diproses honey — ada rasa mangga, bunga melati, dan sedikit gula aren. Luar biasa kompleks!" — Cupper dari Jakarta</div>`,
+						},
+						{
+							id: "wilayah",
+							label: "📍 Wilayah",
+							icon: "📍",
+							content: `<div class="chapter-title">📍 Rumah Arabika Jawa Barat</div>
+      <div class="chapter-text">Arabika Jawa Barat memiliki terroir — karakter tanah dan iklim unik — yang tak bisa ditiru daerah lain.</div>
+      <div class="fact-boxes">
+        <div class="fact-box"><div class="fact-key">🏔️ Garut</div><div class="fact-val">Papandayan, Cikajang — 1.400–1.700 mdpl</div></div>
+        <div class="fact-box"><div class="fact-key">🌿 Cianjur</div><div class="fact-val">Cipanas, Puncak — 1.200–1.600 mdpl</div></div>
+        <div class="fact-box"><div class="fact-key">🏡 Bandung</div><div class="fact-val">Pangalengan, Ciwidey — 1.300–1.500 mdpl</div></div>
+        <div class="fact-box"><div class="fact-key">🌄 Tasikmalaya</div><div class="fact-val">Gunung Galunggung — 1.100–1.400 mdpl</div></div>
+      </div>
+      <div class="story-quote">"Tanah vulkanik Papandayan mengandung mineral yang tidak bisa kamu beli di toko pupuk mana pun. Itulah mengapa kopi kami berbeda." — Pak Budi</div>`,
+						},
+						{
+							id: "tips",
+							label: "💡 Tips",
+							icon: "💡",
+							content: `<div class="chapter-title">💡 Rahasia Pak Budi</div>
+      <div class="chapter-text">Pak Budi telah menanam Arabika selama 30 tahun. Ini rahasia-rahasianya:</div>
+      <div class="story-quote">"🌡️ Jaga suhu 18–24°C — Arabika sangat sensitif. Di bawah 15°C dia beku, di atas 30°C dia stres. Ketinggian 1.000 mdpl ke atas adalah zona nyamannya."</div>
+      <div class="story-quote">"💊 Semprotkan fungisida tembaga setiap musim hujan untuk mencegah karat daun (Hemileia vastatrix) — musuh nomor satu Arabika sejak abad ke-19."</div>
+      <div class="story-quote">"🍒 Hanya petik buah merah sempurna. Satu buah hijau saja bisa merusak seluruh batch fermentasi. Petik merah = kopi bintang lima!"</div>`,
+						},
+					],
+				},
+				{
+					id: "robusta",
+					name: "Kopi Robusta",
+					latin: "Coffea canephora",
+					// char: "💪",
+					char: coffeeChars.robusta,
+					badge: "Tahan Hama",
+					bannerColor: "linear-gradient(135deg,#e8f5e9 0%,#c8e6c9 100%)",
+					accent: "#2E7D32",
+					teaser: "Si pemberani! Kopi yang kuat, tahan hama, dan penuh energi — cocok untuk petani pemula.",
+					tags: ["Dataran Rendah", "Tahan Hama", "Kafein Tinggi"],
+					stats: { ketinggian: "200–800 mdpl", rasa: "Pahit, Earthy, Full Body", kafein: "2,0–2,7%", panen: "Tahun ke 2–3" },
+					chapters: [
+						{
+							id: "sejarah",
+							label: "📜 Sejarah",
+							icon: "📜",
+							content: `<div class="chapter-title">📜 Si Tangguh dari Afrika</div>
+      <div class="story-quote">"Ketika wabah 1880 menghancurkan semua Arabika kami, Robusta datang sebagai penyelamat. Dia keras, tapi jujur." — Catatan Perkebunan Sukabumi, 1905</div>
+      <div class="chapter-text">Robusta berasal dari hutan tropis Kongo, Afrika Tengah. Namanya sendiri berarti "kuat" — dan memang itulah keunggulannya.<br><br>Setelah wabah Hemileia vastatrix menghancurkan perkebunan Arabika di seluruh Asia pada 1870-1880an, pemerintah kolonial Belanda memperkenalkan Robusta sebagai pengganti darurat.<br><br>Kini, Indonesia adalah produsen Robusta terbesar kedua di dunia setelah Vietnam. Lebih dari 70% ekspor kopi Indonesia adalah Robusta — mesin espresso di seluruh Eropa bergantung padanya.</div>`,
+						},
+						{
+							id: "karakter",
+							label: "🎨 Karakteristik",
+							icon: "🎨",
+							content: `<div class="chapter-title">🎨 Tebal, Pahit, Bertenaga</div>
+      <div class="chapter-text">Robusta adalah kopi untuk mereka yang ingin "bangun sungguhan". Kafeinnya hampir 2x Arabika.</div>
+      <div class="fact-boxes">
+        <div class="fact-box"><div class="fact-key">🤎 Rasa</div><div class="fact-val">Pahit & Earthy</div></div>
+        <div class="fact-box"><div class="fact-key">💪 Body</div><div class="fact-val">Full Body & Creamy</div></div>
+        <div class="fact-box"><div class="fact-key">⚡ Kafein</div><div class="fact-val">2–2,7% (2× Arabika!)</div></div>
+        <div class="fact-box"><div class="fact-key">☕ Kegunaan</div><div class="fact-val">Espresso Blend & Instan</div></div>
+      </div>
+      <div class="story-quote">"Crema espresso yang tebal dan cantik? Itu jasa Robusta. Tanpa Robusta, espresso kamu bakal encer." — Barista profesional</div>`,
+						},
+						{
+							id: "wilayah",
+							label: "📍 Wilayah",
+							icon: "📍",
+							content: `<div class="chapter-title">📍 Rumah Robusta</div>
+      <div class="chapter-text">Robusta bisa tumbuh di tempat Arabika tidak bisa — ini yang membuatnya begitu berharga.</div>
+      <div class="fact-boxes">
+        <div class="fact-box"><div class="fact-key">🌴 Lampung</div><div class="fact-val">Produsen terbesar Indonesia</div></div>
+        <div class="fact-box"><div class="fact-key">🏝️ Sumsel</div><div class="fact-val">Pagaralam — khas asap</div></div>
+        <div class="fact-box"><div class="fact-key">🌳 Sukabumi</div><div class="fact-val">Dataran rendah Jabar</div></div>
+        <div class="fact-box"><div class="fact-key">🌿 Flores</div><div class="fact-val">Bajawa — karakter unik</div></div>
+      </div>`,
+						},
+						{
+							id: "tips",
+							label: "💡 Tips",
+							icon: "💡",
+							content: `<div class="chapter-title">💡 Keunggulan Robusta</div>
+      <div class="story-quote">"Robusta tahan suhu 24–36°C — cocok untuk dataran rendah Jawa Barat yang panas. Tidak perlu khawatir karat daun!"</div>
+      <div class="story-quote">"Panen lebih cepat — bisa mulai tahun ke-2 atau ke-3. Untuk petani pemula, Robusta adalah pilihan bijak sebelum lanjut ke Arabika."</div>
+      <div class="story-quote">"Robusta sangat bagus untuk espresso blend: campur 30% Arabika premium + 70% Robusta berkualitas = kopi kafe bintang lima dengan harga terjangkau!"</div>`,
+						},
+					],
+				},
+				{
+					id: "liberika",
+					name: "Kopi Liberika",
+					latin: "Coffea liberica",
+					// char: "🌴",
+					char: coffeeChars.liberika,
+					badge: "Langka",
+					bannerColor: "linear-gradient(135deg,#fff3e0 0%,#ffe0b2 100%)",
+					accent: "#E65100",
+					teaser: "Si raksasa langka! Pohon setinggi 9 meter dengan biji jumbo dan rasa yang bikin penasaran.",
+					tags: ["Langka", "Unik", "Pohon Besar"],
+					stats: { ketinggian: "0–600 mdpl", rasa: "Smoky, Woody, Fruity", kafein: "1,2–1,5%", panen: "Tahun ke 4–5" },
+					chapters: [
+						{
+							id: "sejarah",
+							label: "📜 Sejarah",
+							icon: "📜",
+							content: `<div class="chapter-title">📜 Raksasa dari Liberia</div>
+      <div class="story-quote">"Aku pernah melihat pohon Liberika setinggi atap rumah 3 lantai. Petani perlu tangga khusus untuk memanennya!" — Penjelajah kebun kopi Kalimantan</div>
+      <div class="chapter-text">Liberika berasal dari pantai barat Afrika — Liberia dan Sierra Leone. Dibawa ke Asia Tenggara pada akhir abad ke-19 sebagai "harapan terakhir" ketika Arabika dilanda wabah besar.<br><br>Di Filipina, Liberika (disebut Kapeng Barako) adalah simbol nasional dan kebanggaan budaya. Di Indonesia, Liberika tumbuh liar di hutan-hutan Kalimantan dan dibudidayakan terbatas di Jambi.<br><br>Kopi ini sangat langka — hanya 2% produksi kopi dunia — dan harganya bisa sangat tinggi di pasar spesialti internasional.</div>`,
+						},
+						{
+							id: "karakter",
+							label: "🎨 Karakteristik",
+							icon: "🎨",
+							content: `<div class="chapter-title">🎨 Raksasa yang Unik</div>
+      <div class="chapter-text">Liberika adalah kopi paling berbeda dari semua jenis. Penggemar menyebutnya "kopi petualang".</div>
+      <div class="fact-boxes">
+        <div class="fact-box"><div class="fact-key">📏 Ukuran Biji</div><div class="fact-val">2× Arabika (sangat besar!)</div></div>
+        <div class="fact-box"><div class="fact-key">🌴 Tinggi Pohon</div><div class="fact-val">Hingga 9 meter!</div></div>
+        <div class="fact-box"><div class="fact-key">🍌 Rasa Unik</div><div class="fact-val">Smoky + Nangka + Kayu</div></div>
+        <div class="fact-box"><div class="fact-key">⏳ Panen Pertama</div><div class="fact-val">4–5 tahun (paling lama)</div></div>
+      </div>
+      <div class="story-quote">"Banyak yang bilang Liberika rasanya aneh. Tapi 'aneh' itu mahal di pasar spesialti. Barista top dunia hunting kopi ini!" — Eksportir kopi Jambi</div>`,
+						},
+						{
+							id: "wilayah",
+							label: "📍 Wilayah",
+							icon: "📍",
+							content: `<div class="chapter-title">📍 Di Mana Menemukan Liberika</div>
+      <div class="fact-boxes">
+        <div class="fact-box"><div class="fact-key">🌊 Jambi</div><div class="fact-val">Muaro Jambi — lahan gambut</div></div>
+        <div class="fact-box"><div class="fact-key">🌲 Kalbar</div><div class="fact-val">Hutan tropis dataran rendah</div></div>
+        <div class="fact-box"><div class="fact-key">🇵🇭 Filipina</div><div class="fact-val">Kapeng Barako — ikonis</div></div>
+        <div class="fact-box"><div class="fact-key">🇲🇾 Malaysia</div><div class="fact-val">Sarawak — produksi terbatas</div></div>
+      </div>
+      <div class="chapter-text">Di Jawa Barat, Liberika masih sangat jarang. Namun beberapa petani inovatif di Sukabumi dan Ciamis mulai mencoba membudidayakannya sebagai komoditas niche premium.</div>`,
+						},
+						{
+							id: "tips",
+							label: "💡 Tips",
+							icon: "💡",
+							content: `<div class="chapter-title">💡 Membudidayakan Liberika</div>
+      <div class="story-quote">"Liberika tahan banjir dan lahan gambut — kondisi yang membunuh kopi lain. Ini keunggulan uniknya untuk wilayah pesisir."</div>
+      <div class="story-quote">"Butuh sabar ekstra — 4–5 tahun menunggu panen pertama. Tapi sekali berbuah, pohon ini produktif hingga puluhan tahun tanpa banyak perawatan."</div>
+      <div class="story-quote">"Siapkan tangga panjang! Pohon Liberika bisa setinggi 9 meter. Beberapa petani bahkan melatih monyet untuk membantu memanen 🐒"</div>`,
+						},
+					],
+				},
+				{
+					id: "excelsa",
+					name: "Kopi Excelsa",
+					latin: "Coffea excelsa",
+					// char: "✨",
+					char: coffeeChars.excelsa,
+					badge: "Spesialti",
+					bannerColor: "linear-gradient(135deg,#f3e5f5 0%,#e1bee7 100%)",
+					accent: "#6A1B9A",
+					teaser: "Si misterius! Rasa yang kompleks dan unik — favorit para barista dan coffee geek dunia.",
+					tags: ["Spesialti", "Blending", "Rare"],
+					stats: { ketinggian: "400–1.000 mdpl", rasa: "Tart, Fruity, Dark", kafein: "1,0–1,5%", panen: "Tahun ke 3–4" },
+					chapters: [
+						{
+							id: "sejarah",
+							label: "📜 Sejarah",
+							icon: "📜",
+							content: `<div class="chapter-title">📜 Identitas yang Misterius</div>
+      <div class="story-quote">"Ilmuwan sempat bingung — apakah Excelsa spesies sendiri atau subspesies Liberika? Perdebatan ini berlangsung 100 tahun!" — Ahli botani kopi</div>
+      <div class="chapter-text">Excelsa punya sejarah taksonomi yang dramatis. Pada 1904, seorang botanis Perancis pertama kali mengidentifikasinya di Afrika Tengah sebagai spesies tersendiri.<br><br>Selama hampir seabad, Excelsa dianggap sebagai spesies keempat kopi (setelah Arabika, Robusta, Liberika). Baru pada 2006, para ilmuwan secara resmi mengklasifikasikannya sebagai subspesies Liberika.<br><br>Namun di dunia kopi, Excelsa tetap diperlakukan sebagai "yang keempat" karena karakternya yang sangat berbeda dari Liberika biasa.</div>`,
+						},
+						{
+							id: "karakter",
+							label: "🎨 Karakteristik",
+							icon: "🎨",
+							content: `<div class="chapter-title">🎨 Profil yang Tak Terduga</div>
+      <div class="chapter-text">Excelsa adalah kopi yang membuat barista terkejut — tidak ada yang seperti ini.</div>
+      <div class="fact-boxes">
+        <div class="fact-box"><div class="fact-key">🍇 Rasa</div><div class="fact-val">Tart + Dark Fruit + Asap</div></div>
+        <div class="fact-box"><div class="fact-key">🌊 Body</div><div class="fact-val">Medium hingga Full</div></div>
+        <div class="fact-box"><div class="fact-key">🔮 Kegunaan</div><div class="fact-val">Blending untuk kompleksitas</div></div>
+        <div class="fact-box"><div class="fact-key">🏆 Pasar</div><div class="fact-val">Spesialti & Barista kompetisi</div></div>
+      </div>
+      <div class="story-quote">"Kalau kamu ingin espresso yang membuat pelanggan bertanya 'ini kopi apa?!' — tambahkan 20% Excelsa ke blending kamu." — World Barista Champion</div>`,
+						},
+						{
+							id: "wilayah",
+							label: "📍 Wilayah",
+							icon: "📍",
+							content: `<div class="chapter-title">📍 Jejak Excelsa di Asia</div>
+      <div class="chapter-text">Excelsa paling banyak dibudidayakan di Asia Tenggara — terutama Vietnam dan Filipina.</div>
+      <div class="fact-boxes">
+        <div class="fact-box"><div class="fact-key">🇻🇳 Vietnam</div><div class="fact-val">Produsen terbesar Excelsa</div></div>
+        <div class="fact-box"><div class="fact-key">🇵🇭 Filipina</div><div class="fact-val">Sagada — kopi gunung</div></div>
+        <div class="fact-box"><div class="fact-key">🌴 Sumatera</div><div class="fact-val">Beberapa sentra kecil</div></div>
+        <div class="fact-box"><div class="fact-key">🏝️ Sulawesi</div><div class="fact-val">Toraja — eksplorasi baru</div></div>
+      </div>
+      <div class="chapter-text">Di Jawa Barat, Excelsa masih sangat langka. Namun program diversifikasi kopi oleh Dinas Perkebunan Jabar mulai mengintroduksi Excelsa sebagai komoditas inovatif.</div>`,
+						},
+						{
+							id: "tips",
+							label: "💡 Tips",
+							icon: "💡",
+							content: `<div class="chapter-title">💡 Potensi Excelsa</div>
+      <div class="story-quote">"Excelsa tahan terhadap banyak penyakit jamur. Ketahanannya mendekati Robusta tapi rasa akhirnya jauh lebih kompleks."</div>
+      <div class="story-quote">"Coba proses Natural/Dry pada Excelsa — rasa buahnya akan meledak! Ini adalah eksperimen paling mengasyikkan dalam dunia kopi spesialti."</div>
+      <div class="story-quote">"Investasi jangka panjang: harga Excelsa di pasar internasional bisa 3–5x Robusta biasa. Langka = mahal = menguntungkan!"</div>`,
+						},
+					],
+				},
+				{
+					id: "preanger",
+					name: "Kopi Java Preanger",
+					latin: "Coffea arabica var. preanger",
+					// char: "🏞️",
+					char: coffeeChars.preanger,
+					badge: "Khas Jabar",
+					bannerColor: "linear-gradient(135deg,#e8eaf6 0%,#c5cae9 100%)",
+					accent: "#1A237E",
+					teaser: "Warisan leluhur! Kopi Priangan yang sudah mendunia sejak zaman VOC — kebanggaan Jawa Barat.",
+					tags: ["Khas Jabar", "Warisan Budaya", "Arabika"],
+					stats: { ketinggian: "1.200–1.800 mdpl", rasa: "Citrus, Caramel, Floral", kafein: "1,2–1,4%", panen: "Tahun ke 3" },
+					chapters: [
+						{
+							id: "sejarah",
+							label: "📜 Sejarah",
+							icon: "📜",
+							content: `<div class="chapter-title">📜 Kopi yang Mengubah Sejarah Dunia</div>
+      <div class="story-quote">"Pada 1711, kapal VOC pertama membawa kopi Priangan ke Amsterdam. Sejak itu, orang Eropa tidak bisa hidup tanpa kopi Jawa." — Catatan Sejarah Batavia</div>
+      <div class="chapter-text">Kopi Preanger adalah kopi pertama yang ditanam secara massal di Nusantara — sejak 1699 di bawah perintah Gubernur Jenderal VOC.<br><br>Wilayah Priangan (kini Bandung, Garut, Cianjur, Tasikmalaya, Sukabumi) menjadi pusat produksi kopi dunia di abad ke-18. Lebih dari 6 juta kilogram kopi dikirim ke Amsterdam setiap tahun.<br><br>Sistem <em>Preanger Stelsel</em> — tanam paksa kopi — adalah salah satu kebijakan paling berpengaruh (dan kontroversial) dalam sejarah kolonial. Kopi Priangan membiayai sebagian besar pembangunan kota-kota di Belanda.</div>`,
+						},
+						{
+							id: "karakter",
+							label: "🎨 Karakteristik",
+							icon: "🎨",
+							content: `<div class="chapter-title">🎨 Rasa yang Membesarkan Nama Jawa</div>
+      <div class="chapter-text">Java Preanger memiliki keseimbangan rasa yang sempurna — tidak terlalu asam, tidak terlalu pahit.</div>
+      <div class="fact-boxes">
+        <div class="fact-box"><div class="fact-key">🍊 Keasaman</div><div class="fact-val">Citrus & Jeruk Manis</div></div>
+        <div class="fact-box"><div class="fact-key">🍮 Aftertaste</div><div class="fact-val">Caramel & Brown Sugar</div></div>
+        <div class="fact-box"><div class="fact-key">🌸 Aroma</div><div class="fact-val">Floral & Rempah Halus</div></div>
+        <div class="fact-box"><div class="fact-key">☕ Body</div><div class="fact-val">Medium — sangat clean</div></div>
+      </div>
+      <div class="story-quote">"Java Preanger dari Garut adalah salah satu kopi paling konsisten yang pernah saya cupping. Setiap batch hampir selalu sempurna." — Q-Grader Internasional</div>`,
+						},
+						{
+							id: "wilayah",
+							label: "📍 Wilayah",
+							icon: "📍",
+							content: `<div class="chapter-title">📍 Tanah Para Pahlawan Kopi</div>
+      <div class="fact-boxes">
+        <div class="fact-box"><div class="fact-key">🌋 Papandayan</div><div class="fact-val">1.400–1.700 mdpl — terbaik!</div></div>
+        <div class="fact-box"><div class="fact-key">🏔️ Cikajang</div><div class="fact-val">Garut Selatan — melegenda</div></div>
+        <div class="fact-box"><div class="fact-key">🌿 Pangalengan</div><div class="fact-val">Bandung Selatan — sejuk</div></div>
+        <div class="fact-box"><div class="fact-key">🌳 Puncak Dua</div><div class="fact-val">Cianjur — khas floral</div></div>
+      </div>
+      <div class="story-quote">"Nenek moyang saya menanam kopi ini sejak diperintah Belanda. Kini saya teruskan bukan karena paksaan — tapi karena kecintaan." — Pak Budi, Cikajang</div>`,
+						},
+						{
+							id: "tips",
+							label: "💡 Tips",
+							icon: "💡",
+							content: `<div class="chapter-title">💡 Merawat Warisan Preanger</div>
+      <div class="story-quote">"Tanah vulkanik Papandayan mengandung mineral unik dari abu gunung berapi. Pupuk kimia tidak bisa menggantikannya — itulah mengapa Preanger dari Garut punya rasa khas."</div>
+      <div class="story-quote">"Proses Wet-Hulled (Giling Basah) khas Jawa Barat: biji dikupas setengah basah lalu dijemur. Hasilnya body lebih tebal dan sedikit earthy — signature Java Coffee!"</div>
+      <div class="story-quote">"Sertifikasi GI (Geographical Indication) Kopi Java Preanger sudah terdaftar. Ini berarti hanya kopi dari Priangan yang boleh pakai nama ini — nilainya sangat tinggi!"</div>`,
+						},
+					],
+				},
+				{
+					id: "luwak",
+					name: "Kopi Luwak",
+					latin: "Coffea sp. (proses khusus)",
+					// char: "🦡",
+					char: coffeeChars.luwak,
+					badge: "Termahal",
+					bannerColor: "linear-gradient(135deg,#ffebee 0%,#ffcdd2 100%)",
+					accent: "#B71C1C",
+					teaser: "Legenda kopi dunia! Diproses oleh luwak liar, menghasilkan rasa paling smooth yang pernah ada.",
+					tags: ["Termahal", "Proses Unik", "Premium"],
+					stats: { ketinggian: "Bergantung varietas", rasa: "Smooth, Low Acid, Rich", kafein: "1,0–1,3%", panen: "Bergantung musim" },
+					chapters: [
+						{
+							id: "sejarah",
+							label: "📜 Sejarah",
+							icon: "📜",
+							content: `<div class="chapter-title">📜 Lahir dari Larangan</div>
+      <div class="story-quote">"Petani tidak boleh ambil kopi untuk diri sendiri — semua harus diserahkan ke VOC. Tapi siapa yang melarang memungut biji yang sudah jatuh dari perut luwak?" — Legenda petani Jawa</div>
+      <div class="chapter-text">Kopi Luwak lahir dari kreativitas petani yang tertindas. Era kolonial melarang petani lokal memanen kopi untuk keperluan sendiri.<br><br>Suatu hari, seorang petani memperhatikan musang (luwak) yang memakan buah kopi dan meninggalkan bijinya yang sudah tercerna. Dengan putus asa — namun penasaran — ia mencuci biji itu, meroastingnya, dan... menghasilkan kopi terenak yang pernah ia cicipi.<br><br>Berita menyebar. Para petani mulai mengumpulkan "kotoran luwak" secara diam-diam. Dan tradisi ini bertahan hingga hari ini — kini dengan harga $100–$600 per kilogram!</div>`,
+						},
+						{
+							id: "karakter",
+							label: "🎨 Karakteristik",
+							icon: "🎨",
+							content: `<div class="chapter-title">🎨 Mengapa Begitu Istimewa?</div>
+      <div class="chapter-text">Rahasia Kopi Luwak ada di enzim pencernaan luwak yang bekerja seperti proses fermentasi alami tingkat tinggi.</div>
+      <div class="fact-boxes">
+        <div class="fact-box"><div class="fact-key">🧬 Sains</div><div class="fact-val">Enzim protease memecah protein biji</div></div>
+        <div class="fact-box"><div class="fact-key">😌 Kepahitan</div><div class="fact-val">Sangat rendah — super smooth</div></div>
+        <div class="fact-box"><div class="fact-key">🍫 Rasa</div><div class="fact-val">Vanilla, Tanah, Dark Choc</div></div>
+        <div class="fact-box"><div class="fact-key">💰 Harga</div><div class="fact-val">Rp 1–3 juta/kg (liar)</div></div>
+      </div>
+      <div class="story-quote">"Kopi Luwak liar dari Pangandaran yang saya cicipi adalah pengalaman yang tidak akan pernah saya lupakan. Smooth seperti sutra, kompleks seperti wine terbaik." — Kolektor kopi Tokyo</div>`,
+						},
+						{
+							id: "etika",
+							label: "🐾 Etika",
+							icon: "🐾",
+							content: `<div class="chapter-title">🐾 Kopi Luwak Etis</div>
+      <div class="chapter-text">Ada sisi gelap Kopi Luwak yang perlu diketahui setiap konsumen.</div>
+      <div class="story-quote">"Saya hanya menjual Kopi Luwak dari luwak liar di hutan saya. Luwak yang dikandang itu stres — dan kopi yang dihasilkan pun berbeda rasanya." — Pak Hasan, produsen etis Ciamis</div>
+      <div class="chapter-text"><strong>Luwak Liar vs Luwak Kandang:</strong><br>• Liar: hidup bebas, pilih buah terbaik sendiri, hasil sangat sedikit, harga sangat tinggi ✅<br>• Kandang: stres, diberi makan paksa, sering disiksa, kualitas lebih rendah, tidak etis ❌<br><br>Tips membeli Kopi Luwak etis: minta sertifikat asal, tanya sistem peternakan, harga terlalu murah = curiga!</div>`,
+						},
+						{
+							id: "tips",
+							label: "💡 Tips",
+							icon: "💡",
+							content: `<div class="chapter-title">💡 Memahami Kopi Luwak</div>
+      <div class="story-quote">"Jangan beli Kopi Luwak dari toko oleh-oleh biasa dengan harga Rp 50.000 — itu pasti palsu atau dari luwak kandang yang tersiksa."</div>
+      <div class="story-quote">"Kopi Luwak liar asli sangat terbatas — luwak hanya makan di musim tertentu dan tidak bisa dipaksa. Kelangkaan inilah yang membuatnya mahal."</div>
+      <div class="story-quote">"Daerah penghasil terbaik: Pangandaran dan Ciamis (Jabar), Lampung, dan Flores. Masing-masing punya karakter unik tergantung kopi apa yang dimakan luwak liarnya."</div>`,
+						},
+					],
+				},
+			];
+
+			// QUIZ DATA
+			const quizData = {
+				easy: [
+					{ q: "☕ Apa warna buah kopi yang siap dipanen?", opts: ["Hijau", "Merah", "Kuning", "Hitam"], ans: 1, exp: 'Buah kopi siap panen berwarna merah cerah. Inilah mengapa panen selektif disebut "petik merah".' },
+					{ q: "🏔️ Kopi jenis apa yang tumbuh di dataran tinggi?", opts: ["Robusta", "Liberika", "Arabika", "Excelsa"], ans: 2, exp: "Arabika tumbuh optimal di ketinggian 1.000–2.000 mdpl dengan suhu sejuk 18–24°C." },
+					{ q: "🌱 Berapa pH tanah yang ideal untuk kopi?", opts: ["3,0–4,0", "5,5–6,5", "7,5–8,5", "9,0–10"], ans: 1, exp: "Kopi tumbuh terbaik di tanah dengan pH 5,5–6,5 (sedikit asam)." },
+					{ q: "💧 Berapa kali menyiram kopi saat musim kemarau?", opts: ["Setiap hari", "2–3 kali seminggu", "Seminggu sekali", "Sebulan sekali"], ans: 1, exp: "Penyiraman 2–3 kali seminggu cukup untuk menjaga kelembaban tanpa genangan." },
+					{ q: "🌿 Apa penyakit paling berbahaya pada Arabika?", opts: ["Busuk Akar", "Karat Daun (HV)", "Ulat Tanah", "Jamur Putih"], ans: 1, exp: "Hemileia vastatrix (HV) atau karat daun adalah penyakit jamur yang sangat merusak Arabika." },
+				],
+				medium: [
+					{ q: "📍 Di kabupaten mana kopi Java Preanger terkenal di Jawa Barat?", opts: ["Bekasi & Karawang", "Garut & Cianjur", "Indramayu & Cirebon", "Subang & Purwakarta"], ans: 1, exp: "Kopi Java Preanger tumbuh di dataran tinggi Garut (Papandayan) dan Cianjur." },
+					{ q: "⚗️ Metode pascapanen apa yang menghasilkan rasa paling bersih?", opts: ["Natural/Dry Process", "Wet/Washed Process", "Honey Process", "Giling Basah"], ans: 1, exp: 'Wet/Washed process menghasilkan kopi "clean" karena lapisan buah dihilangkan sebelum pengeringan.' },
+					{ q: "☕ Kopi mana yang memiliki kandungan kafein TERTINGGI?", opts: ["Arabika", "Liberika", "Excelsa", "Robusta"], ans: 3, exp: "Robusta mengandung 2,0–2,7% kafein, hampir 2x Arabika (1,2–1,5%)." },
+					{ q: "🏛️ Tahun berapa VOC memulai perkebunan kopi di Jawa?", opts: ["1699", "1750", "1800", "1850"], ans: 0, exp: "VOC memulai budidaya kopi komersial di Jawa pada 1699." },
+					{ q: "🌸 Berapa lama bunga kopi bertahan sebelum gugur?", opts: ["1–2 hari", "1 minggu", "2 minggu", "1 bulan"], ans: 0, exp: "Bunga kopi hanya mekar 1–2 hari. Penyerbukan terjadi sangat cepat." },
+				],
+				hard: [
+					{ q: "🧬 Berapa jumlah kromosom kopi Arabika?", opts: ["22 (diploid)", "44 (tetraploid)", "11 (haploid)", "88 (oktoploid)"], ans: 1, exp: "Arabika bersifat tetraploid dengan 44 kromosom (2n=4x=44), sedangkan Robusta hanya 22." },
+					{ q: "🌡️ Pada suhu berapa biji kopi mulai pirolisis saat roasting?", opts: ["100–150°C", "160–180°C", "200–210°C", "250–280°C"], ans: 2, exp: "Pirolisis dimulai ~200°C — reaksi kimia utama yang membentuk ratusan senyawa rasa kopi." },
+					{ q: "📊 Berapa kadar air optimal biji kopi hijau (green bean)?", opts: ["5–7%", "10–12%", "15–18%", "20–25%"], ans: 1, exp: "Kadar air 10–12% adalah standar ICO untuk penyimpanan biji kopi hijau yang aman." },
+					{ q: "🦡 Apa yang menyebabkan Kopi Luwak lebih smooth?", opts: ["Fermentasi liar", "Enzim pencernaan memecah protein", "Paparan sinar matahari", "Varietas kopi khusus"], ans: 1, exp: "Enzim protease luwak memecah protein biji kopi, mengurangi kepahitan dan menghasilkan rasa smooth." },
+					{ q: "🔬 Senyawa utama bertanggung jawab atas rasa pahit kopi?", opts: ["Asam klorogenat", "Sukrosa", "Kafein & Trigonelin", "Asam sitrat"], ans: 2, exp: "Kafein (10–30% kepahitan) + degradasi trigonelin selama roasting = komponen utama rasa pahit." },
+				],
+			};
+
+			// ==================== STATE ====================
+			let totalPoints = 0;
+			let currentQuizLevel = "easy";
+			let currentQ = 0;
+			let quizAnswered = false;
+			let quizScore = 0;
+
+			// ==================== INIT ====================
+			// ===== SVG CHARACTER HELPERS =====
+			function makeFarmerSVG() {
+				return `<svg width="56" height="72" viewBox="0 0 56 72" xmlns="http://www.w3.org/2000/svg">
+      <!-- topi caping -->
+      <ellipse cx="28" cy="18" rx="26" ry="8" fill="#8B6914"/>
+      <ellipse cx="28" cy="16" rx="16" ry="10" fill="#A0791C"/>
+      <!-- kepala -->
+      <circle cx="28" cy="28" r="11" fill="#F5C97A"/>
+      <!-- mata -->
+      <circle cx="24" cy="27" r="1.5" fill="#3E2000"/>
+      <circle cx="32" cy="27" r="1.5" fill="#3E2000"/>
+      <!-- senyum -->
+      <path d="M24 32 Q28 35 32 32" stroke="#3E2000" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- baju hijau -->
+      <rect x="18" y="39" width="20" height="20" rx="4" fill="#4a7c1f"/>
+      <!-- celana coklat -->
+      <rect x="18" y="57" width="8" height="12" rx="2" fill="#5D4037"/>
+      <rect x="30" y="57" width="8" height="12" rx="2" fill="#5D4037"/>
+      <!-- tangan kiri (cangkul) -->
+      <line x1="18" y1="45" x2="8" y2="52" stroke="#4a7c1f" stroke-width="4" stroke-linecap="round"/>
+      <line x1="8" y1="52" x2="5" y2="64" stroke="#8B6914" stroke-width="2.5" stroke-linecap="round"/>
+      <rect x="1" y="62" width="9" height="4" rx="1" fill="#555"/>
+      <!-- tangan kanan -->
+      <line x1="38" y1="45" x2="48" y2="52" stroke="#4a7c1f" stroke-width="4" stroke-linecap="round"/>
+    </svg>`;
+			}
+
+			function makeBirdSVG() {
+				return `<svg width="28" height="18" viewBox="0 0 28 18" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 10 Q8 2 14 8 Q20 2 26 10" stroke="#444" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <circle cx="14" cy="8" r="2" fill="#555"/>
+      <polygon points="14,8 17,9 14,10" fill="#e8a020"/>
+    </svg>`;
+			}
+
+			function makeSunSVG() {
+				return `<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="30" cy="30" r="16" fill="#FFD600"/>
+      <g stroke="#FFD600" stroke-width="3" stroke-linecap="round">
+        <line x1="30" y1="4" x2="30" y2="12"/>
+        <line x1="30" y1="48" x2="30" y2="56"/>
+        <line x1="4" y1="30" x2="12" y2="30"/>
+        <line x1="48" y1="30" x2="56" y2="30"/>
+        <line x1="11" y1="11" x2="17" y2="17"/>
+        <line x1="43" y1="43" x2="49" y2="49"/>
+        <line x1="49" y1="11" x2="43" y2="17"/>
+        <line x1="17" y1="43" x2="11" y2="49"/>
+      </g>
+    </svg>`;
+			}
+
+			function makeCoffeeBerrySVG(size = 28, color = "#c62828") {
+				return `<svg width="${size}" height="${size}" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="14" cy="16" rx="9" ry="11" fill="${color}"/>
+      <ellipse cx="14" cy="16" rx="5" ry="7" fill="${color === "#c62828" ? "#e53935" : color}" opacity="0.4"/>
+      <path d="M14 5 Q16 1 14 0 Q12 1 14 5" fill="#2e7d32"/>
+      <line x1="14" y1="8" x2="14" y2="22" stroke="rgba(0,0,0,0.15)" stroke-width="1"/>
+    </svg>`;
+			}
+
+			function makeCoffeeCupSVG() {
+				return `<svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">
+      <!-- uap -->
+      <path d="M16 10 Q14 6 16 2" stroke="#aaa" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M22 10 Q20 5 22 1" stroke="#aaa" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <!-- cangkir -->
+      <path d="M8 14 L12 38 L32 38 L36 14 Z" fill="#fff" stroke="#ddd" stroke-width="1"/>
+      <rect x="8" y="14" width="28" height="5" rx="2" fill="#e0e0e0"/>
+      <!-- handle -->
+      <path d="M36 20 Q44 20 44 28 Q44 36 36 36" stroke="#ccc" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- kopi coklat -->
+      <ellipse cx="22" cy="19" rx="13" ry="4" fill="#6f3d1e"/>
+    </svg>`;
+			}
+
+			function makeLeafSVG(color = "#4caf50", size = 32) {
+				return `<svg width="${size}" height="${size}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M16 30 Q4 20 6 8 Q14 2 24 10 Q30 20 16 30Z" fill="${color}"/>
+      <line x1="16" y1="30" x2="16" y2="10" stroke="rgba(0,0,0,0.2)" stroke-width="1.2"/>
+      <line x1="16" y1="20" x2="10" y2="15" stroke="rgba(0,0,0,0.15)" stroke-width="0.8"/>
+      <line x1="16" y1="18" x2="22" y2="14" stroke="rgba(0,0,0,0.15)" stroke-width="0.8"/>
+    </svg>`;
+			}
+
+			window.onload = () => {
+				createFloatingBeans();
+				renderStoryCards();
+				startQuiz();
+				simRenderTree(0);
+			};
+
+			// function createFloatingBeans() {
+			// 	const c = document.getElementById("floatingBeans");
+			// 	const e = ["☕", "🫘", "🌱", "🍃", "🌿"];
+			// 	for (let i = 0; i < 12; i++) {
+			// 		const b = document.createElement("div");
+			// 		b.className = "bean";
+			// 		b.textContent = e[Math.floor(Math.random() * e.length)];
+			// 		b.style.cssText = `left:${Math.random() * 100}%;animation-duration:${8 + Math.random() * 12}s;animation-delay:-${Math.random() * 15}s;font-size:${0.8 + Math.random() * 1.5}rem`;
+			// 		c.appendChild(b);
+			// 	}
+			// }
+			function createFloatingBeans() {
+				const c = document.getElementById("floatingBeans");
+				// Ganti emoji dengan SVG inline
+				const beanSVGs = [
+					// biji kopi
+					`<svg width="20" height="16" viewBox="0 0 20 16"><ellipse cx="10" cy="8" rx="9" ry="7" fill="#6f3d1e"/><path d="M10 2 Q13 8 10 14" stroke="#3b1f0a" stroke-width="1.2" fill="none"/></svg>`,
+					// daun
+					`<svg width="18" height="22" viewBox="0 0 18 22"><path d="M9 21 Q1 14 3 5 Q9 1 16 7 Q20 14 9 21Z" fill="#4a7c1f"/><line x1="9" y1="21" x2="9" y2="6" stroke="rgba(0,0,0,.2)" stroke-width="1"/></svg>`,
+					// cangkir mini
+					`<svg width="18" height="18" viewBox="0 0 18 18"><rect x="2" y="6" width="13" height="10" rx="2" fill="#fff" stroke="#ddd" stroke-width="1"/><ellipse cx="8.5" cy="6" rx="5" ry="2" fill="#6f3d1e"/><path d="M15 9 Q19 9 19 13 Q19 17 15 16" stroke="#ccc" stroke-width="1.5" fill="none"/></svg>`,
+				];
+				for (let i = 0; i < 12; i++) {
+					const b = document.createElement("div");
+					b.className = "bean";
+					b.innerHTML = beanSVGs[Math.floor(Math.random() * beanSVGs.length)];
+					b.style.cssText = `left:${Math.random() * 100}%;animation-duration:${8 + Math.random() * 12}s;animation-delay:-${Math.random() * 15}s;`;
+					c.appendChild(b);
+				}
+			}
+
+			function startGame() {
+				document.getElementById("splash").classList.remove("active");
+				document.getElementById("mainGame").classList.add("active");
+				setTimeout(startSimTimer, 200);
+				setTimeout(() => {
+					simSay("Selamat datang di kebun saya!", 3000);
+					simWave();
+				}, 500);
+			}
+
+			// ==================== NAV ====================
+			function showPanel(name) {
+				document.querySelectorAll(".panel").forEach((p) => p.classList.remove("active"));
+				document.querySelectorAll(".nav-btn").forEach((b) => b.classList.remove("active"));
+				document.getElementById("panel" + name.charAt(0).toUpperCase() + name.slice(1)).classList.add("active");
+				document.getElementById("nav" + name.charAt(0).toUpperCase() + name.slice(1)).classList.add("active");
+				if (name === "quiz") startQuiz();
+			}
+
+			// ==================== STORY CARDS ====================
+			function renderStoryCards() {
+				const grid = document.getElementById("storyGrid");
+				grid.innerHTML = coffeeData
+					.map(
+						(c) => `
+    <div class="story-card" onclick="openStoryModal('${c.id}')">
+      <div class="story-banner" style="background:${c.bannerColor}">
+        <div class="story-character">${c.char}</div>
+        ${c.badge ? `<span class="story-badge">${c.badge}</span>` : ""}
+      </div>
+      <div class="story-card-body">
+        <div class="story-card-name">${c.name}</div>
+        <div class="story-card-latin">${c.latin}</div>
+        <div class="story-teaser">${c.teaser}</div>
+        <div class="story-tags">${c.tags.map((t) => `<span class="tag">${t}</span>`).join("")}</div>
+        <div class="story-stats-row">
+          <div class="story-stat"><div class="story-stat-label">📍 Ketinggian</div><div class="story-stat-val">${c.stats.ketinggian}</div></div>
+          <div class="story-stat"><div class="story-stat-label">😋 Rasa</div><div class="story-stat-val">${c.stats.rasa}</div></div>
+        </div>
+      </div>
+    </div>
+  `,
+					)
+					.join("");
+			}
+
+			function openStoryModal(id) {
+				const c = coffeeData.find((x) => x.id === id);
+				const tabs = c.chapters.map((ch, i) => `<button class="chap-tab ${i === 0 ? "active" : ""}" onclick="switchChapter('${ch.id}',this)">${ch.label}</button>`).join("");
+				const contents = c.chapters.map((ch, i) => `<div class="chapter-content ${i === 0 ? "active" : ""}" id="chap-${ch.id}">${ch.content}</div>`).join("");
+
+				const modal = document.getElementById("storyModalContent");
+				modal.innerHTML = `
+    <div class="modal-banner-big" style="background:${c.bannerColor}">
+      <div class="modal-char-big">${c.char}</div>
+      <button class="modal-close-btn" onclick="closeStoryModal()">✕</button>
+    </div>
+    <div class="modal-body-story">
+      <div class="modal-name">${c.name}</div>
+      <div class="modal-latin">${c.latin}</div>
+      <div class="chapter-tabs">${tabs}</div>
+      ${contents}
+      <div style="margin-top:16px">
+        <div class="fact-boxes">
+          ${Object.entries(c.stats)
+				.map(([k, v]) => `<div class="fact-box"><div class="fact-key">${k}</div><div class="fact-val">${v}</div></div>`)
+				.join("")}
+        </div>
+      </div>
+    </div>
+  `;
+				document.getElementById("storyModal").classList.add("open");
+				addPoints(10, "📖 Membaca kisah kopi! +10");
+			}
+
+			function switchChapter(id, btn) {
+				const modal = document.getElementById("storyModalContent");
+				modal.querySelectorAll(".chap-tab").forEach((t) => t.classList.remove("active"));
+				modal.querySelectorAll(".chapter-content").forEach((c) => c.classList.remove("active"));
+				btn.classList.add("active");
+				const target = modal.querySelector(`#chap-${id}`);
+				if (target) target.classList.add("active");
+			}
+
+			function closeStoryModal(e) {
+				if (!e || e.target.id === "storyModal") document.getElementById("storyModal").classList.remove("open");
+			}
+
+			// ==================== SIMULATION ====================
+			const simStages = [
+				{ name: "Siap Tanam", desc: "Pilih lahan dan mulai menanam benih kopi.", tip: "Klik Tanam Benih!", bubble: "Ayo kita mulai!" },
+				{ name: "Benih Ditanam", desc: "Benih sudah masuk tanah. Siram rutin!", tip: "Siram 2-3x", bubble: "Benih sudah masuk tanah!" },
+				{ name: "Berkecambah", desc: "Kecambah muncul! Jaga kelembaban.", tip: "Beri pupuk!", bubble: "Lihat, sudah berkecambah!" },
+				{ name: "Bibit Muda", desc: "Bibit tumbuh kuat. Terus rawat!", tip: "Butuh nutrisi!", bubble: "Tumbuh terus ya nak!" },
+				{ name: "Tanaman Dewasa", desc: "Tanaman dewasa, bersiap berbunga.", tip: "Tunggu bunga!", bubble: "Pohonnya sudah besar!" },
+				{ name: "Berbunga", desc: "Bunga mekar! Jaga kondisi optimal.", tip: "Buah akan muncul~", bubble: "Wanginya seperti melati!" },
+				{ name: "Berbuah", desc: "Buah kopi tumbuh, tunggu hingga merah.", tip: "Hampir panen!", bubble: "Hampir siap dipetik!" },
+				{ name: "Siap Panen!", desc: "Buah merah! Waktunya panen!", tip: "Klik Panen!", bubble: "PANEN! Hari terbaik!" },
+			];
+
+			const simTreeConfigs = [null, { trunk: 0, pot: "seed", foliage: null }, { trunk: 8, pot: "soil", foliage: `<svg width="50" height="38" viewBox="0 0 50 38"><ellipse cx="25" cy="28" rx="18" ry="11" fill="#66bb6a"/><ellipse cx="25" cy="20" rx="12" ry="8" fill="#81c784"/><ellipse cx="25" cy="13" rx="7" ry="6" fill="#a5d6a7"/></svg>` }, { trunk: 20, pot: "soil", foliage: `<svg width="72" height="60" viewBox="0 0 72 60"><ellipse cx="36" cy="46" rx="28" ry="15" fill="#4caf50"/><ellipse cx="36" cy="34" rx="22" ry="14" fill="#66bb6a"/><ellipse cx="36" cy="22" rx="16" ry="12" fill="#81c784"/><ellipse cx="36" cy="12" rx="9" ry="8" fill="#a5d6a7"/></svg>` }, { trunk: 34, pot: "ground", foliage: `<svg width="96" height="82" viewBox="0 0 96 82"><ellipse cx="48" cy="62" rx="40" ry="20" fill="#388e3c"/><ellipse cx="48" cy="46" rx="34" ry="20" fill="#4caf50"/><ellipse cx="26" cy="38" rx="20" ry="14" fill="#66bb6a"/><ellipse cx="70" cy="38" rx="20" ry="14" fill="#66bb6a"/><ellipse cx="48" cy="26" rx="22" ry="15" fill="#81c784"/><ellipse cx="48" cy="13" rx="12" ry="10" fill="#a5d6a7"/></svg>` }, { trunk: 44, pot: "ground", foliage: `<svg width="116" height="102" viewBox="0 0 116 102"><ellipse cx="58" cy="78" rx="47" ry="24" fill="#2e7d32"/><ellipse cx="58" cy="60" rx="40" ry="24" fill="#388e3c"/><ellipse cx="30" cy="50" rx="24" ry="16" fill="#4caf50"/><ellipse cx="86" cy="50" rx="24" ry="16" fill="#4caf50"/><ellipse cx="58" cy="35" rx="28" ry="18" fill="#66bb6a"/><ellipse cx="58" cy="18" rx="16" ry="12" fill="#81c784"/><circle cx="32" cy="44" r="5" fill="white" opacity=".9"/><circle cx="58" cy="32" r="5" fill="white" opacity=".9"/><circle cx="82" cy="46" r="4" fill="white" opacity=".9"/><circle cx="44" cy="54" r="4" fill="white" opacity=".9"/><circle cx="72" cy="54" r="4" fill="white" opacity=".9"/></svg>` }, { trunk: 50, pot: "ground", foliage: `<svg width="126" height="114" viewBox="0 0 126 114"><ellipse cx="63" cy="88" rx="50" ry="25" fill="#2e7d32"/><ellipse cx="63" cy="68" rx="44" ry="26" fill="#388e3c"/><ellipse cx="32" cy="56" rx="26" ry="18" fill="#4caf50"/><ellipse cx="94" cy="56" rx="26" ry="18" fill="#4caf50"/><ellipse cx="63" cy="42" rx="32" ry="20" fill="#66bb6a"/><ellipse cx="63" cy="22" rx="18" ry="14" fill="#81c784"/><circle cx="30" cy="50" r="6" fill="#e53935"/><circle cx="42" cy="62" r="5" fill="#ef5350"/><circle cx="58" cy="50" r="6" fill="#e53935"/><circle cx="74" cy="56" r="5" fill="#ef5350"/><circle cx="90" cy="52" r="6" fill="#e53935"/><circle cx="63" cy="74" r="5" fill="#c62828"/><circle cx="48" cy="72" r="5" fill="#c62828"/></svg>` }, { trunk: 56, pot: "ground", foliage: `<svg width="136" height="124" viewBox="0 0 136 124"><ellipse cx="68" cy="96" rx="54" ry="26" fill="#1b5e20"/><ellipse cx="68" cy="76" rx="48" ry="28" fill="#2e7d32"/><ellipse cx="34" cy="64" rx="28" ry="20" fill="#388e3c"/><ellipse cx="102" cy="64" rx="28" ry="20" fill="#388e3c"/><ellipse cx="68" cy="48" rx="34" ry="22" fill="#4caf50"/><ellipse cx="68" cy="26" rx="20" ry="16" fill="#66bb6a"/><circle cx="30" cy="58" r="7" fill="#c62828"/><circle cx="42" cy="68" r="6" fill="#e53935"/><circle cx="57" cy="56" r="7" fill="#c62828"/><circle cx="70" cy="64" r="6" fill="#e53935"/><circle cx="84" cy="58" r="7" fill="#c62828"/><circle cx="100" cy="66" r="6" fill="#e53935"/><circle cx="52" cy="80" r="6" fill="#b71c1c"/><circle cx="68" cy="86" r="7" fill="#c62828"/><circle cx="83" cy="78" r="6" fill="#b71c1c"/></svg>` }];
+
+			const simPotSVGs = {
+				seed: `<svg width="32" height="24" viewBox="0 0 32 24"><ellipse cx="16" cy="14" rx="10" ry="9" fill="#8B6914"/><ellipse cx="16" cy="14" rx="6" ry="5.5" fill="#A07820"/><path d="M16 5 Q17.5 1.5 16 0 Q14.5 1.5 16 5" fill="#4a7c1f"/></svg>`,
+				soil: `<svg width="28" height="12" viewBox="0 0 28 12"><ellipse cx="14" cy="6" rx="14" ry="6" fill="#5d4037"/></svg>`,
+				ground: ``,
+			};
+
+			let simSt = { stage: 0, health: 100, water: 50, growth: 0, planted: false };
+			let simTimer = null;
+			let simTime = 0;
+
+			function simRenderTree(s) {
+				const f = document.getElementById("treeFoliage");
+				const t = document.getElementById("treeTrunk");
+				const p = document.getElementById("treePot");
+				if (s === 0) {
+					f.innerHTML = "";
+					t.style.height = "0px";
+					t.style.background = "transparent";
+					p.innerHTML = simPotSVGs.seed;
+					return;
+				}
+				const cfg = simTreeConfigs[s];
+				if (!cfg) return;
+				f.innerHTML = cfg.foliage || "";
+				t.style.height = cfg.trunk + "px";
+				t.style.background = cfg.trunk > 0 ? "linear-gradient(180deg,#a1887f,#6d4c41)" : "transparent";
+				p.innerHTML = simPotSVGs[cfg.pot] || "";
+			}
+
+			function simSay(msg, dur = 2500) {
+				const b = document.getElementById("bubble");
+				b.textContent = msg;
+				b.style.display = "block";
+				setTimeout(() => (b.style.display = "none"), dur);
+			}
+
+			function simWave() {
+				const f = document.getElementById("farmerSVG");
+				f.classList.remove("sim-farmer-wave");
+				void f.offsetWidth;
+				f.classList.add("sim-farmer-wave");
+				setTimeout(() => f.classList.remove("sim-farmer-wave"), 600);
+			}
+
+			function simUpdateUI() {
+				document.getElementById("bHealth").style.width = simSt.health + "%";
+				document.getElementById("bGrow").style.width = simSt.growth + "%";
+				document.getElementById("bWater").style.width = simSt.water + "%";
+				document.getElementById("vHealth").textContent = simSt.health + "%";
+				document.getElementById("vGrow").textContent = simSt.growth + "%";
+				document.getElementById("vWater").textContent = simSt.water + "%";
+				const sg = simStages[simSt.stage];
+				document.getElementById("sName").textContent = sg.name;
+				document.getElementById("sDesc").textContent = sg.desc;
+				document.getElementById("sTip").textContent = sg.tip;
+				simRenderTree(simSt.stage);
+			}
+
+			function simLog(msg) {
+				const el = document.getElementById("simLog");
+				const m = String(Math.floor(simTime / 60)).padStart(2, "0");
+				const s2 = String(simTime % 60).padStart(2, "0");
+				el.innerHTML += `<br><span class="sim-log-t">${m}:${s2}</span> ${msg}`;
+				el.scrollTop = el.scrollHeight;
+			}
+
+			function simSpawnPts(txt) {
+				const fx = document.getElementById("fxLayer");
+				const d = document.createElement("div");
+				d.className = "sim-pts";
+				d.textContent = txt;
+				d.style.left = 38 + Math.random() * 24 + "%";
+				d.style.top = "30%";
+				fx.appendChild(d);
+				setTimeout(() => d.remove(), 1200);
+			}
+
+			function simSpawnDrops() {
+				const fx = document.getElementById("fxLayer");
+				for (let i = 0; i < 8; i++) {
+					setTimeout(() => {
+						const d = document.createElement("div");
+						d.className = "sim-drop";
+						d.style.left = 32 + Math.random() * 36 + "%";
+						d.style.top = "8%";
+						fx.appendChild(d);
+						setTimeout(() => d.remove(), 800);
+					}, i * 70);
+				}
+			}
+
+			function simSpawnSparks() {
+				const fx = document.getElementById("fxLayer");
+				const colors = ["#ffd600", "#4caf50", "#ff9800"];
+				for (let i = 0; i < 10; i++) {
+					setTimeout(() => {
+						const d = document.createElement("div");
+						d.className = "sim-spark";
+						d.innerHTML = `<svg width="14" height="14" viewBox="0 0 14 14"><polygon points="7,0 8.5,5 14,5 9.5,8 11,14 7,10.5 3,14 4.5,8 0,5 5.5,5" fill="${colors[i % 3]}"/></svg>`;
+						d.style.left = 22 + Math.random() * 56 + "%";
+						d.style.top = 10 + Math.random() * 60 + "%";
+						fx.appendChild(d);
+						setTimeout(() => d.remove(), 600);
+					}, i * 55);
+				}
+			}
+
+			function simCheckGrow() {
+				const prev = simSt.stage;
+				if (simSt.growth >= 90 && simSt.stage < 7) simSt.stage = 7;
+				else if (simSt.growth >= 75 && simSt.stage < 6) simSt.stage = 6;
+				else if (simSt.growth >= 60 && simSt.stage < 5) simSt.stage = 5;
+				else if (simSt.growth >= 45 && simSt.stage < 4) simSt.stage = 4;
+				else if (simSt.growth >= 30 && simSt.stage < 3) simSt.stage = 3;
+				else if (simSt.growth >= 15 && simSt.stage < 2) simSt.stage = 2;
+				if (simSt.stage !== prev) {
+					simLog("Tahap baru: " + simStages[simSt.stage].name + "!");
+					showToast("🌟 " + simStages[simSt.stage].name);
+					simSay(simStages[simSt.stage].bubble);
+					simWave();
+					if (simSt.stage === 7) {
+						document.getElementById("btnH").disabled = false;
+						addPoints(30, "🍒 Tanaman siap panen! +30");
+					}
+				}
+				simSpawnPts("+5");
+			}
+
+			function act(a) {
+				if (a === "tanam") {
+					if (simSt.planted) return;
+					simSt.planted = true;
+					simSt.stage = 1;
+					simSt.growth = 5;
+					document.getElementById("btnT").disabled = true;
+					document.getElementById("btnS").disabled = false;
+					document.getElementById("btnP").disabled = false;
+					simLog("Benih kopi ditanam! Jaga kelembaban tanah.");
+					addPoints(20, "🌰 Menanam benih! +20");
+					simSpawnPts("+20");
+					simSpawnSparks();
+					simSay(simStages[1].bubble);
+					simWave();
+				} else if (a === "siram") {
+					if (!simSt.planted) return;
+					simSt.water = Math.min(100, simSt.water + 25);
+					simSt.health = Math.min(100, simSt.health + 5);
+					simCheckGrow();
+					simLog("Tanaman disiram! Kadar air meningkat.");
+					addPoints(5, "💧 Menyiram! +5");
+					simSpawnDrops();
+					if (Math.random() < 0.4) simSay("Segar sekali!");
+				} else if (a === "pupuk") {
+					if (!simSt.planted) return;
+					simSt.health = Math.min(100, simSt.health + 15);
+					simSt.growth = Math.min(100, simSt.growth + 15);
+					simCheckGrow();
+					simLog("Pupuk diberikan! Pertumbuhan meningkat.");
+					addPoints(10, "🌿 Memberi pupuk! +10");
+					simSpawnSparks();
+					if (Math.random() < 0.5) simSay("Nutrisi mantap!");
+				} else if (a === "panen") {
+					if (simSt.stage < 7) {
+						showToast("⚠️ Tanaman belum siap panen!");
+						return;
+					}
+					simSt.stage = 0;
+					simSt.planted = false;
+					simSt.health = 100;
+					simSt.water = 50;
+					simSt.growth = 0;
+					document.getElementById("btnT").disabled = false;
+					document.getElementById("btnS").disabled = true;
+					document.getElementById("btnP").disabled = true;
+					document.getElementById("btnH").disabled = true;
+					simRenderTree(0);
+					simLog("PANEN BERHASIL! Kopi siap diolah!");
+					addPoints(100, "🎉 PANEN BERHASIL! +100");
+					simSpawnSparks();
+					simSpawnSparks();
+					launchConfetti();
+					simSay("YEAY! PANEN BERHASIL!", 3000);
+					simWave();
+				}
+				simUpdateUI();
+			}
+
+			function startSimTimer() {
+				simTimer = setInterval(() => {
+					simTime++;
+					if (!simSt.planted) return;
+					if (simTime % 6 === 0) {
+						simSt.water = Math.max(0, simSt.water - 4);
+						if (simSt.water < 20) simSt.health = Math.max(0, simSt.health - 2);
+						simUpdateUI();
+					}
+				}, 1000);
+			}
+
+			// ==================== QUIZ ====================
+			function selectLevel(level, btn) {
+				currentQuizLevel = level;
+				document.querySelectorAll(".level-btn").forEach((b) => b.classList.remove("active"));
+				btn.classList.add("active");
+				currentQ = 0;
+				quizScore = 0;
+				document.getElementById("scoreBoard").classList.remove("show");
+				document.getElementById("quizCard").style.display = "block";
+				renderQuestion();
+			}
+
+			function startQuiz() {
+				currentQ = 0;
+				quizScore = 0;
+				document.getElementById("scoreBoard").classList.remove("show");
+				document.getElementById("quizCard").style.display = "block";
+				renderQuestion();
+			}
+
+			function renderQuestion() {
+				const questions = quizData[currentQuizLevel];
+				if (currentQ >= questions.length) {
+					showScore();
+					return;
+				}
+				const q = questions[currentQ];
+				quizAnswered = false;
+				const dots = questions.map((_, i) => `<div class="quiz-dot ${i < currentQ ? "done" : i === currentQ ? "current" : ""}"></div>`).join("");
+				const letters = ["A", "B", "C", "D"];
+				const opts = q.opts.map((o, i) => `<button class="quiz-opt" onclick="answerQuiz(${i})"><span class="opt-letter">${letters[i]}</span> ${o}</button>`).join("");
+				document.getElementById("quizCard").innerHTML = `
+    <div class="quiz-progress"><span class="quiz-num">Soal ${currentQ + 1}/${questions.length}</span><div class="quiz-dots">${dots}</div></div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options">${opts}</div>
+    <div class="quiz-feedback" id="quizFb"></div>
+    <div class="quiz-actions"><button class="btn-next" id="btnNext" onclick="nextQuestion()">Lanjut →</button></div>
+  `;
+			}
+
+			function answerQuiz(idx) {
+				if (quizAnswered) return;
+				quizAnswered = true;
+				const q = quizData[currentQuizLevel][currentQ];
+				const opts = document.querySelectorAll(".quiz-opt");
+				const fb = document.getElementById("quizFb");
+				opts.forEach((o) => o.classList.add("disabled"));
+				opts[q.ans].classList.add("correct");
+				if (idx === q.ans) {
+					quizScore++;
+					const pts = currentQuizLevel === "easy" ? 10 : currentQuizLevel === "medium" ? 20 : 30;
+					addPoints(pts, `✅ Benar! +${pts}`);
+					fb.className = "quiz-feedback show correct";
+					fb.innerHTML = `<span>✅</span><div><strong>Benar!</strong> ${q.exp}</div>`;
+				} else {
+					opts[idx].classList.add("wrong");
+					fb.className = "quiz-feedback show wrong";
+					fb.innerHTML = `<span>❌</span><div><strong>Salah.</strong> ${q.exp}</div>`;
+				}
+				document.getElementById("btnNext").classList.add("show");
+			}
+
+			function nextQuestion() {
+				currentQ++;
+				renderQuestion();
+			}
+
+			function showScore() {
+				const questions = quizData[currentQuizLevel];
+				const pct = Math.round((quizScore / questions.length) * 100);
+				const stars = pct >= 80 ? "⭐⭐⭐" : pct >= 50 ? "⭐⭐" : "⭐";
+				const msg = pct === 100 ? "🎉 Sempurna! Kamu ahli kopi sejati!" : pct >= 80 ? "🌟 Luar biasa! Sangat pintar!" : pct >= 50 ? "😊 Bagus! Terus belajar ya!" : "💪 Jangan menyerah, coba lagi!";
+				document.getElementById("quizCard").style.display = "none";
+				const sb = document.getElementById("scoreBoard");
+				sb.innerHTML = `<span class="score-trophy">${pct === 100 ? "🏆" : "☕"}</span><div class="score-title">Quiz Selesai!</div><div class="score-stars">${stars}</div><div class="score-val">${quizScore}/${questions.length}</div><div style="font-size:1.5rem;color:var(--coffee-warm);font-weight:800">${pct}%</div><div class="score-msg">${msg}</div><button class="btn-retry" onclick="startQuiz()">🔄 Coba Lagi</button>`;
+				sb.classList.add("show");
+				if (pct === 100) launchConfetti();
+			}
+
+			// ==================== POINTS ====================
+			function addPoints(pts, msg) {
+				totalPoints += pts;
+				document.getElementById("totalPoints").textContent = totalPoints;
+				const levels = [
+					[0, "Pemula"],
+					[100, "Pelajar"],
+					[300, "Petani"],
+					[600, "Ahli"],
+					[1000, "Master Kopi ☕"],
+				];
+				for (let i = levels.length - 1; i >= 0; i--) {
+					if (totalPoints >= levels[i][0]) {
+						document.getElementById("levelDisplay").textContent = levels[i][1];
+						break;
+					}
+				}
+				if (msg) showToast(msg);
+			}
+
+			function showToast(msg) {
+				const t = document.getElementById("toast");
+				t.textContent = msg;
+				t.classList.add("show");
+				setTimeout(() => t.classList.remove("show"), 2500);
+			}
+
+			function launchConfetti() {
+				const colors = ["#FFD600", "#E91E8C", "#4CAF50", "#29B6F6", "#FF9800", "#9C27B0"];
+				for (let i = 0; i < 60; i++) {
+					const c = document.createElement("div");
+					c.className = "confetti-piece";
+					const color = colors[Math.floor(Math.random() * colors.length)];
+					const x = Math.random() * 100 + "vw";
+					const dx = (Math.random() - 0.5) * 200 + "px";
+					const dur = 1.5 + Math.random() * 2 + "s";
+					const delay = Math.random() * 0.5 + "s";
+					const shape = Math.random() > 0.5 ? "50%" : "0";
+					c.style.cssText = `left:${Math.random() * 100}vw;top:0;background:${color};border-radius:${shape};--x:${x};--dx:${dx};--dur:${dur};--delay:${delay}`;
+					document.body.appendChild(c);
+					setTimeout(() => c.remove(), 4000);
+				}
+			}
+		</script>
+	</body>
+</html>

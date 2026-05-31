@@ -404,18 +404,11 @@
 				font-size: 8px;
 				color: #6a5020;
 				border-radius: 2px 0 0 2px;
-				z-index: 15;
+				z-index: 5;
 				writing-mode: vertical-rl;
 			}
 			#panel-toggle:hover {
 				color: #c0a040;
-			}
-			#panel-toggle.shifted {
-				right: 216px;
-				transition: right 0.2s;
-			}
-			#panel-toggle {
-				transition: right 0.2s;
 			}
 			#intro {
 				position: absolute;
@@ -2109,17 +2102,9 @@
 			}
 			function togglePanel() {
 				panelOpen = !panelOpen;
-				const side = document.getElementById("side");
+				document.getElementById("side").classList.toggle("open", panelOpen);
 				const tog = document.getElementById("panel-toggle");
-				if (panelOpen) {
-					side.classList.add("open");
-					tog.classList.add("shifted");
-					tog.textContent = "PANEL ◂";
-				} else {
-					side.classList.remove("open");
-					tog.classList.remove("shifted");
-					tog.textContent = "PANEL ▸";
-				}
+				tog.textContent = panelOpen ? "PANEL ◂" : "PANEL ▸";
 			}
 			function qBar(val, max, col) {
 				const p = Math.round(Math.min(val / max, 1) * 100);
@@ -2499,7 +2484,6 @@
 				showToast("🔄 Reset!");
 				panelOpen = false;
 				document.getElementById("side").classList.remove("open");
-				document.getElementById("panel-toggle").classList.remove("shifted");
 				document.getElementById("panel-toggle").textContent = "PANEL ▸";
 			}
 			function startGame() {
@@ -2671,75 +2655,27 @@
 			// ════════ FULLSCREEN ════════
 			function toggleFullscreen() {
 				const el = document.getElementById("screen");
-				const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || "ontouchstart" in window || window.innerWidth <= 768;
+				const isMobile = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent) || window.innerWidth <= 768;
 
 				const isFS = !!(document.fullscreenElement || document.webkitFullscreenElement || document.mozFullScreenElement);
 
 				if (!isFS) {
-					// ── Masuk fullscreen ──
-					if (isMobile) {
-						// Mobile: fullscreen seluruh document agar bisa rotate
-						const req = document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen || document.documentElement.mozRequestFullScreen;
-						if (req) {
-							req.call(document.documentElement)
-								.then(() => {
-									// Paksa landscape setelah fullscreen granted
-									if (screen.orientation && screen.orientation.lock) {
-										screen.orientation.lock("landscape").catch(() => {
-											// Fallback: pakai CSS transform rotate
-											forceLandscapeCSS(true);
-										});
-									} else {
-										// Browser lama: CSS transform
-										forceLandscapeCSS(true);
-									}
-								})
-								.catch(() => {
-									// Fullscreen ditolak: CSS rotate saja
-									forceLandscapeCSS(true);
-								});
-						} else {
-							forceLandscapeCSS(true);
-						}
-					} else {
-						// Desktop: fullscreen element biasa
-						const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen;
-						if (req) req.call(el);
+					// Masuk fullscreen
+					const req = el.requestFullscreen || el.webkitRequestFullscreen || el.mozRequestFullScreen;
+					if (req) req.call(el);
+
+					// Mobile: minta landscape
+					if (isMobile && screen.orientation && screen.orientation.lock) {
+						screen.orientation.lock("landscape").catch(() => {});
 					}
 				} else {
-					// ── Keluar fullscreen ──
+					// Keluar fullscreen
 					const ex = document.exitFullscreen || document.webkitExitFullscreen || document.mozCancelFullScreen;
 					if (ex) ex.call(document);
 
 					if (screen.orientation && screen.orientation.unlock) {
 						screen.orientation.unlock();
 					}
-					forceLandscapeCSS(false);
-				}
-			}
-
-			// CSS rotate fallback untuk browser yang tolak screen.orientation.lock
-			function forceLandscapeCSS(on) {
-				const wrapper = document.getElementById("wrapper");
-				const hint = document.getElementById("rotate-hint");
-				if (on) {
-					// Cek apakah memang portrait
-					if (window.innerHeight > window.innerWidth) {
-						wrapper.style.cssText = `
-                transform: rotate(90deg);
-                transform-origin: center center;
-                width: ${window.innerHeight}px;
-                height: ${window.innerWidth}px;
-                position: fixed;
-                top: ${(window.innerHeight - window.innerWidth) / 2}px;
-                left: -${(window.innerHeight - window.innerWidth) / 2}px;
-                overflow: hidden;
-            `;
-						if (hint) hint.style.display = "none"; // sembunyikan hint rotate
-					}
-				} else {
-					wrapper.style.cssText = "";
-					if (hint) hint.style.display = "";
 				}
 			}
 
@@ -2749,25 +2685,26 @@
 				document.getElementById("fs-icon").textContent = isFS ? "✕" : "⛶";
 				document.getElementById("fs-label").textContent = isFS ? "EXIT" : "FULLSCREEN";
 
-				const screenEl = document.getElementById("screen");
+				// Resize canvas agar mengisi layar saat fullscreen
+				const screen = document.getElementById("screen");
 				if (isFS) {
-					screenEl.style.width = "100vw";
-					screenEl.style.height = "100vh";
-					screenEl.style.display = "flex";
-					screenEl.style.flexDirection = "column";
-					screenEl.style.alignItems = "center";
-					screenEl.style.justifyContent = "center";
-					// Scale canvas
 					const scaleX = window.innerWidth / CW;
 					const scaleY = window.innerHeight / CH;
-					const scale = Math.min(scaleX, scaleY) * 0.98;
+					const scale = Math.min(scaleX, scaleY);
 					gc.style.width = CW * scale + "px";
 					gc.style.height = CH * scale + "px";
+					screen.style.width = "100vw";
+					screen.style.height = "100vh";
+					screen.style.display = "flex";
+					screen.style.flexDirection = "column";
+					screen.style.alignItems = "center";
+					screen.style.justifyContent = "center";
 				} else {
 					gc.style.width = "";
 					gc.style.height = "";
-					screenEl.style.cssText = "";
-					forceLandscapeCSS(false);
+					screen.style.width = "";
+					screen.style.height = "";
+					screen.style.display = "";
 				}
 			}
 
