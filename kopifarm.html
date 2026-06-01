@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="id">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<title>Kopi Farm — Pixel Edition</title>
+		<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/styleGame.css" type="text/css" />
+	</head>
+	<body>
+		<div id="wrapper">
+			<div id="screen" style="position: relative">
+				<!-- FULLSCREEN BAR -->
+				<div id="fullscreen-bar">
+					<span id="fs-title">KOPI FARM</span>
+					<button id="fs-btn" onclick="toggleFullscreen()">
+						<span id="fs-icon">⛶</span>
+						<span id="fs-label">FULLSCREEN</span>
+					</button>
+				</div>
+
+				<!-- INTRO -->
+				<div id="intro">
+					<canvas id="intro-canvas" width="320" height="240"></canvas>
+					<div class="intro-title">KOPI FARM</div>
+					<div class="intro-sub">Pixel Edition · Scrolling World<br />Tanam · Rawat · Panen · Jual ke NPC</div>
+					<button id="start-btn" onclick="startGame()">▶ MULAI BERTANI</button>
+				</div>
+				<!-- HUD -->
+				<div id="hud">
+					<div class="hc"><span class="icon">💰</span><span class="v" id="h-gold">500</span><span>rp</span></div>
+					<div class="hc"><span class="icon" id="h-seed-icon">🌱</span><span class="v" id="h-seed-qty">5</span></div>
+					<div class="hc"><span class="icon">☕</span><span class="v" id="h-inv">0</span></div>
+					<div class="hc"><span class="icon">📅</span>Hari <span class="v" id="h-day">1</span></div>
+					<div class="hc"><span class="icon">🗺</span><span class="v" id="h-zone">Ladang</span></div>
+					<div class="hc" id="hc-weather">
+						<div id="weather-icon">🌤</div>
+						<div id="weather-txt">Cerah</div>
+						<div id="season-txt">Hujan</div>
+					</div>
+				</div>
+				<!-- GAME CANVAS -->
+				<canvas id="gc" width="800" height="500"></canvas>
+				<!-- MINIMAP -->
+				<canvas id="minimap"></canvas>
+				<!-- TOAST -->
+				<div id="toast"></div>
+				<!-- MODAL EDUKASI -->
+				<div id="edu-modal" style="display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.75); z-index: 25; align-items: center; justify-content: center">
+					<div style="background: #0e0a04; border: 3px solid #20a0e0; border-radius: 4px; padding: 16px; width: 85%; max-width: 480px; max-height: 80%; overflow-y: auto; position: relative; font-family: &quot;Press Start 2P&quot;, monospace">
+						<div id="edu-modal-title" style="font-size: 8px; color: #80e0ff; margin-bottom: 10px; padding-bottom: 8px; border-bottom: 2px solid #1a4060"></div>
+						<div id="edu-modal-body" style="font-size: 6px; color: #a0c8d0; line-height: 2; white-space: pre-wrap"></div>
+						<button onclick="closeEduModal()" style="margin-top: 14px; font-family: &quot;Press Start 2P&quot;, monospace; font-size: 6px; background: #102840; border: 2px solid #20a0e0; color: #60d0ff; padding: 6px 16px; cursor: pointer; border-radius: 2px; display: block; width: 100%">✕ TUTUP</button>
+					</div>
+				</div>
+				<!-- PANEL TOGGLE -->
+				<div id="panel-toggle" onclick="togglePanel()">PANEL ▸</div>
+				<!-- SIDE PANEL -->
+				<div id="side">
+					<div id="panel-tabs">
+						<div class="ptab on" id="pt-shop" onclick="switchTab('shop')">🛒 Benih</div>
+						<div class="ptab" id="pt-market" onclick="switchTab('market')">🏪 Pasar</div>
+						<div class="ptab" id="pt-inv" onclick="switchTab('inv')">🎒 Tas</div>
+						<div class="ptab" id="pt-edu" onclick="switchTab('edu')">📚 Edu</div>
+					</div>
+					<div id="panel-body"></div>
+				</div>
+
+				<!-- MOBILE CONTROLS -->
+				<div id="mobile-controls">
+					<!-- Joystick kiri -->
+					<div id="joystick-zone">
+						<div id="joystick-base"></div>
+						<div id="joystick-thumb"></div>
+					</div>
+					<!-- Tombol aksi kanan -->
+					<div id="action-btns">
+						<button class="act-btn" id="btn-act-water"><span class="bi">💧</span>SIRAM</button>
+						<button class="act-btn" id="btn-act-dig"><span class="bi">⛏</span>GALI</button>
+						<button class="act-btn" id="btn-act-sow"><span class="bi">🌱</span>TANAM</button>
+						<button class="act-btn" id="btn-act-harvest"><span class="bi">🧺</span>PANEN</button>
+						<button class="act-btn" id="btn-act-action"><span class="bi">⚡</span>AKSI</button>
+					</div>
+				</div>
+
+				<!-- TOOLBAR -->
+				<div id="toolbar">
+					<button class="tb on" id="btn-dig" onclick="setTool('dig')"><span class="ti">⛏</span>GALI</button>
+					<button class="tb" id="btn-sow" onclick="setTool('sow')"><span class="ti">🌱</span>TANAM</button>
+					<button class="tb" id="btn-water" onclick="setTool('water')"><span class="ti">💧</span>SIRAM</button>
+					<button class="tb" id="btn-harvest" onclick="setTool('harvest')"><span class="ti">🧺</span>PANEN</button>
+					<button class="tb" id="btn-reset" onclick="if (confirm('Reset?')) resetGame();" style="flex: 0.4"><span class="ti" style="font-size: 12px">↺</span></button>
+				</div>
+				<!-- STATUS BAR -->
+				<div id="statusbar">
+					<span id="plot-txt">—</span>
+					<div id="day-wrap">
+						<div id="daybar"><div id="dayfill" style="width: 0%"></div></div>
+						<span id="daytime-txt">Pagi</span>
+						<button id="nextday-btn" onclick="advanceDay()">⏭ Skip</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ROTATE HINT (mobile portrait) -->
+		<!-- <div id="rotate-hint">
+			<div class="rh-icon">📱</div>
+			<div>Putar layar</div>
+			<div style="font-size: 7px; color: #a08040; margin-top: 4px">untuk pengalaman terbaik</div>
+		</div> -->
+
+		<script src="assets/js/mainGame.js"></script>
+	</body>
+</html>

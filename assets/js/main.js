@@ -142,80 +142,86 @@ const coffeeData = [
 
 // ==================== PRODUK UNGGULAN DINAS ====================
 const produkDinas = [
-    {
-        nama: "Biji Kopi Robusta Memuko",
-        emoji: "💪",
-        deskripsi: "Kopi robusta unggulan Jawa Barat dari perkebunan Memuko. Cita rasa pahit tegas dengan body penuh, cocok untuk espresso dan kopi susu.",
-        asal: "Perkebunan Memuko, Jawa Barat",
-        jenis: "Robusta",
-        warna: "#E8F5E9",
-        aksen: "#2E7D32",
-        keunggulan: ["Tahan hama & penyakit", "Produktivitas tinggi", "Harga kompetitif"]
-    },
-    {
-        nama: "Kopi Arabika Jawa Barat",
-        emoji: "🏔️",
-        deskripsi: "Kopi arabika pilihan dari dataran tinggi Jawa Barat. Dikenal dengan keasaman citrus yang menyenangkan dan aroma floral yang khas.",
-        asal: "Garut, Cianjur, Bandung Selatan",
-        jenis: "Arabika",
-        warna: "#FFF8E1",
-        aksen: "#FF8F00",
-        keunggulan: ["Kualitas premium ekspor", "Aroma floral khas", "Profil rasa kompleks"]
-    },
-    {
-        nama: "Teh Putih",
-        emoji: "🍵",
-        deskripsi: "Teh putih premium Jawa Barat dipetik dari pucuk daun muda yang belum mekar. Rasa lembut dengan aroma halus yang menyegarkan.",
-        asal: "Perkebunan Teh Jawa Barat",
-        jenis: "Teh",
-        warna: "#F3E5F5",
-        aksen: "#7B1FA2",
-        keunggulan: ["Antioksidan tinggi", "Rasa lembut", "Proses minimal"]
-    },
-    {
-        nama: "Teh Orange Pekoe",
-        emoji: "🟠",
-        deskripsi: "Teh hitam grade orange pekoe dari perkebunan Jawa Barat. Warna seduhan merah keemasan dengan rasa kuat dan aroma malt yang khas.",
-        asal: "Perkebunan Teh Jawa Barat",
-        jenis: "Teh",
-        warna: "#FFF3E0",
-        aksen: "#E65100",
-        keunggulan: ["Grade ekspor terpilih", "Warna seduhan premium", "Aroma khas malt"]
-    },
-    {
-        nama: "Teh Hitam",
-        emoji: "🫖",
-        deskripsi: "Teh hitam klasik Jawa Barat dengan proses fermentasi penuh. Rasa bold dan kuat, cocok untuk teh susu maupun diseduh langsung.",
-        asal: "Perkebunan Teh Jawa Barat",
-        jenis: "Teh",
-        warna: "#FFEBEE",
-        aksen: "#B71C1C",
-        keunggulan: ["Rasa bold & kuat", "Cocok berbagai sajian", "Produksi lokal unggulan"]
-    }
+	{
+		nama: "Biji Kopi Robusta Memuko",
+		emoji: "💪",
+		deskripsi: "Kopi robusta unggulan Jawa Barat dari perkebunan Memuko. Cita rasa pahit tegas dengan body penuh, cocok untuk espresso dan kopi susu.",
+		asal: "Perkebunan Memuko, Jawa Barat",
+		jenis: "Robusta",
+		warna: "#E8F5E9",
+		aksen: "#2E7D32",
+		keunggulan: ["Tahan hama & penyakit", "Produktivitas tinggi", "Harga kompetitif"],
+	},
+	{
+		nama: "Kopi Arabika Jawa Barat",
+		emoji: "🏔️",
+		deskripsi: "Kopi arabika pilihan dari dataran tinggi Jawa Barat. Dikenal dengan keasaman citrus yang menyenangkan dan aroma floral yang khas.",
+		asal: "Garut, Cianjur, Bandung Selatan",
+		jenis: "Arabika",
+		warna: "#FFF8E1",
+		aksen: "#FF8F00",
+		keunggulan: ["Kualitas premium ekspor", "Aroma floral khas", "Profil rasa kompleks"],
+	},
+	{
+		nama: "Teh Putih",
+		emoji: "🍵",
+		deskripsi: "Teh putih premium Jawa Barat dipetik dari pucuk daun muda yang belum mekar. Rasa lembut dengan aroma halus yang menyegarkan.",
+		asal: "Perkebunan Teh Jawa Barat",
+		jenis: "Teh",
+		warna: "#F3E5F5",
+		aksen: "#7B1FA2",
+		keunggulan: ["Antioksidan tinggi", "Rasa lembut", "Proses minimal"],
+	},
+	{
+		nama: "Teh Orange Pekoe",
+		emoji: "🟠",
+		deskripsi: "Teh hitam grade orange pekoe dari perkebunan Jawa Barat. Warna seduhan merah keemasan dengan rasa kuat dan aroma malt yang khas.",
+		asal: "Perkebunan Teh Jawa Barat",
+		jenis: "Teh",
+		warna: "#FFF3E0",
+		aksen: "#E65100",
+		keunggulan: ["Grade ekspor terpilih", "Warna seduhan premium", "Aroma khas malt"],
+	},
+	{
+		nama: "Teh Hitam",
+		emoji: "🫖",
+		deskripsi: "Teh hitam klasik Jawa Barat dengan proses fermentasi penuh. Rasa bold dan kuat, cocok untuk teh susu maupun diseduh langsung.",
+		asal: "Perkebunan Teh Jawa Barat",
+		jenis: "Teh",
+		warna: "#FFEBEE",
+		aksen: "#B71C1C",
+		keunggulan: ["Rasa bold & kuat", "Cocok berbagai sajian", "Produksi lokal unggulan"],
+	},
 ];
 
 // ==================== QUIZ DATA ====================
 const quizData = {
 	easy: [
-		{ q: "☕ Apa warna buah kopi yang siap dipanen?", opts: ["Hijau", "Merah", "Kuning", "Hitam"], ans: 1, exp: 'Buah kopi yang siap dipanen berwarna merah cerah. Inilah mengapa panen selektif disebut "petik merah".' },
-		{ q: "🏔️ Kopi jenis apa yang tumbuh di dataran tinggi?", opts: ["Robusta", "Liberika", "Arabika", "Excelsa"], ans: 2, exp: "Arabika tumbuh optimal di ketinggian 1.000–2.000 mdpl dengan suhu sejuk 18–24°C." },
-		{ q: "🌱 Berapa pH tanah yang ideal untuk menanam kopi?", opts: ["3,0–4,0", "5,5–6,5", "7,5–8,5", "9,0–10"], ans: 1, exp: "Kopi tumbuh terbaik di tanah dengan pH 5,5–6,5 (sedikit asam)." },
-		{ q: "💧 Berapa kali sebaiknya menyiram kopi saat musim kemarau?", opts: ["Setiap hari", "2–3 kali seminggu", "Seminggu sekali", "Sebulan sekali"], ans: 1, exp: "Penyiraman 2–3 kali seminggu cukup untuk menjaga kelembaban tanah tanpa menyebabkan genangan." },
-		{ q: "🌿 Apa nama penyakit paling berbahaya pada kopi Arabika?", opts: ["Busuk Akar", "Karat Daun (HV)", "Ulat Tanah", "Jamur Putih"], ans: 1, exp: 'Hemileia vastatrix (HV) atau "karat daun" adalah penyakit jamur yang sangat merusak perkebunan Arabika.' },
+		{ q: "☕ Apa warna buah kopi yang siap dipanen?", opts: ["Hijau", "Merah", "Kuning", "Hitam"], ans: 1, exp: 'Buah kopi siap panen berwarna merah cerah. Inilah mengapa panen selektif disebut "petik merah". Buah hijau/hitam menurunkan mutu.' },
+		{ q: "🏔️ Kopi Arabika tumbuh optimal di ketinggian berapa?", opts: ["0–200 mdpl", "200–600 mdpl", "1.000–2.000 mdpl", "2.500–3.000 mdpl"], ans: 2, exp: "Arabika tumbuh optimal di 1.000–2.000 mdpl dengan suhu 15–25°C dan pH tanah 5,5–6,5." },
+		{ q: "🌱 Berapa pH tanah ideal untuk menanam kopi?", opts: ["3,0–4,0", "5,5–6,5", "7,5–8,5", "9,0–10"], ans: 1, exp: "Kopi tumbuh terbaik di pH 5,5–6,5. Berlaku untuk Arabika maupun Robusta." },
+		{ q: "💧 Kapan waktu terbaik menanam kopi?", opts: ["Musim kemarau", "Awal musim hujan", "Pertengahan kemarau", "Kapan saja"], ans: 1, exp: "Penanaman dilakukan awal musim hujan agar bibit mendapat cukup air dan tidak stres akibat panas terik." },
+		{ q: "🌿 Berapa pasang daun bibit kopi yang siap tanam?", opts: ["1–2 pasang", "3–4 pasang", "6–8 pasang", "10–12 pasang"], ans: 2, exp: "Bibit siap tanam memiliki 6–8 pasang daun normal dengan sepasang cabang primer yang sudah terbentuk." },
+		{ q: "🧪 Berapa dosis pupuk organik per pohon kopi per tahun?", opts: ["1–2 kg", "5–8 kg", "10–20 kg", "30–50 kg"], ans: 2, exp: "Dosis pupuk organik yang dianjurkan adalah 10–20 kg/pohon/tahun, sangat penting untuk tanah dengan bahan organik rendah (<3,5%)." },
+		{ q: "🦡 Apa nama hama penggerek buah kopi?", opts: ["Helopeltis", "Hypothenemus hampei", "Pratylenchus coffeae", "Hemileia vastatrix"], ans: 1, exp: "Hypothenemus hampei (PBKo/Penggerek Buah Kopi) adalah hama utama yang menyerang buah kopi dan menurunkan mutu hasil panen." },
 	],
 	medium: [
-		{ q: "📍 Di kabupaten mana kopi Java Preanger terkenal di Jawa Barat?", opts: ["Bekasi & Karawang", "Garut & Cianjur", "Indramayu & Cirebon", "Subang & Purwakarta"], ans: 1, exp: "Kopi Java Preanger tumbuh di dataran tinggi Garut (Papandayan, Cikajang) dan Cianjur yang memiliki iklim ideal." },
-		{ q: "⚗️ Metode pascapanen apa yang menghasilkan rasa paling bersih (clean)?", opts: ["Natural/Dry Process", "Wet/Washed Process", "Honey Process", "Giling Basah"], ans: 1, exp: 'Wet/Washed process menghasilkan kopi dengan rasa paling "clean" karena lapisan buah dihilangkan sebelum pengeringan.' },
-		{ q: "☕ Kopi mana yang memiliki kandungan kafein TERTINGGI?", opts: ["Arabika", "Liberika", "Excelsa", "Robusta"], ans: 3, exp: "Robusta mengandung 2,0–2,7% kafein, hampir 2x lebih tinggi dari Arabika (1,2–1,5%)." },
-		{ q: "🏛️ Tahun berapa VOC pertama kali memulai perkebunan kopi di Jawa?", opts: ["1699", "1750", "1800", "1850"], ans: 0, exp: "VOC memulai budidaya kopi komersial di Jawa pada tahun 1699, menjadikan Jawa sebagai pemasok kopi utama dunia." },
-		{ q: "🌸 Berapa lama bunga kopi bertahan sebelum gugur?", opts: ["1–2 hari", "1 minggu", "2 minggu", "1 bulan"], ans: 0, exp: "Bunga kopi (mirip melati) hanya mekar selama 1–2 hari saja. Penyerbukan terjadi sangat cepat dalam periode ini." },
+		{ q: "📍 Kopi Robusta tumbuh di ketinggian berapa?", opts: ["0–100 mdpl", "100–600 mdpl", "1.000–1.500 mdpl", "1.500–2.000 mdpl"], ans: 1, exp: "Robusta tumbuh optimal di 100–600 mdpl dengan suhu 21–24°C. Lebih toleran panas dibanding Arabika." },
+		{ q: "⚗️ Metode pascapanen apa yang menghasilkan mutu TERBAIK?", opts: ["Natural/Dry Process", "Giling Kering", "Giling Basah (Wet Hulled)", "Semi-washed"], ans: 2, exp: "Giling Basah (Wet Hulled) dianjurkan karena menghasilkan mutu terbaik. Buah masak harus segera diolah setelah panen." },
+		{ q: "🌱 Apa nama klon batang bawah yang tahan nematoda?", opts: ["BP 42", "BP 308", "SA 237", "Kartika 1"], ans: 1, exp: "Klon BP 308 digunakan sebagai batang bawah pada bibit sambungan Robusta karena tahan terhadap nematoda parasit." },
+		{ q: "✂️ Pada ketinggian berapa Etape I pemangkasan dilakukan?", opts: ["50–60 cm", "80–100 cm", "120–140 cm", "160–180 cm"], ans: 1, exp: "Etape I: batang dipotong di ±1 m, cabang primer disunat pada 80–100 cm untuk membentuk kerangka tanaman." },
+		{ q: "🏛️ Berapa jumlah keluarga yang bergantung pada kopi di Indonesia?", opts: ["100.000 keluarga", "500.000 keluarga", "1 juta keluarga", "1,84 juta keluarga"], ans: 3, exp: "Tidak kurang dari 1,84 juta keluarga bergantung langsung pada budidaya kopi, dan sekitar 1 juta keluarga lagi pada industri hilirnya." },
+		{ q: "🌿 Tanaman penaung tetap apa yang paling umum dipakai di Indonesia?", opts: ["Pisang", "Lamtoro (Leucaena sp.)", "Jagung", "Singkong"], ans: 1, exp: "Lamtoro (Leucaena sp.) adalah penaung tetap paling umum, ditanam jarak 2×2,5 m lalu dijarangkan ke 4×5 m setelah dewasa." },
+		{ q: "📊 Kelas lahan mana yang paling ideal untuk kopi?", opts: ["Kelas N", "Kelas S3", "Kelas S2", "Kelas S1"], ans: 3, exp: "Kelas S1 (Sangat Sesuai) adalah lahan terbaik tanpa pembatas berarti. Kelas N berarti tidak sesuai dan tidak bisa dikoreksi." },
 	],
 	hard: [
-		{ q: "🧬 Berapa jumlah kromosom yang dimiliki kopi Arabika?", opts: ["22 (diploid)", "44 (tetraploid)", "11 (haploid)", "88 (oktoploid)"], ans: 1, exp: "Arabika bersifat tetraploid dengan 44 kromosom (2n=4x=44), sedangkan Robusta hanya 22 kromosom (diploid)." },
-		{ q: "🌡️ Pada suhu berapa biji kopi mulai mengalami proses pirolisis saat roasting?", opts: ["100–150°C", "160–180°C", "200–210°C", "250–280°C"], ans: 2, exp: "Pirolisis dimulai sekitar 200°C — ini adalah reaksi kimia utama yang membentuk ratusan senyawa rasa pada kopi." },
-		{ q: "📊 Berapa persen kadar air optimal biji kopi hijau (green bean) siap simpan?", opts: ["5–7%", "10–12%", "15–18%", "20–25%"], ans: 1, exp: "Kadar air 10–12% adalah standar internasional (ICO) untuk penyimpanan biji kopi hijau yang aman dari jamur." },
-		{ q: "🦡 Apa yang menyebabkan kopi luwak memiliki rasa lebih smooth?", opts: ["Proses fermentasi liar", "Enzim pencernaan memecah protein", "Paparan sinar matahari lebih lama", "Varietas kopi khusus"], ans: 1, exp: "Enzim protease dalam sistem pencernaan luwak memecah protein dalam biji kopi, mengurangi kepahitan dan menghasilkan rasa yang lebih smooth." },
-		{ q: "🔬 Senyawa apa yang bertanggung jawab utama atas rasa pahit kopi?", opts: ["Asam klorogenat", "Sukrosa", "Kafein & Trigonelin", "Asam sitrat"], ans: 2, exp: "Kafein berkontribusi 10–30% kepahitan kopi, sementara degradasi trigonelin selama roasting menghasilkan senyawa pahit tambahan dan aroma roasty." },
+		{ q: "🧪 Dosis Urea untuk kopi berumur >10 tahun per pohon per tahun?", opts: ["100 gram", "200 gram", "300 gram", "400 gram"], ans: 3, exp: "Pohon kopi >10 tahun membutuhkan Urea 400g + SP36 200g + KCl 250g + Kieserit 140g per pohon per tahun, dibagi dua pemberian." },
+		{ q: "🦠 Jamur apa yang digunakan untuk mengendalikan PBKo secara biologis?", opts: ["Paecilomyces lilacinus", "Beauveria bassiana", "Trichoderma sp.", "Gliocladium sp."], ans: 1, exp: "Beauveria bassiana digunakan dengan dosis 2,5 kg biakan padat atau 100 g spora murni per hektar, tiga kali aplikasi per musim panen." },
+		{ q: "📐 Berapa ukuran rorak konservasi yang dianjurkan?", opts: ["60×30×30 cm", "120×40×40 cm", "200×60×60 cm", "80×80×80 cm"], ans: 1, exp: "Rorak berukuran 120×40×40 cm dibuat di sekitar tanaman untuk menampung air dan bahan organik, mengurangi erosi." },
+		{ q: "🌱 Robusta sebaiknya ditanam poliklonal berapa klon?", opts: ["1 klon tunggal", "2 klon", "3–4 klon", "5–6 klon"], ans: 2, exp: "Robusta bersifat menyerbuk silang sehingga wajib ditanam poliklonal 3–4 klon agar terjadi penyerbukan silang dan produksi optimal." },
+		{ q: "📜 Berapa jarak tanam yang dianjurkan untuk Robusta?", opts: ["1,5 m × 1,5 m", "2,0 m × 1,5 m", "2,5 m × 2,5 m", "4,0 m × 4,0 m"], ans: 2, exp: "Robusta ditanam dengan jarak 2,5×2,5 m atau 3,0×2,0 m. Lubang tanam 60×60 cm bagian atas, 40×40 cm bagian bawah, kedalaman 60 cm." },
+		{ q: "🔬 Berapa jumlah perangkap PBKo yang dipasang per hektar?", opts: ["5 trap", "12 trap", "24 trap", "50 trap"], ans: 2, exp: "Dipasang 24 trap/ha menggunakan senyawa penarik (seperti Hypotan), minimal selama 2 tahun setelah panen untuk memutus siklus hama." },
+		{ q: "🌡️ Suhu optimal untuk kopi Liberika?", opts: ["10–15°C", "15–20°C", "21–30°C", "30–40°C"], ans: 2, exp: "Liberika tumbuh di suhu 21–30°C pada ketinggian 0–900 mdpl dengan curah hujan 1.250–3.500 mm/tahun, cocok di lahan gambut." },
 	],
 };
 
@@ -225,31 +231,6 @@ let currentQuizLevel = "easy";
 let currentQ = 0;
 let quizAnswered = false;
 let quizScore = 0;
-
-// Simulation state
-let simState = {
-	stage: 0, // 0=idle, 1=seeded, 2=seedling, 3=growing, 4=flowering, 5=fruiting, 6=harvestable
-	health: 100,
-	water: 50,
-	growth: 0,
-	planted: false,
-	actionCount: 0,
-	lastLog: 0,
-};
-
-const stages = [
-	{ name: "Siap Tanam", emoji: "", desc: "Pilih lahan dan mulai menanam benih kopi.", tip: '💡 Klik "Tanam Benih" untuk memulai!', icon: "🌰" },
-	{ name: "Benih Ditanam", emoji: "🌰", desc: "Benih sudah ditanam! Siram secara rutin.", tip: "💧 Siram 2-3x seminggu", icon: "🌰" },
-	{ name: "Berkecambah", emoji: "🌱", desc: "Kecambah muncul! Jaga kelembaban tanah.", tip: "🌿 Beri pupuk sekarang!", icon: "🌱" },
-	{ name: "Bibit Muda", emoji: "🪴", desc: "Bibit tumbuh kuat. Terus rawat dengan baik!", tip: "☀️ Pastikan cukup sinar", icon: "🪴" },
-	{ name: "Tanaman Dewasa", emoji: "🌿", desc: "Tanaman dewasa! Bersiap berbunga.", tip: "🌸 Tunggu musim bunga!", icon: "🌿" },
-	{ name: "Berbunga", emoji: "🌸", desc: "Bunga kopi mekar! Jaga kondisi optimal.", tip: "⏳ Buah akan muncul", icon: "🌸" },
-	{ name: "Berbuah", emoji: "🍒", desc: "Buah kopi tumbuh. Tunggu hingga merah!", tip: "🍒 Hampir siap panen!", icon: "🍒" },
-	{ name: "Siap Panen! 🎉", emoji: "☕", desc: "Buah kopi sudah merah! Waktunya panen!", tip: "🎉 Klik Panen sekarang!", icon: "☕" },
-];
-
-let simTimer = null;
-let simTime = 0;
 
 // ==================== INIT ====================
 window.onload = () => {
@@ -274,9 +255,6 @@ function createFloatingBeans() {
 function startGame() {
 	document.getElementById("splash").classList.remove("active");
 	document.getElementById("mainGame").classList.add("active");
-	setTimeout(() => {
-		startSimTimer();
-	}, 100);
 }
 
 // ==================== NAVIGATION ====================
@@ -317,8 +295,10 @@ function renderCoffeeCards() {
 }
 
 function renderProdukDinas() {
-    const grid = document.getElementById("produkGrid");
-    grid.innerHTML = produkDinas.map(p => `
+	const grid = document.getElementById("produkGrid");
+	grid.innerHTML = produkDinas
+		.map(
+			(p) => `
         <div class="coffee-card" style="cursor:default;">
             <div class="coffee-card-banner" style="background:${p.warna};">
                 <span style="font-size:3.5rem">${p.emoji}</span>
@@ -329,18 +309,24 @@ function renderProdukDinas() {
                 <div class="coffee-card-latin" style="color:${p.aksen}">📍 ${p.asal}</div>
                 <div class="coffee-card-desc">${p.deskripsi}</div>
                 <div style="margin-top: 10px;">
-                    ${p.keunggulan.map(k => `
+                    ${p.keunggulan
+						.map(
+							(k) => `
                         <div style="display:flex; align-items:center; gap:8px; font-size:0.82rem; color:#444; margin-bottom:5px;">
                             <span style="color:${p.aksen}; font-weight:800;">✓</span> ${k}
                         </div>
-                    `).join("")}
+                    `,
+						)
+						.join("")}
                 </div>
                 <div style="margin-top:12px; background:var(--cream); border-radius:10px; padding:8px 12px; font-size:0.78rem; font-weight:700; color:var(--coffee-mid); border-left: 3px solid ${p.aksen};">
                     Jenis: ${p.jenis}
                 </div>
             </div>
         </div>
-    `).join("");
+    `,
+		)
+		.join("");
 }
 
 function openCoffeeModal(id) {
@@ -384,167 +370,6 @@ function openCoffeeModal(id) {
 function closeCoffeeModal(e) {
 	if (!e || e.target.id === "coffeeModal" || e.target.className === "modal-close") {
 		document.getElementById("coffeeModal").classList.remove("open");
-	}
-}
-
-// ==================== SIMULATION ====================
-function startSimTimer() {
-	simTimer = setInterval(() => {
-		simTime++;
-		if (!simState.planted) return;
-		// Passive water decrease
-		if (simTime % 5 === 0) {
-			simState.water = Math.max(0, simState.water - 3);
-			if (simState.water < 20) {
-				simState.health = Math.max(0, simState.health - 2);
-			}
-			updateSimUI();
-		}
-	}, 1000);
-}
-
-function updateSimStats() {
-	document.getElementById("healthVal").textContent = simState.health + "%";
-	document.getElementById("growthVal").textContent = simState.growth + "%";
-	document.getElementById("waterVal").textContent = simState.water + "%";
-	document.getElementById("healthBar").style.width = simState.health + "%";
-	document.getElementById("growthBar").style.width = simState.growth + "%";
-	document.getElementById("waterBar").style.width = simState.water + "%";
-}
-
-function updateSimUI() {
-	updateSimStats();
-	const s = stages[simState.stage];
-	document.getElementById("stageName").textContent = s.name;
-	document.getElementById("stageDesc").textContent = s.desc;
-	document.getElementById("stageTip").textContent = s.tip;
-	document.getElementById("stageIcon").textContent = s.icon;
-	document.getElementById("plantEmoji").textContent = s.emoji;
-}
-
-function handleSoilClick() {
-	if (!simState.planted) simAction("tanam");
-}
-
-function simAction(action) {
-	const effects = document.getElementById("simEffects");
-	const area = document.getElementById("simArea");
-	const rect = area.getBoundingClientRect();
-
-	switch (action) {
-		case "tanam":
-			if (simState.planted) return;
-			simState.planted = true;
-			simState.stage = 1;
-			simState.growth = 5;
-			document.getElementById("btnTanam").disabled = true;
-			document.getElementById("btnSiram").disabled = false;
-			document.getElementById("btnPupuk").disabled = false;
-			addSimLog("🌰 Benih kopi ditanam! Jaga kelembaban tanah.");
-			addPoints(20, "Menanam benih! +20");
-			showSparkles(area, "🌱");
-			break;
-
-		case "siram":
-			if (!simState.planted) return;
-			simState.water = Math.min(100, simState.water + 25);
-			simState.health = Math.min(100, simState.health + 5);
-			checkGrowth();
-			addSimLog("💧 Tanaman disiram! Kadar air meningkat.");
-			addPoints(5, "Menyiram! +5");
-			showWaterDrops(area);
-			break;
-
-		case "pupuk":
-			if (!simState.planted) return;
-			simState.health = Math.min(100, simState.health + 15);
-			simState.growth = Math.min(100, simState.growth + 15);
-			checkGrowth();
-			addSimLog("🌿 Pupuk diberikan! Pertumbuhan meningkat pesat.");
-			addPoints(10, "Memberi pupuk! +10");
-			showSparkles(area, "✨");
-			break;
-
-		case "panen":
-			if (simState.stage < 7) {
-				showToast("⚠️ Tanaman belum siap panen!");
-				return;
-			}
-			simState.stage = 0;
-			simState.planted = false;
-			simState.health = 100;
-			simState.water = 50;
-			simState.growth = 0;
-			document.getElementById("btnTanam").disabled = false;
-			document.getElementById("btnSiram").disabled = true;
-			document.getElementById("btnPupuk").disabled = true;
-			document.getElementById("btnPanen").disabled = true;
-			document.getElementById("plantEmoji").textContent = "";
-			addSimLog("☕ PANEN BERHASIL! Kopi siap diolah. Luar biasa!");
-			addPoints(100, "🎉 PANEN BERHASIL! +100");
-			launchConfetti();
-			break;
-	}
-	updateSimUI();
-}
-
-function checkGrowth() {
-	const prev = simState.stage;
-	if (simState.growth >= 90 && simState.stage < 7) simState.stage = 7;
-	else if (simState.growth >= 75 && simState.stage < 6) simState.stage = 6;
-	else if (simState.growth >= 60 && simState.stage < 5) simState.stage = 5;
-	else if (simState.growth >= 45 && simState.stage < 4) simState.stage = 4;
-	else if (simState.growth >= 30 && simState.stage < 3) simState.stage = 3;
-	else if (simState.growth >= 15 && simState.stage < 2) simState.stage = 2;
-
-	if (simState.stage !== prev) {
-		addSimLog(`🌟 Tahap baru: ${stages[simState.stage].name}!`);
-		showToast(`🌟 ${stages[simState.stage].name}`);
-		if (simState.stage === 7) {
-			document.getElementById("btnPanen").disabled = false;
-			addPoints(30, "Tanaman siap panen! +30");
-		}
-	}
-}
-
-function addSimLog(msg) {
-	const log = document.getElementById("simLog");
-	const mins = Math.floor(simTime / 60)
-		.toString()
-		.padStart(2, "0");
-	const secs = (simTime % 60).toString().padStart(2, "0");
-	const entry = document.createElement("div");
-	entry.className = "log-entry";
-	entry.innerHTML = `<span class="log-time">${mins}:${secs}</span>&nbsp; ${msg}`;
-	log.appendChild(entry);
-	log.scrollTop = log.scrollHeight;
-}
-
-function showWaterDrops(area) {
-	for (let i = 0; i < 6; i++) {
-		setTimeout(() => {
-			const d = document.createElement("div");
-			d.className = "water-drop";
-			d.textContent = "💧";
-			d.style.left = 40 + Math.random() * 20 + "%";
-			d.style.top = "30%";
-			area.appendChild(d);
-			setTimeout(() => d.remove(), 1000);
-		}, i * 100);
-	}
-}
-
-function showSparkles(area, emoji) {
-	for (let i = 0; i < 8; i++) {
-		setTimeout(() => {
-			const s = document.createElement("div");
-			s.className = "sparkle";
-			s.textContent = emoji;
-			s.style.left = 30 + Math.random() * 40 + "%";
-			s.style.top = 20 + Math.random() * 50 + "%";
-			area.appendChild(s);
-			setTimeout(() => s.remove(), 800);
-		}, i * 80);
 	}
 }
 
