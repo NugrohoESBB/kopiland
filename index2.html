@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="id">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>KopiLand</title>
+		<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet" />
+		<link rel="stylesheet" href="assets/css/style.css" type="text/css" />
+	</head>
+	<body>
+		<!-- Floating decorations -->
+		<div class="floating-beans" id="floatingBeans"></div>
+
+		<!-- Toast notification -->
+		<div class="toast" id="toast">🎉 Pesan</div>
+
+		<!-- ==================== SPLASH SCREEN ==================== -->
+		<div class="screen active" id="splash">
+			<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; pointer-events: none">
+				<!-- Mountains -->
+				<div style="position: absolute; bottom: 0; left: -5%; width: 40%; height: 180px; background: linear-gradient(180deg, #2d5016, #1a3a0a); border-radius: 50% 50% 0 0"></div>
+				<div style="position: absolute; bottom: 0; left: 25%; width: 50%; height: 220px; background: linear-gradient(180deg, #4a7c1f, #2d5016); border-radius: 50% 50% 0 0"></div>
+				<div style="position: absolute; bottom: 0; right: -5%; width: 40%; height: 160px; background: linear-gradient(180deg, #3a6b18, #1a3a0a); border-radius: 50% 50% 0 0"></div>
+				<!-- Stars -->
+				<div style="position: absolute; top: 15%; left: 15%; font-size: 1.5rem; animation: twinkle 2s ease infinite">⭐</div>
+				<div style="position: absolute; top: 25%; right: 20%; font-size: 1rem; animation: twinkle 2.5s ease infinite 0.5s">✨</div>
+				<div style="position: absolute; top: 10%; right: 35%; font-size: 1.2rem; animation: twinkle 1.8s ease infinite 1s">⭐</div>
+			</div>
+			<style>
+				@keyframes twinkle {
+					0%,
+					100% {
+						opacity: 0.3;
+						transform: scale(0.8);
+					}
+					50% {
+						opacity: 1;
+						transform: scale(1.2);
+					}
+				}
+			</style>
+
+			<div class="splash-content">
+				<span class="splash-emoji">☕</span>
+				<div class="splash-title">KopiLand</div>
+				<div class="splash-subtitle">🌱 Game Edukasi Budidaya Kopi</div>
+				<p class="splash-desc">Jelajahi dunia kopi Jawa Barat! Pelajari jenis kopi, simulasikan budidaya, dan uji pengetahuanmu lewat kuis seru!</p>
+				<button class="btn-start" onclick="startGame()">▶ Mulai Petualangan!</button>
+				<div style="margin-top: 20px">
+					<div class="badge-jabar">🏛️ Dinas Perkebunan Jawa Barat &nbsp;|&nbsp; 🎓 Media Edukasi Interaktif</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- ==================== MAIN GAME ==================== -->
+		<div class="screen" id="mainGame">
+			<!-- Header -->
+			<div class="game-header">
+				<div class="logo-area">
+					<div class="logo-icon">☕</div>
+					<div>
+						<div class="logo-text">KopiLand</div>
+						<div class="logo-sub">Dinas Perkebunan Jawa Barat</div>
+					</div>
+				</div>
+				<div class="header-stats">
+					<div class="stat-chip"><span class="icon">⭐</span><span id="totalPoints">0</span> Poin</div>
+					<div class="stat-chip"><span class="icon">🏆</span><span id="levelDisplay">Pemula</span></div>
+				</div>
+			</div>
+
+			<!-- Nav -->
+			<nav class="main-nav">
+				<button class="nav-btn active" onclick="showPanel('info')" id="navInfo"><span class="nav-icon">📚</span> Info Kopi</button>
+				<button class="nav-btn" onclick="showPanel('simulasi')" id="navSim"><span class="nav-icon">🌱</span> Simulasi</button>
+				<button class="nav-btn" onclick="showPanel('quiz')" id="navQuiz"><span class="nav-icon">❓</span> Kuis</button>
+				<button class="nav-btn" onclick="showPanel('edukasi')" id="navEdu"><span class="nav-icon">🎓</span> Edukasi</button>
+				<button class="nav-btn" onclick="showPanel('produk')" id="navProduk"><span class="nav-icon">🏛️</span> Produk Dinas</button>
+			</nav>
+
+			<!-- Content -->
+			<div class="content-area">
+				<!-- ===== INFO KOPI ===== -->
+				<div class="panel active" id="panelInfo">
+					<div class="section-header">
+						<div class="section-tag">📖 Ensiklopedia</div>
+						<h2 class="section-title">Jenis-Jenis Kopi Indonesia</h2>
+						<p class="section-desc">Klik kartu untuk mengetahui informasi lebih lengkap!</p>
+					</div>
+					<div class="coffee-grid" id="coffeeGrid"></div>
+				</div>
+
+				<!-- ===== SIMULASI ===== -->
+				<div class="panel" id="panelSimulasi">
+					<div class="section-header">
+						<div class="section-tag">🎮 Mini Game</div>
+						<h2 class="section-title">Simulasi Bertani Kopi</h2>
+						<p class="section-desc">Tanam, rawat, panen, dan jual kopi ke NPC! Temui NPC biru 💡 untuk belajar budidaya.</p>
+					</div>
+
+					<!-- Panduan singkat -->
+					<div style="background: linear-gradient(135deg, #1a3a0a, #2d5016); border-radius: 16px; padding: 16px 20px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
+						<div style="color: #aed854; font-size: 0.82rem; font-weight: 800; flex: 1; min-width: 200px">🕹️ Cara Bermain:</div>
+						<div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 0.75rem">
+							<span style="background: rgba(255, 255, 255, 0.1); color: #e8b97a; padding: 4px 10px; border-radius: 20px">⬆⬇⬅➡ / WASD Gerak</span>
+							<span style="background: rgba(255, 255, 255, 0.1); color: #e8b97a; padding: 4px 10px; border-radius: 20px">E / Klik = Aksi</span>
+							<span style="background: rgba(255, 255, 255, 0.1); color: #e8b97a; padding: 4px 10px; border-radius: 20px">Tab = Panel</span>
+							<span style="background: rgba(255, 255, 255, 0.1); color: #80e0ff; padding: 4px 10px; border-radius: 20px">💡 NPC Biru = Edukasi</span>
+							<span style="background: rgba(255, 255, 255, 0.1); color: #f0d060; padding: 4px 10px; border-radius: 20px">💬 NPC Kuning = Jual Kopi</span>
+						</div>
+					</div>
+
+					<!-- Game container -->
+					<div style="width: 100%; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); background: #000; position: relative">
+						<iframe id="kopiframe" src="kopifarm.html" style="width: 100%; height: 620px; border: none; display: block" scrolling="no" allowfullscreen></iframe>
+					</div>
+
+					<div style="margin-top: 12px; background: var(--cream); border-radius: 12px; padding: 12px 16px; font-size: 0.78rem; color: var(--coffee-mid); line-height: 1.7; border-left: 4px solid var(--coffee-warm)">💡 <strong>Tips:</strong> Klik tombol <strong>FULLSCREEN</strong> di dalam game untuk pengalaman bermain terbaik. Di mobile, gunakan joystick kiri untuk bergerak dan tombol aksi di kanan.</div>
+				</div>
+
+				<!-- ===== QUIZ ===== -->
+				<div class="panel" id="panelQuiz">
+					<div class="section-header">
+						<div class="section-tag">🎯 Uji Pengetahuan</div>
+						<h2 class="section-title">Kuis Interaktif</h2>
+						<p class="section-desc">Pilih level kesulitan dan jawab pertanyaan!</p>
+					</div>
+
+					<div class="quiz-area">
+						<div class="level-selector">
+							<button class="level-btn easy active" onclick="selectLevel('easy', this)">🌱 Pemula</button>
+							<button class="level-btn medium" onclick="selectLevel('medium', this)">🌿 Menengah</button>
+							<button class="level-btn hard" onclick="selectLevel('hard', this)">🏆 Mahir</button>
+						</div>
+
+						<div id="quizCard" class="quiz-card"></div>
+						<div class="score-board" id="scoreBoard"></div>
+					</div>
+				</div>
+
+				<!-- ===== EDUKASI ===== -->
+				<div class="panel" id="panelEdukasi">
+					<div class="section-header">
+						<div class="section-tag">📖 Panduan</div>
+						<h2 class="section-title">Edukasi Budidaya Kopi</h2>
+						<p class="section-desc">Pelajari proses lengkap dari kebun hingga cangkir!</p>
+					</div>
+
+					<div class="info-cards">
+						<div class="info-card" style="border-top-color: #4caf50">
+							<div class="ic-icon">🌦️</div>
+							<div class="ic-title">Iklim Ideal</div>
+							<div class="ic-text">Arabika: 1.000–2.000 mdpl, 15–25°C. Robusta: 100–600 mdpl, 21–24°C. Liberika: 0–900 mdpl, 21–30°C, cocok lahan gambut.</div>
+						</div>
+						<div class="info-card" style="border-top-color: #795548">
+							<div class="ic-icon">🪨</div>
+							<div class="ic-title">Kelas Kesesuaian Lahan</div>
+							<div class="ic-text"><b>S1</b> Sangat Sesuai · <b>S2</b> Sesuai (pembatas ringan) · <b>S3</b> Marginal (perlu masukan ekstra) · <b>N</b> Tidak Sesuai (permanen).</div>
+						</div>
+						<div class="info-card" style="border-top-color: #2196f3">
+							<div class="ic-icon">💧</div>
+							<div class="ic-title">Irigasi & Rorak</div>
+							<div class="ic-text">Siram rutin saat kemarau. Buat rorak 120×40×40 cm di sekitar tanaman untuk konservasi air dan bahan organik.</div>
+						</div>
+						<div class="info-card" style="border-top-color: #ff9800">
+							<div class="ic-icon">🌿</div>
+							<div class="ic-title">Pemupukan (>10 th)</div>
+							<div class="ic-text">Urea 400g + SP36 200g + KCl 250g + Kieserit 140g per pohon/tahun. Dibagi 2 dosis: awal & akhir musim hujan. Tambah 10–20 kg pupuk organik.</div>
+						</div>
+						<div class="info-card" style="border-top-color: #e91e63">
+							<div class="ic-icon">✂️</div>
+							<div class="ic-title">Pemangkasan 3 Etape</div>
+							<div class="ic-text">Etape I: 80–100 cm · Etape II: 120–140 cm · Etape III: 160–180 cm. Tampilan akhir dari atas mirip logo Mercedes Benz!</div>
+						</div>
+						<div class="info-card" style="border-top-color: #9c27b0">
+							<div class="ic-icon">☕</div>
+							<div class="ic-title">Panen & Pascapanen</div>
+							<div class="ic-text">Petik buah MERAH saja. Segera olah setelah panen! Giling Basah (Wet Hulled) dianjurkan untuk mutu terbaik.</div>
+						</div>
+						<div class="info-card" style="border-top-color: #f44336">
+							<div class="ic-icon">🐛</div>
+							<div class="ic-title">Pengendalian Hama</div>
+							<div class="ic-text">PBKo: gunakan Beauveria bassiana + 24 trap/ha. Nematoda: pakai batang bawah BP 308. Karat daun: tanam varietas tahan S 795.</div>
+						</div>
+						<div class="info-card" style="border-top-color: #00bcd4">
+							<div class="ic-icon">📜</div>
+							<div class="ic-title">Sertifikasi Kopi</div>
+							<div class="ic-text">Fairtrade · UTZ Certified · Organic · Rainforest Alliance · 4C · CAFE Practices · Bird Friendly. Membuka akses pasar premium internasional.</div>
+						</div>
+						<div class="info-card" style="border-top-color: #8bc34a">
+							<div class="ic-icon">🌳</div>
+							<div class="ic-title">Penaung Wajib</div>
+							<div class="ic-text">Penaung tetap WAJIB ada! Lamtoro paling umum. Populasi 400–600 pohon/ha. Tanpa penaung, degradasi lahan dipercepat.</div>
+						</div>
+						<div class="info-card" style="border-top-color: #607d8b">
+							<div class="ic-icon">🐄</div>
+							<div class="ic-title">Integrasi Ternak</div>
+							<div class="ic-text">Integrasikan kambing/sapi di kebun kopi. Kotoran jadi pupuk organik, kulit kopi jadi pakan ternak, pangkasan jadi pakan hijau.</div>
+						</div>
+					</div>
+
+					<!-- Timeline -->
+					<div class="timeline">
+						<div class="timeline-title">⏳ Tahapan Budidaya Kopi Arabika (GAP)</div>
+						<div class="timeline-item">
+							<div class="tl-icon" style="background: #e8f5e9">🌱</div>
+							<div class="tl-content">
+								<div class="tl-title">Persiapan Lahan</div>
+								<div class="tl-time">Sebelum tanam (6 bulan)</div>
+								<div class="tl-text">Buat lubang tanam 60×60 cm (atas) dan 40×40 cm (bawah), kedalaman 60 cm. Siapkan 6 bulan sebelum tanam, tutup 3 bulan sebelum tanam dengan campuran tanah + bahan organik. Buat rorak 120×40×40 cm untuk konservasi air.</div>
+							</div>
+						</div>
+						<div class="timeline-item">
+							<div class="tl-icon" style="background: #fff8e1">🪴</div>
+							<div class="tl-content">
+								<div class="tl-title">Pembibitan</div>
+								<div class="tl-time">Bulan 0–12</div>
+								<div class="tl-text">Semai benih sedalam 0,5 cm dengan jarak 3×5 cm. Pindah ke polibeg setelah sepasang daun membuka (stadium kepelan). Bibit siap tanam umur 10–12 bulan dengan 6–8 pasang daun normal.</div>
+							</div>
+						</div>
+						<div class="timeline-item">
+							<div class="tl-icon" style="background: #e3f2fd">🌿</div>
+							<div class="tl-content">
+								<div class="tl-title">Penanaman & TBM</div>
+								<div class="tl-time">Tahun 1–2</div>
+								<div class="tl-text">Tanam awal musim hujan. Jarak tanam 2,5×2,5 m (jangkung) atau 2,0×1,5 m (katai). Intensitas cahaya 30–50%. Pupuk tahun 1: Urea 40g + SP36 50g + KCl 30g + Kieserit 20g. Tumpang sari diperbolehkan di fase TBM.</div>
+							</div>
+						</div>
+						<div class="timeline-item">
+							<div class="tl-icon" style="background: #fce4ec">🌸</div>
+							<div class="tl-content">
+								<div class="tl-title">Pemangkasan Bentuk</div>
+								<div class="tl-time">Tahun 2–3</div>
+								<div class="tl-text">Etape I (80–100 cm) → Etape II (120–140 cm) → Etape III (160–180 cm). Tampilan dari atas menyerupai logo Mercedes Benz. Lakukan juga pemangkasan pemeliharaan untuk membuang cabang tidak produktif.</div>
+							</div>
+						</div>
+						<div class="timeline-item">
+							<div class="tl-icon" style="background: #ffebee">🍒</div>
+							<div class="tl-content">
+								<div class="tl-title">Pembuahan & Panen Pertama</div>
+								<div class="tl-time">Tahun 3–4</div>
+								<div class="tl-text">Panen selektif "petik merah" — buah merah cerah, daging lunak dan manis. Hindari buah hijau/hitam. Pupuk tahun 3–4: Urea 150–200g + SP36 100g + KCl 100–140g + Kieserit 50–70g per pohon.</div>
+							</div>
+						</div>
+						<div class="timeline-item">
+							<div class="tl-icon" style="background: #f3e5f5">☕</div>
+							<div class="tl-content">
+								<div class="tl-title">Pascapanen</div>
+								<div class="tl-time">Segera setelah panen</div>
+								<div class="tl-text">Segera olah setelah panen — penundaan menurunkan mutu! Metode Giling Basah (Wet Hulled) menghasilkan mutu terbaik. Rendam buah busuk/PBKo di air panas 60°C selama ±5 menit sebelum dibuang.</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- VARIETAS UNGGUL -->
+					<div class="timeline" style="margin-top: 24px">
+						<div class="timeline-title">🌿 Varietas Kopi Unggul Indonesia</div>
+
+						<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 20px">
+							<div style="background: var(--cream); border-radius: 14px; padding: 16px; border-left: 4px solid #ff8f00">
+								<div style="font-weight: 800; color: var(--coffee-dark); margin-bottom: 8px">☕ Arabika Anjuran Lama</div>
+								<div style="font-size: 0.83rem; color: #555; line-height: 1.8">AB 3 · USDA 762 · S 795 · Kartika 1 · Kartika 2</div>
+								<div style="font-size: 0.75rem; color: var(--coffee-warm); margin-top: 6px; font-weight: 700">Terbukti >10 tahun di lapangan</div>
+							</div>
+							<div style="background: var(--cream); border-radius: 14px; padding: 16px; border-left: 4px solid #4caf50">
+								<div style="font-weight: 800; color: var(--coffee-dark); margin-bottom: 8px">🌱 Arabika Anjuran Baru</div>
+								<div style="font-size: 0.83rem; color: #555; line-height: 1.8">AS 1 (Andungsari 1) · Sigarar Utang · Gayo 1 · Gayo 2 · AS 2K</div>
+								<div style="font-size: 0.75rem; color: var(--coffee-warm); margin-top: 6px; font-weight: 700">Rilis <10 tahun, produktivitas tinggi</div>
+							</div>
+							<div style="background: var(--cream); border-radius: 14px; padding: 16px; border-left: 4px solid #2e7d32">
+								<div style="font-weight: 800; color: var(--coffee-dark); margin-bottom: 8px">💪 Robusta Klon Anjuran</div>
+								<div style="font-size: 0.83rem; color: #555; line-height: 1.8">BP 42 · BP 234 · BP 288 · BP 358 · BP 409 · BP 436 · BP 534 · SA 237</div>
+								<div style="font-size: 0.75rem; color: var(--coffee-warm); margin-top: 6px; font-weight: 700">Tanam poliklonal 3–4 klon · Batang bawah BP 308</div>
+							</div>
+						</div>
+
+						<div style="background: #e8f5e9; border-radius: 14px; padding: 16px; border-left: 4px solid #4caf50">
+							<div style="font-weight: 800; color: #2e7d32; margin-bottom: 8px">📍 Panduan Ketinggian untuk Arabika</div>
+							<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; font-size: 0.82rem">
+								<div style="background: white; border-radius: 10px; padding: 10px">
+									<div style="font-weight: 800; color: var(--coffee-dark)">700–1.000 mdpl</div>
+									<div style="color: #555; margin-top: 4px">S 795</div>
+								</div>
+								<div style="background: white; border-radius: 10px; padding: 10px">
+									<div style="font-weight: 800; color: var(--coffee-dark)">>1.000 mdpl (iklim A/B)</div>
+									<div style="color: #555; margin-top: 4px">AS 1 · Gayo 1 · Gayo 2 · Sigarar Utang · AS 2K</div>
+								</div>
+								<div style="background: white; border-radius: 10px; padding: 10px">
+									<div style="font-weight: 800; color: var(--coffee-dark)">>1.250 mdpl (iklim A/B)</div>
+									<div style="color: #555; margin-top: 4px">AB 3 · AS 1 · Gayo 1 · Gayo 2 · Sigarar Utang · AS 2K</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- TABEL DOSIS PUPUK -->
+					<div class="timeline" style="margin-top: 24px">
+						<div class="timeline-title">🧪 Panduan Dosis Pupuk Anorganik</div>
+						<div style="overflow-x: auto">
+							<table style="width: 100%; border-collapse: collapse; font-size: 0.83rem">
+								<thead>
+									<tr style="background: var(--coffee-mid); color: white">
+										<th style="padding: 10px; text-align: left; border-radius: 8px 0 0 0">Umur Pohon</th>
+										<th style="padding: 10px; text-align: center">Urea</th>
+										<th style="padding: 10px; text-align: center">SP 36</th>
+										<th style="padding: 10px; text-align: center">KCl</th>
+										<th style="padding: 10px; text-align: center; border-radius: 0 8px 0 0">Kieserit</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr style="background: #fff8e1">
+										<td style="padding: 9px 10px; font-weight: 700">1 tahun</td>
+										<td style="padding: 9px 10px; text-align: center">40 g</td>
+										<td style="padding: 9px 10px; text-align: center">50 g</td>
+										<td style="padding: 9px 10px; text-align: center">30 g</td>
+										<td style="padding: 9px 10px; text-align: center">20 g</td>
+									</tr>
+									<tr style="background: white">
+										<td style="padding: 9px 10px; font-weight: 700">2 tahun</td>
+										<td style="padding: 9px 10px; text-align: center">100 g</td>
+										<td style="padding: 9px 10px; text-align: center">80 g</td>
+										<td style="padding: 9px 10px; text-align: center">80 g</td>
+										<td style="padding: 9px 10px; text-align: center">30 g</td>
+									</tr>
+									<tr style="background: #fff8e1">
+										<td style="padding: 9px 10px; font-weight: 700">3 tahun</td>
+										<td style="padding: 9px 10px; text-align: center">150 g</td>
+										<td style="padding: 9px 10px; text-align: center">100 g</td>
+										<td style="padding: 9px 10px; text-align: center">100 g</td>
+										<td style="padding: 9px 10px; text-align: center">50 g</td>
+									</tr>
+									<tr style="background: white">
+										<td style="padding: 9px 10px; font-weight: 700">4 tahun</td>
+										<td style="padding: 9px 10px; text-align: center">200 g</td>
+										<td style="padding: 9px 10px; text-align: center">100 g</td>
+										<td style="padding: 9px 10px; text-align: center">140 g</td>
+										<td style="padding: 9px 10px; text-align: center">70 g</td>
+									</tr>
+									<tr style="background: #fff8e1">
+										<td style="padding: 9px 10px; font-weight: 700">5–10 tahun</td>
+										<td style="padding: 9px 10px; text-align: center">300 g</td>
+										<td style="padding: 9px 10px; text-align: center">160 g</td>
+										<td style="padding: 9px 10px; text-align: center">200 g</td>
+										<td style="padding: 9px 10px; text-align: center">100 g</td>
+									</tr>
+									<tr style="background: #e8f5e9">
+										<td style="padding: 9px 10px; font-weight: 800; color: #2e7d32">>10 tahun</td>
+										<td style="padding: 9px 10px; text-align: center; font-weight: 800; color: #2e7d32">400 g</td>
+										<td style="padding: 9px 10px; text-align: center; font-weight: 800; color: #2e7d32">200 g</td>
+										<td style="padding: 9px 10px; text-align: center; font-weight: 800; color: #2e7d32">250 g</td>
+										<td style="padding: 9px 10px; text-align: center; font-weight: 800; color: #2e7d32">140 g</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div style="font-size: 0.78rem; color: var(--coffee-mid); margin-top: 10px; font-style: italic">* Dosis per pohon per tahun. Dibagi 2 kali pemberian: awal dan akhir musim hujan. Tambahkan pupuk organik 10–20 kg/pohon/tahun.</div>
+					</div>
+
+					<!-- SERTIFIKASI -->
+					<div class="timeline" style="margin-top: 24px">
+						<div class="timeline-title">📜 Skema Sertifikasi Kopi Berkelanjutan</div>
+						<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px">
+							<div style="background: var(--cream); border-radius: 12px; padding: 14px; text-align: center">
+								<div style="font-size: 1.8rem">🤝</div>
+								<div style="font-weight: 800; color: var(--coffee-dark); margin: 6px 0 4px">Fairtrade</div>
+								<div style="font-size: 0.78rem; color: #555">Menjamin harga adil bagi petani di rantai pasok</div>
+							</div>
+							<div style="background: var(--cream); border-radius: 12px; padding: 14px; text-align: center">
+								<div style="font-size: 1.8rem">✅</div>
+								<div style="font-weight: 800; color: var(--coffee-dark); margin: 6px 0 4px">UTZ Certified</div>
+								<div style="font-size: 0.78rem; color: #555">Standar praktik pertanian bertanggung jawab</div>
+							</div>
+							<div style="background: var(--cream); border-radius: 12px; padding: 14px; text-align: center">
+								<div style="font-size: 1.8rem">🌿</div>
+								<div style="font-weight: 800; color: var(--coffee-dark); margin: 6px 0 4px">Organic Coffee</div>
+								<div style="font-size: 0.78rem; color: #555">Bebas bahan kimia sintetis, produksi organik penuh</div>
+							</div>
+							<div style="background: var(--cream); border-radius: 12px; padding: 14px; text-align: center">
+								<div style="font-size: 1.8rem">🌲</div>
+								<div style="font-weight: 800; color: var(--coffee-dark); margin: 6px 0 4px">Rainforest Alliance</div>
+								<div style="font-size: 0.78rem; color: #555">Perlindungan ekosistem dan kesejahteraan petani</div>
+							</div>
+							<div style="background: var(--cream); border-radius: 12px; padding: 14px; text-align: center">
+								<div style="font-size: 1.8rem">♻️</div>
+								<div style="font-weight: 800; color: var(--coffee-dark); margin: 6px 0 4px">4C (Common Code)</div>
+								<div style="font-size: 0.78rem; color: #555">Kode dasar keberlanjutan industri kopi global</div>
+							</div>
+							<div style="background: var(--cream); border-radius: 12px; padding: 14px; text-align: center">
+								<div style="font-size: 1.8rem">🐦</div>
+								<div style="font-weight: 800; color: var(--coffee-dark); margin: 6px 0 4px">Bird Friendly</div>
+								<div style="font-size: 0.78rem; color: #555">Ramah terhadap keanekaragaman hayati & burung liar</div>
+							</div>
+						</div>
+						<div style="margin-top: 14px; background: #e3f2fd; border-radius: 12px; padding: 14px; font-size: 0.83rem; color: #1565c0; border-left: 4px solid #1565c0">💡 <strong>Tips:</strong> Sertifikasi diberikan setelah inspeksi oleh lembaga terakreditasi. Untuk ekspor ke Uni Eropa, gunakan standar EuroGAP sebagai acuan.</div>
+					</div>
+				</div>
+			</div>
+			<!-- /content-area -->
+
+			<!-- ===== PRODUK DINAS ===== -->
+			<div class="panel" id="panelProduk">
+				<div class="section-header">
+					<div class="section-tag">🏛️ Dinas Perkebunan Jawa Barat</div>
+					<h2 class="section-title">Produk Unggulan Kami</h2>
+					<p class="section-desc">Produk-produk terbaik perkebunan Jawa Barat yang dipromosikan oleh Dinas Perkebunan</p>
+				</div>
+
+				<!-- Banner dinas -->
+				<div style="background: linear-gradient(135deg, #2d5016, #4a7c1f); border-radius: 20px; padding: 24px; margin-bottom: 28px; color: white; display: flex; align-items: center; gap: 16px">
+					<div style="font-size: 3rem">🏛️</div>
+					<div>
+						<div style="font-family: &quot;Baloo 2&quot;, sans-serif; font-size: 1.2rem; font-weight: 800">Dinas Perkebunan Provinsi Jawa Barat</div>
+						<div style="font-size: 0.85rem; opacity: 0.85; margin-top: 4px">Mendukung pengembangan komoditas perkebunan unggulan untuk kesejahteraan masyarakat Jawa Barat</div>
+					</div>
+				</div>
+
+				<!-- Grid produk -->
+				<div id="produkGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px"></div>
+			</div>
+		</div>
+		<!-- /mainGame -->
+
+		<!-- Coffee Detail Modal -->
+		<div class="modal-overlay" id="coffeeModal" onclick="closeCoffeeModal(event)">
+			<div class="modal" id="modalContent"></div>
+		</div>
+
+		<script src="assets/js/main.js"></script>
+	</body>
+</html>

@@ -2,429 +2,1169 @@
 <html lang="id">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 		<title>KopiLand</title>
-		<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet" />
-		<link rel="stylesheet" href="assets/css/style.css" type="text/css" />
+		<style>
+			@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&family=Nunito+Sans:wght@400;600;700&display=swap");
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+				-webkit-tap-highlight-color: transparent;
+			}
+			body {
+				background: #1a0a00;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				height: 100vh;
+				overflow: hidden;
+				font-family: "Nunito Sans", sans-serif;
+			}
+			#wrap {
+				position: relative;
+				width: 420px;
+				height: 780px;
+				overflow: hidden;
+				background: #e8a030;
+			}
+			canvas {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+			}
+			/* UI Overlay */
+			#ui {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				pointer-events: none;
+			}
+			/* Top bar */
+			#topbar {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 64px;
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 0 12px;
+				pointer-events: all;
+			}
+			.topcard {
+				background: rgba(255, 255, 255, 0.92);
+				border-radius: 20px;
+				padding: 6px 14px;
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+			}
+			.topcard span {
+				font-family: "Nunito";
+				font-size: 15px;
+				font-weight: 800;
+				color: #5a3200;
+			}
+			.topcard .icon {
+				font-size: 18px;
+			}
+			/* Day/Season badge */
+			#seasonbadge {
+				position: absolute;
+				top: 12px;
+				left: 50%;
+				transform: translateX(-50%);
+				background: linear-gradient(135deg, #ff8c00, #e05a00);
+				border-radius: 20px;
+				padding: 6px 18px;
+				box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
+				pointer-events: none;
+			}
+			#seasonbadge span {
+				font-family: "Nunito";
+				font-size: 13px;
+				font-weight: 800;
+				color: #fff;
+				white-space: nowrap;
+			}
+			/* Weather bar */
+			#weatherbar {
+				position: absolute;
+				top: 70px;
+				left: 50%;
+				transform: translateX(-50%);
+				background: rgba(255, 255, 255, 0.85);
+				border-radius: 16px;
+				padding: 5px 16px;
+				pointer-events: none;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+			#weatherbar span {
+				font-family: "Nunito";
+				font-size: 12px;
+				font-weight: 700;
+				color: #5a3200;
+			}
+			/* Day progress */
+			#daybar {
+				position: absolute;
+				top: 100px;
+				left: 16px;
+				right: 16px;
+				height: 6px;
+				background: rgba(0, 0, 0, 0.15);
+				border-radius: 3px;
+				pointer-events: none;
+			}
+			#daybarfill {
+				height: 6px;
+				background: linear-gradient(90deg, #ffe066, #ff9900);
+				border-radius: 3px;
+				transition: width 0.3s;
+			}
+			/* Action popup */
+			#popup {
+				position: absolute;
+				display: none;
+				pointer-events: all;
+				z-index: 100;
+			}
+			#popup-inner {
+				background: linear-gradient(180deg, #fffdf5 0%, #fff8e1 100%);
+				border-radius: 24px;
+				padding: 14px 10px 10px;
+				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+				border: 2.5px solid #e8c060;
+				min-width: 200px;
+			}
+			#popup-title {
+				font-family: "Nunito";
+				font-size: 13px;
+				font-weight: 800;
+				color: #a06000;
+				text-align: center;
+				margin-bottom: 10px;
+			}
+			#popup-btns {
+				display: flex;
+				gap: 8px;
+				justify-content: center;
+				flex-wrap: wrap;
+			}
+			.pbtn {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 4px;
+				background: linear-gradient(180deg, #fff9e8, #ffeeb0);
+				border: 2px solid #e0a830;
+				border-radius: 16px;
+				padding: 10px 10px 6px;
+				cursor: pointer;
+				transition:
+					transform 0.12s,
+					box-shadow 0.12s;
+				min-width: 58px;
+				pointer-events: all;
+			}
+			.pbtn:active {
+				transform: scale(0.93);
+			}
+			.pbtn.active {
+				background: linear-gradient(180deg, #ffe066, #ffb700);
+				border-color: #cc8800;
+				box-shadow: 0 0 0 3px #ffdd6688;
+			}
+			.pbtn .pemoji {
+				font-size: 26px;
+				line-height: 1;
+			}
+			.pbtn .plabel {
+				font-family: "Nunito";
+				font-size: 10px;
+				font-weight: 800;
+				color: #7a4400;
+			}
+			.pbtn.disabled {
+				opacity: 0.35;
+				pointer-events: none;
+			}
+			#popup-close {
+				text-align: center;
+				margin-top: 8px;
+				font-size: 11px;
+				color: #aaa;
+				font-weight: 700;
+				cursor: pointer;
+				padding: 2px;
+			}
+			/* Coffee select bottom */
+			#coffeesel {
+				position: absolute;
+				bottom: 90px;
+				left: 50%;
+				transform: translateX(-50%);
+				display: flex;
+				gap: 12px;
+				pointer-events: all;
+			}
+			.cbtn {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 4px;
+				background: rgba(255, 255, 255, 0.92);
+				border: 2.5px solid transparent;
+				border-radius: 18px;
+				padding: 8px 12px;
+				cursor: pointer;
+				box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+				transition: all 0.15s;
+			}
+			.cbtn.sel {
+				border-color: #ff9900;
+				background: #fff9e0;
+				box-shadow: 0 0 0 3px #ffcc6688;
+			}
+			.cbtn .cicon {
+				font-size: 22px;
+			}
+			.cbtn .cname {
+				font-family: "Nunito";
+				font-size: 10px;
+				font-weight: 800;
+				color: #5a3200;
+			}
+			/* Bottom label */
+			#botlabel {
+				position: absolute;
+				bottom: 50px;
+				left: 50%;
+				transform: translateX(-50%);
+				pointer-events: none;
+			}
+			#botlabel span {
+				font-family: "Nunito";
+				font-size: 12px;
+				font-weight: 700;
+				color: rgba(255, 255, 255, 0.8);
+			}
+			/* Score popup */
+			.score-pop {
+				position: absolute;
+				font-family: "Nunito";
+				font-size: 22px;
+				font-weight: 900;
+				color: #ffd700;
+				text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+				pointer-events: none;
+				z-index: 200;
+			}
+			/* Notif toast */
+			#toast {
+				position: absolute;
+				bottom: 140px;
+				left: 50%;
+				transform: translateX(-50%);
+				background: rgba(30, 15, 0, 0.85);
+				border-radius: 20px;
+				padding: 8px 20px;
+				pointer-events: none;
+				opacity: 0;
+				transition: opacity 0.3s;
+			}
+			#toast span {
+				font-family: "Nunito";
+				font-size: 13px;
+				font-weight: 700;
+				color: #fff;
+			}
+		</style>
 	</head>
 	<body>
-		<!-- Floating decorations -->
-		<div class="floating-beans" id="floatingBeans"></div>
+		<div id="wrap">
+			<canvas id="c"></canvas>
+			<div id="ui">
+				<div id="topbar">
+					<div class="topcard"><span class="icon">☕</span><span id="score-txt">0</span></div>
+					<div class="topcard"><span class="icon">📅</span><span id="day-txt">Hari 1</span></div>
+				</div>
+				<div id="seasonbadge"><span id="season-txt">Musim Hujan 🌧</span></div>
+				<div id="weatherbar"><span id="weather-txt">⛈ Hujan Lebat</span><span id="growmod-txt" style="color: #2d8a2d">×1.4 tumbuh</span></div>
+				<div id="daybar"><div id="daybarfill" style="width: 0%"></div></div>
 
-		<!-- Toast notification -->
-		<div class="toast" id="toast">🎉 Pesan</div>
+				<div id="popup">
+					<div id="popup-inner">
+						<div id="popup-title">Pilih Aksi</div>
+						<div id="popup-btns"></div>
+						<div id="popup-close" onclick="closePopup()">✕ Tutup</div>
+					</div>
+				</div>
 
-		<!-- ==================== SPLASH SCREEN ==================== -->
-		<div class="screen active" id="splash">
-			<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; overflow: hidden; pointer-events: none">
-				<!-- Mountains -->
-				<div style="position: absolute; bottom: 0; left: -5%; width: 40%; height: 180px; background: linear-gradient(180deg, #2d5016, #1a3a0a); border-radius: 50% 50% 0 0"></div>
-				<div style="position: absolute; bottom: 0; left: 25%; width: 50%; height: 220px; background: linear-gradient(180deg, #4a7c1f, #2d5016); border-radius: 50% 50% 0 0"></div>
-				<div style="position: absolute; bottom: 0; right: -5%; width: 40%; height: 160px; background: linear-gradient(180deg, #3a6b18, #1a3a0a); border-radius: 50% 50% 0 0"></div>
-				<!-- Stars -->
-				<div style="position: absolute; top: 15%; left: 15%; font-size: 1.5rem; animation: twinkle 2s ease infinite">⭐</div>
-				<div style="position: absolute; top: 25%; right: 20%; font-size: 1rem; animation: twinkle 2.5s ease infinite 0.5s">✨</div>
-				<div style="position: absolute; top: 10%; right: 35%; font-size: 1.2rem; animation: twinkle 1.8s ease infinite 1s">⭐</div>
+				<div id="coffeesel">
+					<div class="cbtn sel" onclick="selCoffee(0)"><span class="cicon">🫘</span><span class="cname">Arabika</span></div>
+					<div class="cbtn" onclick="selCoffee(1)"><span class="cicon">☕</span><span class="cname">Robusta</span></div>
+					<div class="cbtn" onclick="selCoffee(2)"><span class="cicon">🌿</span><span class="cname">Liberika</span></div>
+				</div>
+				<div id="botlabel"><span>Ketuk petak untuk aksi</span></div>
+				<div id="toast"><span id="toast-msg"></span></div>
 			</div>
-			<style>
-				@keyframes twinkle {
-					0%,
-					100% {
-						opacity: 0.3;
-						transform: scale(0.8);
+		</div>
+
+		<script>
+			// ─── CONSTANTS ───────────────────────────────────────────────
+			const CW = 420,
+				CH = 780;
+			const ST = { EMPTY: 0, DUG: 1, SEEDED: 2, SPROUT: 3, YOUNG: 4, MATURE: 5, RIPE: 6 };
+			const ST_LABEL = ["Tanah Kosong", "Sudah Digali", "Benih Ditanam", "Kecambah", "Bibit Muda", "Pohon Dewasa", "Siap Panen ✨"];
+
+			const SEASONS = [
+				{
+					name: "Musim Hujan 🌧",
+					bgTop: "#c25a00",
+					bgBot: "#e88020",
+					weathers: [
+						{ name: "Hujan Lebat", e: "⛈", g: 1.4, p: 0.35 },
+						{ name: "Gerimis", e: "🌧", g: 1.2, p: 0.35 },
+						{ name: "Berkabut", e: "🌫", g: 0.9, p: 0.2 },
+						{ name: "Cerah", e: "⛅", g: 1.0, p: 0.1 },
+					],
+				},
+				{
+					name: "Pancaroba 🌤",
+					bgTop: "#d07000",
+					bgBot: "#f0a030",
+					weathers: [
+						{ name: "Cerah", e: "⛅", g: 1.1, p: 0.4 },
+						{ name: "Gerimis", e: "🌧", g: 1.0, p: 0.25 },
+						{ name: "Panas", e: "🌤", g: 0.9, p: 0.25 },
+						{ name: "Badai", e: "⛈", g: 0.7, p: 0.1 },
+					],
+				},
+				{
+					name: "Kemarau ☀",
+					bgTop: "#b84000",
+					bgBot: "#e06000",
+					weathers: [
+						{ name: "Panas", e: "🌤", g: 0.7, p: 0.3 },
+						{ name: "Terik", e: "☀", g: 0.5, p: 0.35 },
+						{ name: "Cerah", e: "⛅", g: 0.8, p: 0.25 },
+						{ name: "Badai", e: "⛈", g: 0.6, p: 0.1 },
+					],
+				},
+				{
+					name: "Musim Dingin ❄",
+					bgTop: "#6070a0",
+					bgBot: "#8090c0",
+					weathers: [
+						{ name: "Berkabut", e: "🌫", g: 0.6, p: 0.4 },
+						{ name: "Gerimis", e: "🌧", g: 0.8, p: 0.3 },
+						{ name: "Cerah", e: "⛅", g: 0.7, p: 0.2 },
+						{ name: "Badai", e: "⛈", g: 0.5, p: 0.1 },
+					],
+				},
+			];
+			const COFFEES = [
+				{ name: "Arabika", color: "#c0392b", dark: "#8b1a0e", seasons: [1.3, 1.1, 0.7, 0.8], rate: 1.0 },
+				{ name: "Robusta", color: "#7b3f00", dark: "#4a2000", seasons: [1.1, 1.2, 1.0, 0.9], rate: 1.2 },
+				{ name: "Liberika", color: "#b8860b", dark: "#7a5600", seasons: [1.0, 1.0, 0.9, 0.8], rate: 0.9 },
+			];
+
+			// ─── STATE ───────────────────────────────────────────────────
+			let score = 0,
+				totalDay = 1,
+				seasonIdx = 0,
+				dayInSeason = 0;
+			let weather = pickWeather(SEASONS[0]);
+			let dayTimer = 0,
+				DAY_SEC = 35;
+			let selectedCoffee = 0,
+				selectedPlot = -1;
+			let plots = Array.from({ length: 9 }, () => ({ state: ST.EMPTY, growth: 0, coffeeType: 0, watered: false, waterAnim: 0, bloomAnim: 0, shakeAnim: 0 }));
+			let particles = [],
+				weatherPts = [],
+				scorePops = [];
+			let animTime = 0;
+			let toastTimer = 0;
+
+			function pickWeather(s) {
+				let r = Math.random(),
+					c = 0;
+				for (let w of s.weathers) {
+					c += w.p;
+					if (r < c) return w;
+				}
+				return s.weathers[0];
+			}
+
+			// ─── CANVAS ──────────────────────────────────────────────────
+			const canvas = document.getElementById("c");
+			const ctx = canvas.getContext("2d");
+			canvas.width = CW;
+			canvas.height = CH;
+
+			// ─── ISOMETRIC GRID ──────────────────────────────────────────
+			// 3x3 grid, isometric projection
+			const ISO_TILE_W = 110,
+				ISO_TILE_H = 56;
+			const GRID_OX = CW / 2,
+				GRID_OY = 395; // origin (top of grid center)
+
+			function isoToScreen(col, row) {
+				return {
+					x: GRID_OX + ((col - row) * ISO_TILE_W) / 2,
+					y: GRID_OY + ((col + row) * ISO_TILE_H) / 2,
+				};
+			}
+
+			function screenToIso(sx, sy) {
+				// inverse iso
+				const dx = sx - GRID_OX,
+					dy = sy - GRID_OY;
+				const col = (dx / (ISO_TILE_W / 2) + dy / (ISO_TILE_H / 2)) / 2;
+				const row = (dy / (ISO_TILE_H / 2) - dx / (ISO_TILE_W / 2)) / 2;
+				return { col: Math.round(col), row: Math.round(row) };
+			}
+
+			function plotIdx(col, row) {
+				return row * 3 + col;
+			}
+
+			// ─── DRAW HELPERS ────────────────────────────────────────────
+			function drawIsoTile(x, y, w, h, topC, leftC, rightC, alpha = 1) {
+				ctx.globalAlpha = alpha;
+				// Top face (diamond)
+				ctx.beginPath();
+				ctx.moveTo(x, y);
+				ctx.lineTo(x + w / 2, y + h / 2);
+				ctx.lineTo(x, y + h);
+				ctx.lineTo(x - w / 2, y + h / 2);
+				ctx.closePath();
+				ctx.fillStyle = topC;
+				ctx.fill();
+				// Left face
+				const depth = 18;
+				ctx.beginPath();
+				ctx.moveTo(x - w / 2, y + h / 2);
+				ctx.lineTo(x, y + h);
+				ctx.lineTo(x, y + h + depth);
+				ctx.lineTo(x - w / 2, y + h / 2 + depth);
+				ctx.closePath();
+				ctx.fillStyle = leftC;
+				ctx.fill();
+				// Right face
+				ctx.beginPath();
+				ctx.moveTo(x + w / 2, y + h / 2);
+				ctx.lineTo(x, y + h);
+				ctx.lineTo(x, y + h + depth);
+				ctx.lineTo(x + w / 2, y + h / 2 + depth);
+				ctx.closePath();
+				ctx.fillStyle = rightC;
+				ctx.fill();
+				ctx.globalAlpha = 1;
+			}
+
+			function hexAlpha(hex, a) {
+				const r = parseInt(hex.slice(1, 3), 16),
+					g = parseInt(hex.slice(3, 5), 16),
+					b = parseInt(hex.slice(5, 7), 16);
+				return `rgba(${r},${g},${b},${a})`;
+			}
+
+			// ─── PLANT DRAWING ───────────────────────────────────────────
+			function drawPlant(x, y, plot, idx) {
+				const coffee = COFFEES[plot.coffeeType];
+				const t = animTime;
+				const shake = plot.shakeAnim > 0 ? Math.sin(t * 18) * 3 * plot.shakeAnim : 0;
+				const bloom = plot.bloomAnim;
+
+				ctx.save();
+				ctx.translate(x + shake, y);
+
+				switch (plot.state) {
+					case ST.SEEDED: {
+						// Small mound with seed
+						ctx.beginPath();
+						ctx.ellipse(0, 0, 18, 8, 0, 0, Math.PI * 2);
+						ctx.fillStyle = "#a06820";
+						ctx.fill();
+						ctx.beginPath();
+						ctx.ellipse(0, -3, 6, 4, 0, 0, Math.PI * 2);
+						ctx.fillStyle = "#c8a040";
+						ctx.fill();
+						break;
 					}
-					50% {
-						opacity: 1;
-						transform: scale(1.2);
+					case ST.SPROUT: {
+						const sc = 0.7 + bloom * 0.3;
+						ctx.scale(sc, sc);
+						// Soil mound
+						ctx.beginPath();
+						ctx.ellipse(0, 4, 22, 9, 0, 0, Math.PI * 2);
+						ctx.fillStyle = "#7a4e20";
+						ctx.fill();
+						// Stem
+						ctx.beginPath();
+						ctx.moveTo(0, 2);
+						ctx.lineTo(0, -18);
+						ctx.strokeStyle = "#4a8a2a";
+						ctx.lineWidth = 3;
+						ctx.stroke();
+						// Two leaves
+						for (let s of [-1, 1]) {
+							ctx.beginPath();
+							ctx.ellipse(s * 12, -12, 10, 5, s * 0.4, 0, Math.PI * 2);
+							ctx.fillStyle = "#5aaa3a";
+							ctx.fill();
+						}
+						break;
+					}
+					case ST.YOUNG: {
+						// Soil
+						ctx.beginPath();
+						ctx.ellipse(0, 6, 26, 10, 0, 0, Math.PI * 2);
+						ctx.fillStyle = "#7a4e20";
+						ctx.fill();
+						// Trunk
+						ctx.beginPath();
+						ctx.moveTo(-2, 4);
+						ctx.lineTo(-2, -28);
+						ctx.strokeStyle = "#5a3810";
+						ctx.lineWidth = 5;
+						ctx.stroke();
+						// Branch leaves
+						for (let [lx, ly, rx, ry] of [
+							[-16, -18, 14, -22],
+							[-20, -8, 18, -14],
+							[-10, -28, 10, -30],
+						]) {
+							ctx.beginPath();
+							ctx.ellipse(lx, ly, 13, 6, -0.3, 0, Math.PI * 2);
+							ctx.fillStyle = "#3a8830";
+							ctx.fill();
+							ctx.beginPath();
+							ctx.ellipse(rx, ry, 13, 6, 0.3, 0, Math.PI * 2);
+							ctx.fillStyle = "#4aaa3a";
+							ctx.fill();
+						}
+						break;
+					}
+					case ST.MATURE: {
+						ctx.beginPath();
+						ctx.ellipse(0, 6, 30, 12, 0, 0, Math.PI * 2);
+						ctx.fillStyle = "#6a3e14";
+						ctx.fill();
+						ctx.beginPath();
+						ctx.moveTo(-3, 4);
+						ctx.lineTo(-3, -36);
+						ctx.strokeStyle = "#5a3010";
+						ctx.lineWidth = 7;
+						ctx.stroke();
+						// Canopy layers
+						for (let [cy, cr, cg] of [
+							[-42, 28, "#2d6b2d"],
+							[-30, 34, "#3a8a3a"],
+							[-16, 30, "#4aaa3a"],
+						]) {
+							ctx.beginPath();
+							ctx.ellipse(0, cy, cr, cr * 0.55, 0, 0, Math.PI * 2);
+							ctx.fillStyle = cg;
+							ctx.fill();
+						}
+						// Few berries hint
+						ctx.fillStyle = coffee.color + "aa";
+						for (let [bx, by] of [
+							[-10, -32],
+							[8, -26],
+							[-4, -44],
+							[12, -38],
+						]) {
+							ctx.beginPath();
+							ctx.arc(bx, by, 4, 0, Math.PI * 2);
+							ctx.fill();
+						}
+						break;
+					}
+					case ST.RIPE: {
+						// Full tree
+						ctx.beginPath();
+						ctx.ellipse(0, 6, 30, 12, 0, 0, Math.PI * 2);
+						ctx.fillStyle = "#6a3e14";
+						ctx.fill();
+						ctx.beginPath();
+						ctx.moveTo(-3, 4);
+						ctx.lineTo(-3, -36);
+						ctx.strokeStyle = "#5a3010";
+						ctx.lineWidth = 7;
+						ctx.stroke();
+						for (let [cy, cr, cg] of [
+							[-42, 28, "#2d6b2d"],
+							[-30, 34, "#3a8a3a"],
+							[-16, 30, "#4aaa3a"],
+						]) {
+							ctx.beginPath();
+							ctx.ellipse(0, cy, cr, cr * 0.55, 0, 0, Math.PI * 2);
+							ctx.fillStyle = cg;
+							ctx.fill();
+						}
+						// Many ripe berries
+						const berries = [
+							[-12, -36],
+							[8, -30],
+							[-2, -48],
+							[14, -42],
+							[-18, -24],
+							[6, -20],
+							[0, -38],
+							[16, -30],
+							[-8, -46],
+						];
+						for (let [bx, by] of berries) {
+							// Berry
+							ctx.beginPath();
+							ctx.arc(bx, by, 5, 0, Math.PI * 2);
+							ctx.fillStyle = coffee.color;
+							ctx.fill();
+							// Shine
+							ctx.beginPath();
+							ctx.arc(bx - 1, by - 1, 2, 0, Math.PI * 2);
+							ctx.fillStyle = "rgba(255,255,255,0.5)";
+							ctx.fill();
+						}
+						// Glow ring
+						const gr = ctx.createRadialGradient(0, -30, 10, 0, -30, 44);
+						gr.addColorStop(0, hexAlpha(coffee.color, 0.18 + 0.08 * Math.sin(t * 2.5)));
+						gr.addColorStop(1, "rgba(255,200,0,0)");
+						ctx.beginPath();
+						ctx.arc(0, -30, 44, 0, Math.PI * 2);
+						ctx.fillStyle = gr;
+						ctx.fill();
+						break;
 					}
 				}
-			</style>
 
-			<div class="splash-content">
-				<span class="splash-emoji">☕</span>
-				<div class="splash-title">KopiLand</div>
-				<div class="splash-subtitle">🌱 Game Edukasi Budidaya Kopi</div>
-				<p class="splash-desc">Jelajahi dunia kopi Jawa Barat! Pelajari jenis kopi, simulasikan budidaya, dan uji pengetahuanmu lewat kuis seru!</p>
-				<button class="btn-start" onclick="startGame()">▶ Mulai Petualangan!</button>
-				<div style="margin-top: 20px">
-					<div class="badge-jabar">🏛️ Dinas Perkebunan Jawa Barat &nbsp;|&nbsp; 🎓 Media Edukasi Interaktif</div>
-				</div>
-			</div>
-		</div>
+				// Growth bar (for planted, non-ripe)
+				if (plot.state >= ST.SEEDED && plot.state < ST.RIPE) {
+					const pct = Math.min(1, plot.growth / 90);
+					const bw = 54,
+						bh = 6;
+					ctx.beginPath();
+					ctx.roundRect(-bw / 2, 14, bw, bh, 3);
+					ctx.fillStyle = "rgba(0,0,0,0.25)";
+					ctx.fill();
+					ctx.beginPath();
+					ctx.roundRect(-bw / 2, 14, bw * pct, bh, 3);
+					const gc = pct > 0.7 ? "#44dd44" : pct > 0.4 ? "#ffcc00" : "#ff6644";
+					ctx.fillStyle = gc;
+					ctx.fill();
+					// Water drop indicator
+					if (plot.watered) {
+						ctx.fillStyle = "#4499ff";
+						ctx.font = "bold 11px Nunito";
+						ctx.textAlign = "center";
+						ctx.fillText("💧", 0, 30);
+					}
+				}
+				if (plot.state === ST.RIPE) {
+					// Bouncing star
+					const by = Math.sin(t * 3) * 4 - 52;
+					ctx.font = "18px serif";
+					ctx.textAlign = "center";
+					ctx.fillText("✨", 0, by);
+				}
 
-		<!-- ==================== MAIN GAME ==================== -->
-		<div class="screen" id="mainGame">
-			<!-- Header -->
-			<div class="game-header">
-				<div class="logo-area">
-					<div class="logo-icon">☕</div>
-					<div>
-						<div class="logo-text">KopiLand</div>
-						<div class="logo-sub">Dinas Perkebunan Jawa Barat</div>
-					</div>
-				</div>
-				<div class="header-stats">
-					<div class="stat-chip"><span class="icon">⭐</span><span id="totalPoints">0</span> Poin</div>
-					<div class="stat-chip"><span class="icon">🏆</span><span id="levelDisplay">Pemula</span></div>
-				</div>
-			</div>
+				ctx.restore();
+			}
 
-			<!-- Nav -->
-			<nav class="main-nav">
-				<button class="nav-btn active" onclick="showPanel('info')" id="navInfo"><span class="nav-icon">📚</span> Info Kopi</button>
-				<button class="nav-btn" onclick="showPanel('simulasi')" id="navSim"><span class="nav-icon">🌱</span> Simulasi</button>
-				<button class="nav-btn" onclick="showPanel('quiz')" id="navQuiz"><span class="nav-icon">❓</span> Kuis</button>
-				<button class="nav-btn" onclick="showPanel('edukasi')" id="navEdu"><span class="nav-icon">🎓</span> Edukasi</button>
-				<button class="nav-btn" onclick="showPanel('produk')" id="navProduk"><span class="nav-icon">🏛️</span> Produk Dinas</button>
-			</nav>
+			// ─── WEATHER PARTICLES ───────────────────────────────────────
+			function initWeatherPts() {
+				weatherPts = [];
+				const w = weather;
+				let n = 0;
+				if (w.name === "Hujan Lebat" || w.name === "Badai") n = 70;
+				else if (w.name === "Gerimis") n = 30;
+				else if (w.name === "Berkabut") n = 18;
+				for (let i = 0; i < n; i++) {
+					weatherPts.push({ x: Math.random() * CW, y: Math.random() * CH, vy: w.name.includes("Hujan") || w.name === "Badai" ? Math.random() * 7 + 5 : 1.5, vx: w.name === "Badai" ? Math.random() * 3 + 1 : 0, alpha: Math.random() * 0.4 + 0.2, size: Math.random() * 1.5 + 0.5 });
+				}
+			}
+			initWeatherPts();
 
-			<!-- Content -->
-			<div class="content-area">
-				<!-- ===== INFO KOPI ===== -->
-				<div class="panel active" id="panelInfo">
-					<div class="section-header">
-						<div class="section-tag">📖 Ensiklopedia</div>
-						<h2 class="section-title">Jenis-Jenis Kopi Indonesia</h2>
-						<p class="section-desc">Klik kartu untuk mengetahui informasi lebih lengkap!</p>
-					</div>
-					<div class="coffee-grid" id="coffeeGrid"></div>
-				</div>
+			// ─── BACKGROUND DRAW ─────────────────────────────────────────
+			function drawBG() {
+				const s = SEASONS[seasonIdx];
+				// Sky gradient
+				const grd = ctx.createLinearGradient(0, 0, 0, CH * 0.55);
+				grd.addColorStop(0, s.bgTop);
+				grd.addColorStop(1, s.bgBot);
+				ctx.fillStyle = grd;
+				ctx.fillRect(0, 0, CW, CH);
 
-				<!-- ===== SIMULASI ===== -->
-				<div class="panel" id="panelSimulasi">
-					<div class="section-header">
-						<div class="section-tag">🎮 Mini Game</div>
-						<h2 class="section-title">Simulasi Bertani Kopi</h2>
-						<p class="section-desc">Tanam, rawat, panen, dan jual kopi ke NPC! Temui NPC biru 💡 untuk belajar budidaya.</p>
-					</div>
+				// Sun / glow
+				const sunG = ctx.createRadialGradient(CW / 2, 200, 10, CW / 2, 200, 180);
+				if (weather.name === "Terik" || weather.name === "Cerah" || weather.name === "Panas") {
+					sunG.addColorStop(0, "rgba(255,255,200,0.55)");
+					sunG.addColorStop(0.3, "rgba(255,220,100,0.25)");
+					sunG.addColorStop(1, "rgba(255,200,0,0)");
+				} else {
+					sunG.addColorStop(0, "rgba(255,255,200,0.18)");
+					sunG.addColorStop(1, "rgba(255,200,0,0)");
+				}
+				ctx.fillStyle = sunG;
+				ctx.fillRect(0, 0, CW, CH);
 
-					<!-- Panduan singkat -->
-					<div style="background: linear-gradient(135deg, #1a3a0a, #2d5016); border-radius: 16px; padding: 16px 20px; margin-bottom: 16px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
-						<div style="color: #aed854; font-size: 0.82rem; font-weight: 800; flex: 1; min-width: 200px">🕹️ Cara Bermain:</div>
-						<div style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 0.75rem">
-							<span style="background: rgba(255, 255, 255, 0.1); color: #e8b97a; padding: 4px 10px; border-radius: 20px">⬆⬇⬅➡ / WASD Gerak</span>
-							<span style="background: rgba(255, 255, 255, 0.1); color: #e8b97a; padding: 4px 10px; border-radius: 20px">E / Klik = Aksi</span>
-							<span style="background: rgba(255, 255, 255, 0.1); color: #e8b97a; padding: 4px 10px; border-radius: 20px">Tab = Panel</span>
-							<span style="background: rgba(255, 255, 255, 0.1); color: #80e0ff; padding: 4px 10px; border-radius: 20px">💡 NPC Biru = Edukasi</span>
-							<span style="background: rgba(255, 255, 255, 0.1); color: #f0d060; padding: 4px 10px; border-radius: 20px">💬 NPC Kuning = Jual Kopi</span>
-						</div>
-					</div>
+				// Distant hills
+				ctx.fillStyle = "rgba(180,90,20,0.35)";
+				ctx.beginPath();
+				ctx.ellipse(80, 310, 120, 50, 0, 0, Math.PI * 2);
+				ctx.fill();
+				ctx.beginPath();
+				ctx.ellipse(340, 290, 140, 60, 0, 0, Math.PI * 2);
+				ctx.fill();
+				ctx.beginPath();
+				ctx.ellipse(210, 320, 90, 40, 0, 0, Math.PI * 2);
+				ctx.fill();
 
-					<!-- Game container -->
-					<div style="width: 100%; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); background: #000; position: relative">
-						<iframe id="kopiframe" src="kopifarm.html" style="width: 100%; height: 620px; border: none; display: block" scrolling="no" allowfullscreen></iframe>
-					</div>
+				// Ground (sand/soil style)
+				const gnd = ctx.createLinearGradient(0, CH * 0.48, 0, CH);
+				gnd.addColorStop(0, "#c87828");
+				gnd.addColorStop(0.3, "#b86820");
+				gnd.addColorStop(1, "#8a4010");
+				ctx.fillStyle = gnd;
+				ctx.fillRect(0, CH * 0.48, CW, CH * 0.52);
 
-					<div style="margin-top: 12px; background: var(--cream); border-radius: 12px; padding: 12px 16px; font-size: 0.78rem; color: var(--coffee-mid); line-height: 1.7; border-left: 4px solid var(--coffee-warm)">💡 <strong>Tips:</strong> Klik tombol <strong>FULLSCREEN</strong> di dalam game untuk pengalaman bermain terbaik. Di mobile, gunakan joystick kiri untuk bergerak dan tombol aksi di kanan.</div>
-				</div>
+				// Decorative palm-like trees on sides
+				drawDecoTree(32, 420, 0.7);
+				drawDecoTree(388, 450, 0.6);
+			}
 
-				<!-- ===== QUIZ ===== -->
-				<div class="panel" id="panelQuiz">
-					<div class="section-header">
-						<div class="section-tag">🎯 Uji Pengetahuan</div>
-						<h2 class="section-title">Kuis Interaktif</h2>
-						<p class="section-desc">Pilih level kesulitan dan jawab pertanyaan!</p>
-					</div>
+			function drawDecoTree(x, y, sc) {
+				ctx.save();
+				ctx.translate(x, y);
+				ctx.scale(sc, sc);
+				// Trunk
+				ctx.beginPath();
+				ctx.moveTo(0, 0);
+				ctx.lineTo(0, -80);
+				ctx.strokeStyle = "#6a3a10";
+				ctx.lineWidth = 8;
+				ctx.stroke();
+				// Fronds
+				for (let a of [-60, -30, 0, 30, 60, 90, -90]) {
+					ctx.save();
+					ctx.rotate((a * Math.PI) / 180);
+					ctx.beginPath();
+					ctx.moveTo(0, -80);
+					ctx.quadraticCurveTo(30 * Math.cos(a * 0.03), -80 - 40, 50, -80 - 30);
+					ctx.strokeStyle = "#3a7a1a";
+					ctx.lineWidth = 5;
+					ctx.stroke();
+					// Leaf blob
+					ctx.beginPath();
+					ctx.ellipse(50, -80 - 30, 16, 8, (a * Math.PI) / 180, 0, Math.PI * 2);
+					ctx.fillStyle = "#4a9a2a";
+					ctx.fill();
+					ctx.restore();
+				}
+				// Coconuts
+				ctx.fillStyle = "#c8a030";
+				ctx.beginPath();
+				ctx.arc(8, -75, 6, 0, Math.PI * 2);
+				ctx.fill();
+				ctx.beginPath();
+				ctx.arc(-6, -72, 5, 0, Math.PI * 2);
+				ctx.fill();
+				ctx.restore();
+			}
 
-					<div class="quiz-area">
-						<div class="level-selector">
-							<button class="level-btn easy active" onclick="selectLevel('easy', this)">🌱 Pemula</button>
-							<button class="level-btn medium" onclick="selectLevel('medium', this)">🌿 Menengah</button>
-							<button class="level-btn hard" onclick="selectLevel('hard', this)">🏆 Mahir</button>
-						</div>
+			// ─── MAIN RENDER ─────────────────────────────────────────────
+			function render(dt) {
+				ctx.clearRect(0, 0, CW, CH);
+				drawBG();
 
-						<div id="quizCard" class="quiz-card"></div>
-						<div class="score-board" id="scoreBoard"></div>
-					</div>
-				</div>
+				// Weather particles
+				const isRain = ["Hujan Lebat", "Gerimis", "Badai"].includes(weather.name);
+				const isFog = weather.name === "Berkabut";
+				ctx.save();
+				if (isRain) {
+					ctx.strokeStyle = "rgba(150,180,255,0.55)";
+					ctx.lineWidth = 1.2;
+					for (let wp of weatherPts) {
+						ctx.beginPath();
+						ctx.moveTo(wp.x, wp.y);
+						ctx.lineTo(wp.x + wp.vx * 2, wp.y + 6);
+						ctx.stroke();
+					}
+				} else if (isFog) {
+					for (let wp of weatherPts) {
+						ctx.fillStyle = `rgba(220,220,240,${wp.alpha * 0.15})`;
+						ctx.beginPath();
+						ctx.ellipse(wp.x, wp.y, 50, 14, 0, 0, Math.PI * 2);
+						ctx.fill();
+					}
+				}
+				ctx.restore();
 
-				<!-- ===== EDUKASI ===== -->
-				<div class="panel" id="panelEdukasi">
-					<div class="section-header">
-						<div class="section-tag">📖 Panduan</div>
-						<h2 class="section-title">Edukasi Budidaya Kopi</h2>
-						<p class="section-desc">Pelajari proses lengkap dari kebun hingga cangkir!</p>
-					</div>
+				// Draw isometric plots (back to front = row 0 col 0 -> row 2 col 2)
+				for (let row = 0; row < 3; row++) {
+					for (let col = 0; col < 3; col++) {
+						const { x, y } = isoToScreen(col, row);
+						const idx = plotIdx(col, row);
+						const plot = plots[idx];
+						const isSel = selectedPlot === idx;
 
-					<div class="info-cards">
-						<div class="info-card" style="border-top-color: #4caf50">
-							<div class="ic-icon">🌦️</div>
-							<div class="ic-title">Iklim Ideal</div>
-							<div class="ic-text">Arabika: 1.000–2.000 mdpl, 15–25°C. Robusta: 100–600 mdpl, 21–24°C. Liberika: 0–900 mdpl, 21–30°C, cocok lahan gambut.</div>
-						</div>
-						<div class="info-card" style="border-top-color: #795548">
-							<div class="ic-icon">🪨</div>
-							<div class="ic-title">Kelas Kesesuaian Lahan</div>
-							<div class="ic-text"><b>S1</b> Sangat Sesuai · <b>S2</b> Sesuai (pembatas ringan) · <b>S3</b> Marginal (perlu masukan ekstra) · <b>N</b> Tidak Sesuai (permanen).</div>
-						</div>
-						<div class="info-card" style="border-top-color: #2196f3">
-							<div class="ic-icon">💧</div>
-							<div class="ic-title">Irigasi & Rorak</div>
-							<div class="ic-text">Siram rutin saat kemarau. Buat rorak 120×40×40 cm di sekitar tanaman untuk konservasi air dan bahan organik.</div>
-						</div>
-						<div class="info-card" style="border-top-color: #ff9800">
-							<div class="ic-icon">🌿</div>
-							<div class="ic-title">Pemupukan (>10 th)</div>
-							<div class="ic-text">Urea 400g + SP36 200g + KCl 250g + Kieserit 140g per pohon/tahun. Dibagi 2 dosis: awal & akhir musim hujan. Tambah 10–20 kg pupuk organik.</div>
-						</div>
-						<div class="info-card" style="border-top-color: #e91e63">
-							<div class="ic-icon">✂️</div>
-							<div class="ic-title">Pemangkasan 3 Etape</div>
-							<div class="ic-text">Etape I: 80–100 cm · Etape II: 120–140 cm · Etape III: 160–180 cm. Tampilan akhir dari atas mirip logo Mercedes Benz!</div>
-						</div>
-						<div class="info-card" style="border-top-color: #9c27b0">
-							<div class="ic-icon">☕</div>
-							<div class="ic-title">Panen & Pascapanen</div>
-							<div class="ic-text">Petik buah MERAH saja. Segera olah setelah panen! Giling Basah (Wet Hulled) dianjurkan untuk mutu terbaik.</div>
-						</div>
-						<div class="info-card" style="border-top-color: #f44336">
-							<div class="ic-icon">🐛</div>
-							<div class="ic-title">Pengendalian Hama</div>
-							<div class="ic-text">PBKo: gunakan Beauveria bassiana + 24 trap/ha. Nematoda: pakai batang bawah BP 308. Karat daun: tanam varietas tahan S 795.</div>
-						</div>
-						<div class="info-card" style="border-top-color: #00bcd4">
-							<div class="ic-icon">📜</div>
-							<div class="ic-title">Sertifikasi Kopi</div>
-							<div class="ic-text">Fairtrade · UTZ Certified · Organic · Rainforest Alliance · 4C · CAFE Practices · Bird Friendly. Membuka akses pasar premium internasional.</div>
-						</div>
-						<div class="info-card" style="border-top-color: #8bc34a">
-							<div class="ic-icon">🌳</div>
-							<div class="ic-title">Penaung Wajib</div>
-							<div class="ic-text">Penaung tetap WAJIB ada! Lamtoro paling umum. Populasi 400–600 pohon/ha. Tanpa penaung, degradasi lahan dipercepat.</div>
-						</div>
-						<div class="info-card" style="border-top-color: #607d8b">
-							<div class="ic-icon">🐄</div>
-							<div class="ic-title">Integrasi Ternak</div>
-							<div class="ic-text">Integrasikan kambing/sapi di kebun kopi. Kotoran jadi pupuk organik, kulit kopi jadi pakan ternak, pangkasan jadi pakan hijau.</div>
-						</div>
-					</div>
+						// Tile colors based on state
+						let topC = "#6a8a3a",
+							leftC = "#4a6a20",
+							rightC = "#3a5a18";
+						if (plot.state >= ST.DUG) {
+							topC = "#8a5a28";
+							leftC = "#6a3e14";
+							rightC = "#5a2e0a";
+						}
+						if (plot.watered && plot.state >= ST.SEEDED) {
+							topC = "#7a5a30";
+							leftC = "#5a3e18";
+							rightC = "#4a2e08";
+						}
 
-					<!-- Timeline -->
-					<div class="timeline">
-						<div class="timeline-title">⏳ Tahapan Budidaya Kopi Arabika (GAP)</div>
-						<div class="timeline-item">
-							<div class="tl-icon" style="background: #e8f5e9">🌱</div>
-							<div class="tl-content">
-								<div class="tl-title">Persiapan Lahan</div>
-								<div class="tl-time">Sebelum tanam (6 bulan)</div>
-								<div class="tl-text">Buat lubang tanam 60×60 cm (atas) dan 40×40 cm (bawah), kedalaman 60 cm. Siapkan 6 bulan sebelum tanam, tutup 3 bulan sebelum tanam dengan campuran tanah + bahan organik. Buat rorak 120×40×40 cm untuk konservasi air.</div>
-							</div>
-						</div>
-						<div class="timeline-item">
-							<div class="tl-icon" style="background: #fff8e1">🪴</div>
-							<div class="tl-content">
-								<div class="tl-title">Pembibitan</div>
-								<div class="tl-time">Bulan 0–12</div>
-								<div class="tl-text">Semai benih sedalam 0,5 cm dengan jarak 3×5 cm. Pindah ke polibeg setelah sepasang daun membuka (stadium kepelan). Bibit siap tanam umur 10–12 bulan dengan 6–8 pasang daun normal.</div>
-							</div>
-						</div>
-						<div class="timeline-item">
-							<div class="tl-icon" style="background: #e3f2fd">🌿</div>
-							<div class="tl-content">
-								<div class="tl-title">Penanaman & TBM</div>
-								<div class="tl-time">Tahun 1–2</div>
-								<div class="tl-text">Tanam awal musim hujan. Jarak tanam 2,5×2,5 m (jangkung) atau 2,0×1,5 m (katai). Intensitas cahaya 30–50%. Pupuk tahun 1: Urea 40g + SP36 50g + KCl 30g + Kieserit 20g. Tumpang sari diperbolehkan di fase TBM.</div>
-							</div>
-						</div>
-						<div class="timeline-item">
-							<div class="tl-icon" style="background: #fce4ec">🌸</div>
-							<div class="tl-content">
-								<div class="tl-title">Pemangkasan Bentuk</div>
-								<div class="tl-time">Tahun 2–3</div>
-								<div class="tl-text">Etape I (80–100 cm) → Etape II (120–140 cm) → Etape III (160–180 cm). Tampilan dari atas menyerupai logo Mercedes Benz. Lakukan juga pemangkasan pemeliharaan untuk membuang cabang tidak produktif.</div>
-							</div>
-						</div>
-						<div class="timeline-item">
-							<div class="tl-icon" style="background: #ffebee">🍒</div>
-							<div class="tl-content">
-								<div class="tl-title">Pembuahan & Panen Pertama</div>
-								<div class="tl-time">Tahun 3–4</div>
-								<div class="tl-text">Panen selektif "petik merah" — buah merah cerah, daging lunak dan manis. Hindari buah hijau/hitam. Pupuk tahun 3–4: Urea 150–200g + SP36 100g + KCl 100–140g + Kieserit 50–70g per pohon.</div>
-							</div>
-						</div>
-						<div class="timeline-item">
-							<div class="tl-icon" style="background: #f3e5f5">☕</div>
-							<div class="tl-content">
-								<div class="tl-title">Pascapanen</div>
-								<div class="tl-time">Segera setelah panen</div>
-								<div class="tl-text">Segera olah setelah panen — penundaan menurunkan mutu! Metode Giling Basah (Wet Hulled) menghasilkan mutu terbaik. Rendam buah busuk/PBKo di air panas 60°C selama ±5 menit sebelum dibuang.</div>
-							</div>
-						</div>
-					</div>
+						// Selection glow
+						if (isSel) {
+							ctx.save();
+							ctx.shadowColor = "#ffd700";
+							ctx.shadowBlur = 22;
+							drawIsoTile(x, y, ISO_TILE_W, ISO_TILE_H, topC, leftC, rightC);
+							ctx.restore();
+							// Gold border on top face
+							ctx.save();
+							ctx.strokeStyle = "#ffd700";
+							ctx.lineWidth = 2.5;
+							ctx.setLineDash([6, 4]);
+							ctx.beginPath();
+							ctx.moveTo(x, y);
+							ctx.lineTo(x + ISO_TILE_W / 2, y + ISO_TILE_H / 2);
+							ctx.lineTo(x, y + ISO_TILE_H);
+							ctx.lineTo(x - ISO_TILE_W / 2, y + ISO_TILE_H / 2);
+							ctx.closePath();
+							ctx.stroke();
+							ctx.setLineDash([]);
+							ctx.restore();
+						} else {
+							drawIsoTile(x, y, ISO_TILE_W, ISO_TILE_H, topC, leftC, rightC);
+						}
 
-					<!-- VARIETAS UNGGUL -->
-					<div class="timeline" style="margin-top: 24px">
-						<div class="timeline-title">🌿 Varietas Kopi Unggul Indonesia</div>
+						// Plant
+						if (plot.state > ST.EMPTY) {
+							ctx.save();
+							ctx.translate(0, plot.shakeAnim > 0 ? Math.sin(animTime * 20) * 2 * plot.shakeAnim : 0);
+							drawPlant(x, y + ISO_TILE_H / 2 - 4, plot, idx);
+							ctx.restore();
+						}
+					}
+				}
 
-						<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 20px">
-							<div style="background: var(--cream); border-radius: 14px; padding: 16px; border-left: 4px solid #ff8f00">
-								<div style="font-weight: 800; color: var(--coffee-dark); margin-bottom: 8px">☕ Arabika Anjuran Lama</div>
-								<div style="font-size: 0.83rem; color: #555; line-height: 1.8">AB 3 · USDA 762 · S 795 · Kartika 1 · Kartika 2</div>
-								<div style="font-size: 0.75rem; color: var(--coffee-warm); margin-top: 6px; font-weight: 700">Terbukti >10 tahun di lapangan</div>
-							</div>
-							<div style="background: var(--cream); border-radius: 14px; padding: 16px; border-left: 4px solid #4caf50">
-								<div style="font-weight: 800; color: var(--coffee-dark); margin-bottom: 8px">🌱 Arabika Anjuran Baru</div>
-								<div style="font-size: 0.83rem; color: #555; line-height: 1.8">AS 1 (Andungsari 1) · Sigarar Utang · Gayo 1 · Gayo 2 · AS 2K</div>
-								<div style="font-size: 0.75rem; color: var(--coffee-warm); margin-top: 6px; font-weight: 700">Rilis <10 tahun, produktivitas tinggi</div>
-							</div>
-							<div style="background: var(--cream); border-radius: 14px; padding: 16px; border-left: 4px solid #2e7d32">
-								<div style="font-weight: 800; color: var(--coffee-dark); margin-bottom: 8px">💪 Robusta Klon Anjuran</div>
-								<div style="font-size: 0.83rem; color: #555; line-height: 1.8">BP 42 · BP 234 · BP 288 · BP 358 · BP 409 · BP 436 · BP 534 · SA 237</div>
-								<div style="font-size: 0.75rem; color: var(--coffee-warm); margin-top: 6px; font-weight: 700">Tanam poliklonal 3–4 klon · Batang bawah BP 308</div>
-							</div>
-						</div>
+				// Particles
+				ctx.save();
+				for (let pt of particles) {
+					ctx.globalAlpha = pt.life;
+					ctx.fillStyle = pt.color;
+					ctx.beginPath();
+					ctx.arc(pt.x, pt.y, pt.r, 0, Math.PI * 2);
+					ctx.fill();
+				}
+				ctx.globalAlpha = 1;
+				ctx.restore();
 
-						<div style="background: #e8f5e9; border-radius: 14px; padding: 16px; border-left: 4px solid #4caf50">
-							<div style="font-weight: 800; color: #2e7d32; margin-bottom: 8px">📍 Panduan Ketinggian untuk Arabika</div>
-							<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; font-size: 0.82rem">
-								<div style="background: white; border-radius: 10px; padding: 10px">
-									<div style="font-weight: 800; color: var(--coffee-dark)">700–1.000 mdpl</div>
-									<div style="color: #555; margin-top: 4px">S 795</div>
-								</div>
-								<div style="background: white; border-radius: 10px; padding: 10px">
-									<div style="font-weight: 800; color: var(--coffee-dark)">>1.000 mdpl (iklim A/B)</div>
-									<div style="color: #555; margin-top: 4px">AS 1 · Gayo 1 · Gayo 2 · Sigarar Utang · AS 2K</div>
-								</div>
-								<div style="background: white; border-radius: 10px; padding: 10px">
-									<div style="font-weight: 800; color: var(--coffee-dark)">>1.250 mdpl (iklim A/B)</div>
-									<div style="color: #555; margin-top: 4px">AB 3 · AS 1 · Gayo 1 · Gayo 2 · Sigarar Utang · AS 2K</div>
-								</div>
-							</div>
-						</div>
-					</div>
+				// Score pops
+				for (let sp of scorePops) {
+					ctx.save();
+					ctx.globalAlpha = sp.life;
+					ctx.font = `900 ${sp.size}px Nunito`;
+					ctx.fillStyle = sp.color;
+					ctx.strokeStyle = "rgba(0,0,0,0.4)";
+					ctx.lineWidth = 3;
+					ctx.textAlign = "center";
+					ctx.strokeText(sp.text, sp.x, sp.y);
+					ctx.fillText(sp.text, sp.x, sp.y);
+					ctx.restore();
+				}
+			}
 
-					<!-- TABEL DOSIS PUPUK -->
-					<div class="timeline" style="margin-top: 24px">
-						<div class="timeline-title">🧪 Panduan Dosis Pupuk Anorganik</div>
-						<div style="overflow-x: auto">
-							<table style="width: 100%; border-collapse: collapse; font-size: 0.83rem">
-								<thead>
-									<tr style="background: var(--coffee-mid); color: white">
-										<th style="padding: 10px; text-align: left; border-radius: 8px 0 0 0">Umur Pohon</th>
-										<th style="padding: 10px; text-align: center">Urea</th>
-										<th style="padding: 10px; text-align: center">SP 36</th>
-										<th style="padding: 10px; text-align: center">KCl</th>
-										<th style="padding: 10px; text-align: center; border-radius: 0 8px 0 0">Kieserit</th>
-									</tr>
-								</thead>
-								<tbody>
-									<tr style="background: #fff8e1">
-										<td style="padding: 9px 10px; font-weight: 700">1 tahun</td>
-										<td style="padding: 9px 10px; text-align: center">40 g</td>
-										<td style="padding: 9px 10px; text-align: center">50 g</td>
-										<td style="padding: 9px 10px; text-align: center">30 g</td>
-										<td style="padding: 9px 10px; text-align: center">20 g</td>
-									</tr>
-									<tr style="background: white">
-										<td style="padding: 9px 10px; font-weight: 700">2 tahun</td>
-										<td style="padding: 9px 10px; text-align: center">100 g</td>
-										<td style="padding: 9px 10px; text-align: center">80 g</td>
-										<td style="padding: 9px 10px; text-align: center">80 g</td>
-										<td style="padding: 9px 10px; text-align: center">30 g</td>
-									</tr>
-									<tr style="background: #fff8e1">
-										<td style="padding: 9px 10px; font-weight: 700">3 tahun</td>
-										<td style="padding: 9px 10px; text-align: center">150 g</td>
-										<td style="padding: 9px 10px; text-align: center">100 g</td>
-										<td style="padding: 9px 10px; text-align: center">100 g</td>
-										<td style="padding: 9px 10px; text-align: center">50 g</td>
-									</tr>
-									<tr style="background: white">
-										<td style="padding: 9px 10px; font-weight: 700">4 tahun</td>
-										<td style="padding: 9px 10px; text-align: center">200 g</td>
-										<td style="padding: 9px 10px; text-align: center">100 g</td>
-										<td style="padding: 9px 10px; text-align: center">140 g</td>
-										<td style="padding: 9px 10px; text-align: center">70 g</td>
-									</tr>
-									<tr style="background: #fff8e1">
-										<td style="padding: 9px 10px; font-weight: 700">5–10 tahun</td>
-										<td style="padding: 9px 10px; text-align: center">300 g</td>
-										<td style="padding: 9px 10px; text-align: center">160 g</td>
-										<td style="padding: 9px 10px; text-align: center">200 g</td>
-										<td style="padding: 9px 10px; text-align: center">100 g</td>
-									</tr>
-									<tr style="background: #e8f5e9">
-										<td style="padding: 9px 10px; font-weight: 800; color: #2e7d32">>10 tahun</td>
-										<td style="padding: 9px 10px; text-align: center; font-weight: 800; color: #2e7d32">400 g</td>
-										<td style="padding: 9px 10px; text-align: center; font-weight: 800; color: #2e7d32">200 g</td>
-										<td style="padding: 9px 10px; text-align: center; font-weight: 800; color: #2e7d32">250 g</td>
-										<td style="padding: 9px 10px; text-align: center; font-weight: 800; color: #2e7d32">140 g</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div style="font-size: 0.78rem; color: var(--coffee-mid); margin-top: 10px; font-style: italic">* Dosis per pohon per tahun. Dibagi 2 kali pemberian: awal dan akhir musim hujan. Tambahkan pupuk organik 10–20 kg/pohon/tahun.</div>
-					</div>
+			// ─── PARTICLES ───────────────────────────────────────────────
+			function spawnParticles(x, y, color, n = 10, spread = 30) {
+				for (let i = 0; i < n; i++) {
+					const a = Math.random() * Math.PI * 2;
+					const spd = Math.random() * 3 + 1;
+					particles.push({ x, y, vx: Math.cos(a) * spd, vy: Math.sin(a) * spd - 2, color, r: Math.random() * 5 + 2, life: 1, decay: Math.random() * 0.03 + 0.02 });
+				}
+			}
+			function spawnScorePop(x, y, text, color = "#ffd700") {
+				scorePops.push({ x, y, text, color, life: 1, vy: -1.5, size: 24 });
+			}
 
-					<!-- SERTIFIKASI -->
-					<div class="timeline" style="margin-top: 24px">
-						<div class="timeline-title">📜 Skema Sertifikasi Kopi Berkelanjutan</div>
-						<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px">
-							<div style="background: var(--cream); border-radius: 12px; padding: 14px; text-align: center">
-								<div style="font-size: 1.8rem">🤝</div>
-								<div style="font-weight: 800; color: var(--coffee-dark); margin: 6px 0 4px">Fairtrade</div>
-								<div style="font-size: 0.78rem; color: #555">Menjamin harga adil bagi petani di rantai pasok</div>
-							</div>
-							<div style="background: var(--cream); border-radius: 12px; padding: 14px; text-align: center">
-								<div style="font-size: 1.8rem">✅</div>
-								<div style="font-weight: 800; color: var(--coffee-dark); margin: 6px 0 4px">UTZ Certified</div>
-								<div style="font-size: 0.78rem; color: #555">Standar praktik pertanian bertanggung jawab</div>
-							</div>
-							<div style="background: var(--cream); border-radius: 12px; padding: 14px; text-align: center">
-								<div style="font-size: 1.8rem">🌿</div>
-								<div style="font-weight: 800; color: var(--coffee-dark); margin: 6px 0 4px">Organic Coffee</div>
-								<div style="font-size: 0.78rem; color: #555">Bebas bahan kimia sintetis, produksi organik penuh</div>
-							</div>
-							<div style="background: var(--cream); border-radius: 12px; padding: 14px; text-align: center">
-								<div style="font-size: 1.8rem">🌲</div>
-								<div style="font-weight: 800; color: var(--coffee-dark); margin: 6px 0 4px">Rainforest Alliance</div>
-								<div style="font-size: 0.78rem; color: #555">Perlindungan ekosistem dan kesejahteraan petani</div>
-							</div>
-							<div style="background: var(--cream); border-radius: 12px; padding: 14px; text-align: center">
-								<div style="font-size: 1.8rem">♻️</div>
-								<div style="font-weight: 800; color: var(--coffee-dark); margin: 6px 0 4px">4C (Common Code)</div>
-								<div style="font-size: 0.78rem; color: #555">Kode dasar keberlanjutan industri kopi global</div>
-							</div>
-							<div style="background: var(--cream); border-radius: 12px; padding: 14px; text-align: center">
-								<div style="font-size: 1.8rem">🐦</div>
-								<div style="font-weight: 800; color: var(--coffee-dark); margin: 6px 0 4px">Bird Friendly</div>
-								<div style="font-size: 0.78rem; color: #555">Ramah terhadap keanekaragaman hayati & burung liar</div>
-							</div>
-						</div>
-						<div style="margin-top: 14px; background: #e3f2fd; border-radius: 12px; padding: 14px; font-size: 0.83rem; color: #1565c0; border-left: 4px solid #1565c0">💡 <strong>Tips:</strong> Sertifikasi diberikan setelah inspeksi oleh lembaga terakreditasi. Untuk ekspor ke Uni Eropa, gunakan standar EuroGAP sebagai acuan.</div>
-					</div>
-				</div>
-			</div>
-			<!-- /content-area -->
+			// ─── GAME LOGIC ──────────────────────────────────────────────
+			function advanceDay() {
+				totalDay++;
+				dayInSeason++;
+				if (dayInSeason >= 7) {
+					dayInSeason = 0;
+					seasonIdx = (seasonIdx + 1) % 4;
+				}
+				weather = pickWeather(SEASONS[seasonIdx]);
+				initWeatherPts();
 
-			<!-- ===== PRODUK DINAS ===== -->
-			<div class="panel" id="panelProduk">
-				<div class="section-header">
-					<div class="section-tag">🏛️ Dinas Perkebunan Jawa Barat</div>
-					<h2 class="section-title">Produk Unggulan Kami</h2>
-					<p class="section-desc">Produk-produk terbaik perkebunan Jawa Barat yang dipromosikan oleh Dinas Perkebunan</p>
-				</div>
+				// Grow plants
+				for (let i = 0; i < 9; i++) {
+					const p = plots[i];
+					if (p.state >= ST.SEEDED && p.state < ST.RIPE) {
+						const coffee = COFFEES[p.coffeeType];
+						const w = weather;
+						const s = SEASONS[seasonIdx];
+						const mult = coffee.rate * w.g * coffee.seasons[seasonIdx];
+						const grow = (p.watered ? 18 : 6) * mult + Math.random() * 4;
+						p.growth = Math.min(100, p.growth + grow);
+						p.watered = false;
+						// State advance
+						if (p.state === ST.SEEDED && p.growth >= 20) p.state = ST.SPROUT;
+						else if (p.state === ST.SPROUT && p.growth >= 40) p.state = ST.YOUNG;
+						else if (p.state === ST.YOUNG && p.growth >= 65) p.state = ST.MATURE;
+						else if (p.state === ST.MATURE && p.growth >= 90) {
+							p.state = ST.RIPE;
+							p.bloomAnim = 1;
+						}
+					}
+				}
+				updateUI();
+				showToast(`Hari ${totalDay} — ${weather.e} ${weather.name}`);
+			}
 
-				<!-- Banner dinas -->
-				<div style="background: linear-gradient(135deg, #2d5016, #4a7c1f); border-radius: 20px; padding: 24px; margin-bottom: 28px; color: white; display: flex; align-items: center; gap: 16px">
-					<div style="font-size: 3rem">🏛️</div>
-					<div>
-						<div style="font-family: &quot;Baloo 2&quot;, sans-serif; font-size: 1.2rem; font-weight: 800">Dinas Perkebunan Provinsi Jawa Barat</div>
-						<div style="font-size: 0.85rem; opacity: 0.85; margin-top: 4px">Mendukung pengembangan komoditas perkebunan unggulan untuk kesejahteraan masyarakat Jawa Barat</div>
-					</div>
-				</div>
+			function doAction(plotI, action) {
+				const p = plots[plotI];
+				const { x, y } = isoToScreen(plotI % 3, Math.floor(plotI / 3));
+				const sx = x,
+					sy = y + ISO_TILE_H / 2 - 20;
 
-				<!-- Grid produk -->
-				<div id="produkGrid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px"></div>
-			</div>
-		</div>
-		<!-- /mainGame -->
+				if (action === "dig") {
+					if (p.state !== ST.EMPTY) {
+						showToast("Sudah digali!");
+						return;
+					}
+					p.state = ST.DUG;
+					spawnParticles(sx, sy, "#a07030", 14, 35);
+					p.shakeAnim = 1;
+					setTimeout(() => (p.shakeAnim = 0), 400);
+					showToast("Tanah berhasil digali! ⛏");
+				} else if (action === "seed") {
+					if (p.state !== ST.DUG) {
+						showToast("Gali tanah dulu!");
+						return;
+					}
+					p.state = ST.SEEDED;
+					p.coffeeType = selectedCoffee;
+					p.growth = 0;
+					p.bloomAnim = 0;
+					spawnParticles(sx, sy, "#3a8a2a", 10, 25);
+					p.shakeAnim = 0.6;
+					setTimeout(() => (p.shakeAnim = 0), 500);
+					showToast(`Benih ${COFFEES[selectedCoffee].name} ditanam! 🌱`);
+				} else if (action === "water") {
+					if (p.state < ST.SEEDED || p.state >= ST.RIPE) {
+						showToast("Tidak ada tanaman di sini!");
+						return;
+					}
+					if (p.watered) {
+						showToast("Sudah disiram hari ini!");
+						return;
+					}
+					p.watered = true;
+					p.waterAnim = 1;
+					spawnParticles(sx, sy, "#4499ff", 14, 30);
+					p.shakeAnim = 0.4;
+					setTimeout(() => (p.shakeAnim = 0), 300);
+					showToast("Tanaman disiram! 💧");
+				} else if (action === "harvest") {
+					if (p.state !== ST.RIPE) {
+						showToast("Belum siap panen!");
+						return;
+					}
+					const bonus = Math.floor(p.growth / 8);
+					const gained = 10 + bonus;
+					score += gained;
+					spawnParticles(sx, sy, "#ffd700", 18, 40);
+					spawnScorePop(sx, sy - 30, `+${gained} ☕`, "#ffd700");
+					p.state = ST.DUG;
+					p.growth = 0;
+					p.watered = false;
+					p.bloomAnim = 0;
+					showToast(`Panen berhasil! +${gained} poin ☕`);
+					updateUI();
+				}
+				closePopup();
+			}
 
-		<!-- Coffee Detail Modal -->
-		<div class="modal-overlay" id="coffeeModal" onclick="closeCoffeeModal(event)">
-			<div class="modal" id="modalContent"></div>
-		</div>
+			// ─── POPUP ───────────────────────────────────────────────────
+			const popup = document.getElementById("popup");
+			const popupBtns = document.getElementById("popup-btns");
+			const popupTitle = document.getElementById("popup-title");
 
-		<script src="assets/js/main.js"></script>
+			function openPopup(plotI) {
+				selectedPlot = plotI;
+				const p = plots[plotI];
+				const { x, y } = isoToScreen(plotI % 3, Math.floor(plotI / 3));
+
+				// Position popup above tile
+				const rect = document.getElementById("wrap").getBoundingClientRect();
+				const scaleX = rect.width / CW,
+					scaleY = rect.height / CH;
+				let px = x * scaleX,
+					py = (y - 20) * scaleY;
+
+				popup.style.left = px - 100 + "px";
+				popup.style.top = Math.max(80, py - 160) + "px";
+				popup.style.display = "block";
+
+				popupTitle.textContent = ST_LABEL[p.state];
+
+				const actions = [
+					{ id: "dig", e: "⛏", label: "Cangkul", ok: p.state === ST.EMPTY },
+					{ id: "seed", e: "🌱", label: "Tanam", ok: p.state === ST.DUG },
+					{ id: "water", e: "💧", label: "Siram", ok: p.state >= ST.SEEDED && p.state < ST.RIPE && !p.watered },
+					{ id: "harvest", e: "🌿", label: "Panen", ok: p.state === ST.RIPE },
+				];
+
+				popupBtns.innerHTML = "";
+				for (let a of actions) {
+					const btn = document.createElement("div");
+					btn.className = "pbtn" + (a.ok ? "" : " disabled");
+					btn.innerHTML = `<span class="pemoji">${a.e}</span><span class="plabel">${a.label}</span>`;
+					if (a.ok) btn.onclick = () => doAction(plotI, a.id);
+					popupBtns.appendChild(btn);
+				}
+
+				// Coffee selector visibility
+				if (p.state === ST.DUG) {
+					document.getElementById("coffeesel").style.opacity = "1";
+					document.getElementById("coffeesel").style.pointerEvents = "all";
+				}
+			}
+
+			function closePopup() {
+				popup.style.display = "none";
+				selectedPlot = -1;
+			}
+
+			// ─── COFFEE SELECT ───────────────────────────────────────────
+			function selCoffee(i) {
+				selectedCoffee = i;
+				document.querySelectorAll(".cbtn").forEach((el, j) => el.classList.toggle("sel", j === i));
+			}
+
+			// ─── CANVAS HIT TEST ─────────────────────────────────────────
+			canvas.addEventListener("click", (e) => {
+				if (popup.style.display !== "none") {
+					closePopup();
+					return;
+				}
+				const rect = canvas.getBoundingClientRect();
+				const sx = (e.clientX - rect.left) * (CW / rect.width);
+				const sy = (e.clientY - rect.top) * (CH / rect.height);
+
+				// Check each plot hit area (diamond)
+				for (let row = 0; row < 3; row++) {
+					for (let col = 0; col < 3; col++) {
+						const { x, y } = isoToScreen(col, row);
+						// Point-in-diamond test
+						const hw = ISO_TILE_W / 2,
+							hh = ISO_TILE_H / 2 + 18;
+						const dx = sx - x,
+							dy = sy - (y + hh);
+						if (Math.abs(dx) / hw + Math.abs(dy) / hh < 1.1) {
+							openPopup(plotIdx(col, row));
+							return;
+						}
+					}
+				}
+			});
+
+			// ─── UI UPDATES ──────────────────────────────────────────────
+			function updateUI() {
+				document.getElementById("score-txt").textContent = score;
+				document.getElementById("day-txt").textContent = `Hari ${totalDay}`;
+				document.getElementById("season-txt").textContent = SEASONS[seasonIdx].name;
+				document.getElementById("weather-txt").textContent = `${weather.e} ${weather.name}`;
+				const gm = weather.g;
+				const gt = document.getElementById("growmod-txt");
+				gt.textContent = `×${gm.toFixed(1)} tumbuh`;
+				gt.style.color = gm >= 1.2 ? "#2d8a2d" : gm < 0.7 ? "#cc3300" : "#886600";
+			}
+
+			let toastTO = null;
+			function showToast(msg) {
+				const el = document.getElementById("toast");
+				document.getElementById("toast-msg").textContent = msg;
+				el.style.opacity = "1";
+				if (toastTO) clearTimeout(toastTO);
+				toastTO = setTimeout(() => (el.style.opacity = "0"), 2200);
+			}
+
+			// ─── GAME LOOP ───────────────────────────────────────────────
+			let last = 0;
+			function loop(ts) {
+				const dt = (ts - last) / 1000;
+				last = ts;
+				animTime += dt;
+				dayTimer += dt;
+
+				if (dayTimer >= DAY_SEC) {
+					dayTimer -= DAY_SEC;
+					advanceDay();
+				}
+
+				// Update daybar
+				document.getElementById("daybarfill").style.width = (dayTimer / DAY_SEC) * 100 + "%";
+
+				// Weather particles update
+				for (let wp of weatherPts) {
+					wp.x += wp.vx;
+					wp.y += wp.vy;
+					if (wp.y > CH) {
+						wp.y = -10;
+						wp.x = Math.random() * CW;
+					}
+					if (wp.x > CW) wp.x = 0;
+				}
+
+				// Particles update
+				particles = particles.filter((pt) => {
+					pt.x += pt.vx;
+					pt.y += pt.vy;
+					pt.vy += 0.12;
+					pt.life -= pt.decay;
+					return pt.life > 0;
+				});
+				scorePops = scorePops.filter((sp) => {
+					sp.y += sp.vy;
+					sp.life -= 0.018;
+					return sp.life > 0;
+				});
+
+				// Bloom anim decay
+				for (let p of plots) if (p.bloomAnim > 0) p.bloomAnim = Math.max(0, p.bloomAnim - dt * 1.2);
+
+				render(dt);
+				requestAnimationFrame(loop);
+			}
+
+			updateUI();
+			requestAnimationFrame(loop);
+		</script>
 	</body>
 </html>
