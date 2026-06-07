@@ -288,10 +288,441 @@
 				font-weight: 700;
 				color: #fff;
 			}
+
+			/* Info Panel */
+			#infopanel {
+				position: absolute;
+				top: 0; left: 0; right: 0; bottom: 0;
+				background: rgba(20, 8, 0, 0.82);
+				display: none;
+				z-index: 300;
+				overflow-y: auto;
+				padding: 16px 14px 30px;
+				pointer-events: all;
+			}
+			#infopanel.open { display: block; }
+			#info-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-bottom: 14px;
+				margin-top: 8px;
+			}
+			#info-title {
+				font-family: "Nunito";
+				font-size: 20px;
+				font-weight: 900;
+				color: #ffd700;
+			}
+			#info-subtitle {
+				font-family: "Nunito Sans";
+				font-size: 12px;
+				color: #ffcc88;
+				font-style: italic;
+				margin-bottom: 14px;
+			}
+			#info-close {
+				background: rgba(255,255,255,0.15);
+				border: none;
+				border-radius: 50%;
+				width: 34px; height: 34px;
+				color: #fff;
+				font-size: 18px;
+				cursor: pointer;
+				display: flex; align-items: center; justify-content: center;
+				font-family: "Nunito";
+				font-weight: 900;
+				pointer-events: all;
+			}
+			.info-section {
+				background: rgba(255, 248, 220, 0.08);
+				border: 1.5px solid rgba(255, 200, 80, 0.25);
+				border-radius: 16px;
+				padding: 12px 14px;
+				margin-bottom: 10px;
+			}
+			.info-section-title {
+				font-family: "Nunito";
+				font-size: 12px;
+				font-weight: 900;
+				color: #ffd700;
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+				margin-bottom: 8px;
+			}
+			.info-row {
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+				padding: 4px 0;
+				border-bottom: 1px solid rgba(255,255,255,0.06);
+				gap: 8px;
+			}
+			.info-row:last-child { border-bottom: none; }
+			.info-key {
+				font-family: "Nunito Sans";
+				font-size: 12px;
+				color: #ffcc88;
+				flex-shrink: 0;
+				min-width: 100px;
+			}
+			.info-val {
+				font-family: "Nunito Sans";
+				font-size: 12px;
+				color: #fff;
+				text-align: right;
+				flex: 1;
+			}
+			.info-tips {
+				background: rgba(255, 220, 50, 0.1);
+				border-left: 3px solid #ffd700;
+				border-radius: 0 10px 10px 0;
+				padding: 10px 12px;
+				font-family: "Nunito Sans";
+				font-size: 12px;
+				color: #ffe8a0;
+				line-height: 1.6;
+				margin-top: 2px;
+			}
+
+			/* Splash Screen */
+			#splash {
+				position: absolute;
+				top: 0; left: 0; right: 0; bottom: 0;
+				background: linear-gradient(160deg, #1a4a0a 0%, #2d7a1a 45%, #1a5a08 100%);
+				z-index: 999;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				padding: 24px;
+				pointer-events: all;
+				transition: opacity 0.6s ease;
+			}
+			#splash.fade-out {
+				opacity: 0;
+				pointer-events: none;
+			}
+			.splash-top-band {
+				position: absolute;
+				top: 0; left: 0; right: 0;
+				height: 6px;
+				background: linear-gradient(90deg, #f5c518, #e8a030, #f5c518);
+			}
+			.splash-bottom-band {
+				position: absolute;
+				bottom: 0; left: 0; right: 0;
+				height: 6px;
+				background: linear-gradient(90deg, #f5c518, #e8a030, #f5c518);
+			}
+			.splash-logo-wrap {
+				width: 100px;
+				height: 100px;
+				border-radius: 50%;
+				background: rgba(255,255,255,0.12);
+				border: 3px solid rgba(245,197,24,0.6);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin-bottom: 16px;
+				overflow: hidden;
+				box-shadow: 0 0 0 6px rgba(245,197,24,0.15), 0 8px 32px rgba(0,0,0,0.3);
+			}
+			.splash-logo-wrap img {
+				width: 80px;
+				height: 80px;
+				object-fit: contain;
+			}
+			.splash-logo-placeholder {
+				font-size: 48px;
+				line-height: 1;
+			}
+			.splash-instansi {
+				font-family: "Nunito";
+				font-size: 11px;
+				font-weight: 700;
+				color: rgba(255,255,255,0.7);
+				text-transform: uppercase;
+				letter-spacing: 1.5px;
+				text-align: center;
+				margin-bottom: 2px;
+			}
+			.splash-dinas {
+				font-family: "Nunito";
+				font-size: 15px;
+				font-weight: 900;
+				color: #f5c518;
+				text-align: center;
+				margin-bottom: 2px;
+				line-height: 1.3;
+			}
+			.splash-wilayah {
+				font-family: "Nunito";
+				font-size: 13px;
+				font-weight: 800;
+				color: rgba(255,255,255,0.85);
+				text-align: center;
+				margin-bottom: 28px;
+			}
+			.splash-divider {
+				width: 60px;
+				height: 2px;
+				background: linear-gradient(90deg, transparent, #f5c518, transparent);
+				margin-bottom: 28px;
+			}
+			.splash-game-icon {
+				font-size: 52px;
+				margin-bottom: 8px;
+				filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+			}
+			.splash-game-title {
+				font-family: "Nunito";
+				font-size: 34px;
+				font-weight: 900;
+				color: #ffffff;
+				text-shadow: 0 3px 16px rgba(0,0,0,0.4);
+				margin-bottom: 4px;
+				letter-spacing: -0.5px;
+			}
+			.splash-game-title span {
+				color: #f5c518;
+			}
+			.splash-game-sub {
+				font-family: "Nunito Sans";
+				font-size: 12px;
+				color: rgba(255,255,255,0.65);
+				text-align: center;
+				margin-bottom: 36px;
+				line-height: 1.5;
+				max-width: 280px;
+			}
+			.splash-btn {
+				background: linear-gradient(135deg, #f5c518, #e8a030);
+				border: none;
+				border-radius: 28px;
+				padding: 14px 48px;
+				font-family: "Nunito";
+				font-size: 16px;
+				font-weight: 900;
+				color: #1a3a08;
+				cursor: pointer;
+				box-shadow: 0 6px 24px rgba(245,197,24,0.4), 0 2px 8px rgba(0,0,0,0.2);
+				transition: transform 0.15s, box-shadow 0.15s;
+				pointer-events: all;
+				letter-spacing: 0.3px;
+			}
+			.splash-btn:active {
+				transform: scale(0.96);
+				box-shadow: 0 3px 12px rgba(245,197,24,0.3);
+			}
+			.splash-version {
+				position: absolute;
+				bottom: 16px;
+				font-family: "Nunito Sans";
+				font-size: 10px;
+				color: rgba(255,255,255,0.35);
+				letter-spacing: 0.5px;
+			}
+
+			/* Tutorial Overlay */
+			#tutorial {
+				position: absolute;
+				top: 0; left: 0; right: 0; bottom: 0;
+				z-index: 500;
+				display: none;
+				pointer-events: none;
+			}
+			#tutorial.active { display: block; }
+
+			/* Highlight spotlight */
+			#tut-spotlight {
+				position: absolute;
+				top: 0; left: 0; right: 0; bottom: 0;
+				pointer-events: all;
+			}
+
+			/* Bubble penjelasan */
+			#tut-bubble {
+				position: absolute;
+				background: linear-gradient(160deg, #fffef5, #fff8dc);
+				border: 2.5px solid #e8c060;
+				border-radius: 20px;
+				padding: 14px 16px 12px;
+				box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+				max-width: 300px;
+				min-width: 220px;
+				pointer-events: all;
+				z-index: 501;
+			}
+			#tut-bubble::before {
+				content: '';
+				position: absolute;
+				width: 14px; height: 14px;
+				background: #fff8dc;
+				border-left: 2.5px solid #e8c060;
+				border-bottom: 2.5px solid #e8c060;
+				transform: rotate(-45deg);
+				bottom: -9px;
+				left: 50%;
+				margin-left: -7px;
+			}
+			#tut-bubble.arrow-up::before {
+				border-left: none; border-bottom: none;
+				border-top: 2.5px solid #e8c060;
+				border-right: 2.5px solid #e8c060;
+				top: -9px; bottom: auto;
+			}
+			#tut-bubble.arrow-left::before {
+				border-left: 2.5px solid #e8c060;
+				border-top: 2.5px solid #e8c060;
+				border-right: none; border-bottom: none;
+				left: -9px; top: 50%;
+				margin-left: 0; margin-top: -7px;
+				bottom: auto;
+			}
+			.tut-step-badge {
+				font-family: "Nunito";
+				font-size: 10px;
+				font-weight: 900;
+				color: #fff;
+				background: linear-gradient(135deg, #e8a030, #c87010);
+				border-radius: 20px;
+				padding: 2px 10px;
+				display: inline-block;
+				margin-bottom: 6px;
+				letter-spacing: 0.3px;
+			}
+			.tut-title {
+				font-family: "Nunito";
+				font-size: 14px;
+				font-weight: 900;
+				color: #7a4400;
+				margin-bottom: 5px;
+			}
+			.tut-desc {
+				font-family: "Nunito Sans";
+				font-size: 12px;
+				color: #5a3200;
+				line-height: 1.6;
+				margin-bottom: 10px;
+			}
+			.tut-desc b {
+				color: #c07000;
+				font-weight: 700;
+			}
+			#tut-nav {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 8px;
+			}
+			.tut-dots {
+				display: flex;
+				gap: 5px;
+				align-items: center;
+			}
+			.tut-dot {
+				width: 6px; height: 6px;
+				border-radius: 50%;
+				background: #ddd;
+				transition: all 0.2s;
+			}
+			.tut-dot.active {
+				background: #e8a030;
+				width: 18px;
+				border-radius: 3px;
+			}
+			.tut-btn {
+				font-family: "Nunito";
+				font-size: 12px;
+				font-weight: 900;
+				border: none;
+				border-radius: 14px;
+				padding: 7px 16px;
+				cursor: pointer;
+				pointer-events: all;
+				transition: transform 0.12s;
+			}
+			.tut-btn:active { transform: scale(0.93); }
+			.tut-btn-next {
+				background: linear-gradient(135deg, #f5c518, #e8a030);
+				color: #5a2e00;
+				box-shadow: 0 3px 10px rgba(232,160,48,0.4);
+			}
+			.tut-btn-skip {
+				background: rgba(0,0,0,0.08);
+				color: #888;
+				font-size: 11px;
+				padding: 7px 12px;
+			}
+
+			/* Highlight ring animasi */
+			.tut-ring {
+				position: absolute;
+				border: 3px solid #f5c518;
+				border-radius: 50%;
+				pointer-events: none;
+				animation: tut-pulse 1.2s infinite;
+				z-index: 502;
+			}
+			@keyframes tut-pulse {
+				0%   { box-shadow: 0 0 0 0 rgba(245,197,24,0.6); }
+				70%  { box-shadow: 0 0 0 12px rgba(245,197,24,0); }
+				100% { box-shadow: 0 0 0 0 rgba(245,197,24,0); }
+			}
+
+			/* Darken overlay di luar highlight */
+			#tut-dark {
+				position: absolute;
+				top: 0; left: 0; right: 0; bottom: 0;
+				background: rgba(0,0,0,0.55);
+				pointer-events: all;
+				z-index: 499;
+			}
+			#tut-cutout {
+				position: absolute;
+				background: transparent;
+				box-shadow: 0 0 0 9999px rgba(0,0,0,0.55);
+				border-radius: 16px;
+				pointer-events: none;
+				z-index: 500;
+				transition: all 0.4s ease;
+			}
 		</style>
 	</head>
 	<body>
 		<div id="wrap">
+			<!-- Splash Screen -->
+			<div id="splash">
+				<div class="splash-top-band"></div>
+				<div class="splash-bottom-band"></div>
+
+				<!-- Logo & Identitas Dinas -->
+				<div class="splash-logo-wrap">
+					<img src="assets/img/logo-dinas.webp" alt="Logo Dinas">
+				</div>
+				<div class="splash-instansi">Pemerintah Provinsi Jawa Barat</div>
+				<div class="splash-dinas">Dinas Perkebunan</div>
+				<div class="splash-wilayah">Provinsi Jawa Barat</div>
+
+				<div class="splash-divider"></div>
+
+				<!-- Judul Game -->
+				<div class="splash-game-icon">☕</div>
+				<div class="splash-game-title">Kopi<span>Land</span></div>
+				<div class="splash-game-sub">
+					Media pembelajaran budidaya kopi interaktif<br>
+					Arabika · Robusta · Liberika
+				</div>
+
+				<!-- Tombol Mulai -->
+				<button class="splash-btn" onclick="closeSplash()">
+					🌱 Mulai Bermain
+				</button>
+
+				<div class="splash-version">v1.0.0 · Edukasi Perkebunan</div>
+			</div>
+
 			<canvas id="c"></canvas>
 			<div id="ui">
 				<div id="topbar">
@@ -310,12 +741,100 @@
 					</div>
 				</div>
 
-				<div id="coffeesel">
-					<div class="cbtn sel" onclick="selCoffee(0)"><span class="cicon">🫘</span><span class="cname">Arabika</span></div>
-					<div class="cbtn" onclick="selCoffee(1)"><span class="cicon">☕</span><span class="cname">Robusta</span></div>
-					<div class="cbtn" onclick="selCoffee(2)"><span class="cicon">🌿</span><span class="cname">Liberika</span></div>
+				<!-- Info Panel -->
+				<div id="infopanel">
+					<div id="info-header">
+						<div id="info-title">Arabika</div>
+						<button id="info-close" onclick="closeInfo()">✕</button>
+					</div>
+					<div id="info-subtitle">Coffea arabica</div>
+
+					<!-- Foto Kopi -->
+					<div id="info-foto-wrap" style="display:none; margin-bottom:12px; border-radius:16px; overflow:hidden; border:2px solid rgba(255,200,80,0.3);">
+						<img id="info-foto" src="" alt="" style="width:100%; max-height:180px; object-fit:cover; display:block;" />
+						<div id="info-foto-alt" style="text-align:center; font-family:'Nunito'; font-size:11px; color:#ffcc88; padding:6px; background:rgba(0,0,0,0.3);"></div>
+					</div>
+
+					<!-- Syarat Tumbuh -->
+					<div class="info-section">
+						<div class="info-section-title">🌱 Syarat Tumbuh</div>
+						<div class="info-row"><span class="info-key">Ketinggian</span><span class="info-val" id="i-ketinggian">-</span></div>
+						<div class="info-row"><span class="info-key">Suhu</span><span class="info-val" id="i-suhu">-</span></div>
+						<div class="info-row"><span class="info-key">Curah Hujan</span><span class="info-val" id="i-curahHujan">-</span></div>
+						<div class="info-row"><span class="info-key">pH Tanah</span><span class="info-val" id="i-ph">-</span></div>
+						<div class="info-row"><span class="info-key">Bahan Organik</span><span class="info-val" id="i-bahanOrganik">-</span></div>
+					</div>
+
+					<!-- Karakteristik Biji -->
+					<div class="info-section">
+						<div class="info-section-title">🫘 Karakteristik Biji</div>
+						<div class="info-row"><span class="info-key">Bentuk Biji</span><span class="info-val" id="i-bentukBiji">-</span></div>
+						<div class="info-row"><span class="info-key">Alur Tengah</span><span class="info-val" id="i-alurTengah">-</span></div>
+						<div class="info-row"><span class="info-key">Warna Biji</span><span class="info-val" id="i-warnaBiji">-</span></div>
+						<div class="info-row"><span class="info-key">Ukuran Biji</span><span class="info-val" id="i-ukuranBiji">-</span></div>
+						<div class="info-row"><span class="info-key">Ukuran Buah</span><span class="info-val" id="i-ukuranBuah">-</span></div>
+						<div class="info-row"><span class="info-key">Kafein</span><span class="info-val" id="i-kafein">-</span></div>
+						<div class="info-row"><span class="info-key">Rasa</span><span class="info-val" id="i-rasa">-</span></div>
+						<div class="info-row"><span class="info-key">Aroma</span><span class="info-val" id="i-aroma">-</span></div>
+						<div class="info-row"><span class="info-key">Kadar Gula</span><span class="info-val" id="i-kadarGula">-</span></div>
+						<div class="info-row"><span class="info-key">Kadar Lemak</span><span class="info-val" id="i-kadarLemak">-</span></div>
+						<div class="info-row"><span class="info-key">Kadar Asam</span><span class="info-val" id="i-kadarAsam">-</span></div>
+						<div class="info-row"><span class="info-key">Harga</span><span class="info-val" id="i-harga">-</span></div>
+						<div class="info-row"><span class="info-key">Ketahanan</span><span class="info-val" id="i-ketahanan">-</span></div>
+						<div class="info-row"><span class="info-key">Keistimewaan</span><span class="info-val" id="i-keistimewaan">-</span></div>
+					</div>
+
+					<!-- Budidaya -->
+					<div class="info-section">
+						<div class="info-section-title">🌳 Budidaya</div>
+						<div class="info-row"><span class="info-key">Penaung</span><span class="info-val" id="i-penaung">-</span></div>
+						<div class="info-row"><span class="info-key">Varietas</span><span class="info-val" id="i-varietas">-</span></div>
+					</div>
+
+					<!-- Tips -->
+					<div class="info-section">
+						<div class="info-section-title">💡 Tips Budidaya</div>
+						<div class="info-tips" id="i-tips">-</div>
+					</div>
 				</div>
-				<div id="botlabel"><span>Ketuk petak untuk aksi</span></div>
+
+				<!-- Tutorial Overlay -->
+				<div id="tutorial">
+					<div id="tut-dark" onclick="tutNext()"></div>
+					<div id="tut-cutout"></div>
+					<div id="tut-bubble">
+						<div class="tut-step-badge" id="tut-badge">Langkah 1 / 7</div>
+						<div class="tut-title" id="tut-title">Selamat Datang!</div>
+						<div class="tut-desc" id="tut-desc">Ini adalah KopiLand!</div>
+						<div id="tut-nav">
+							<button class="tut-btn tut-btn-skip" onclick="skipTutorial()">Lewati</button>
+							<div class="tut-dots" id="tut-dots"></div>
+							<button class="tut-btn tut-btn-next" onclick="tutNext()" id="tut-next-btn">Lanjut →</button>
+						</div>
+					</div>
+				</div>
+
+				<div id="coffeesel">
+					<div class="cbtn sel" onclick="selCoffee(0)">
+						<span class="cicon">🫘</span>
+						<span class="cname">Arabika</span>
+						<span style="font-size:11px; color:#a06000;" onclick="event.stopPropagation(); openInfo(0)">ℹ️</span>
+					</div>
+					<div class="cbtn" onclick="selCoffee(1)">
+						<span class="cicon">☕</span>
+						<span class="cname">Robusta</span>
+						<span style="font-size:11px; color:#a06000;" onclick="event.stopPropagation(); openInfo(1)">ℹ️</span>
+					</div>
+					<div class="cbtn" onclick="selCoffee(2)">
+						<span class="cicon">🌿</span>
+						<span class="cname">Liberika</span>
+						<span style="font-size:11px; color:#a06000;" onclick="event.stopPropagation(); openInfo(2)">ℹ️</span>
+					</div>
+				</div>
+				
+				<div id="botlabel">
+					<span id="soil-label">🌱 Lahan: Dataran Tinggi</span>
+				</div>
 				<div id="toast"><span id="toast-msg"></span></div>
 			</div>
 		</div>
@@ -374,9 +893,117 @@
 				},
 			];
 			const COFFEES = [
-				{ name: "Arabika", color: "#c0392b", dark: "#8b1a0e", seasons: [1.3, 1.1, 0.7, 0.8], rate: 1.0 },
-				{ name: "Robusta", color: "#7b3f00", dark: "#4a2000", seasons: [1.1, 1.2, 1.0, 0.9], rate: 1.2 },
-				{ name: "Liberika", color: "#b8860b", dark: "#7a5600", seasons: [1.0, 1.0, 0.9, 0.8], rate: 0.9 },
+				{
+					name: "Arabika", color: "#c0392b", dark: "#8b1a0e",
+					seasons: [1.3, 1.1, 0.7, 0.8], rate: 1.0,
+					soilTop: "#5a7a3a", soilLeft: "#3a5a20", soilRight: "#2a4a18",   // tanah subur hijau gelap
+					dugTop:  "#6a8a3a", dugLeft:  "#4a6a20", dugRight: "#3a5a18",
+					label: "Dataran Tinggi", labelColor: "#ffffff",
+					info: {
+						foto: "assets/img/kopi-arabika.jpg",
+						fotoAlt: "Biji Kopi Arabika",
+						ilmiah: "Coffea arabica",
+						// syarat tumbuh
+						ketinggian: "1.000 – 2.000 m dpl",
+						suhu: "15 – 25°C",
+						curahHujan: "1.250 – 2.500 mm/tahun",
+						ph: "5,5 – 6,5",
+						bahanOrganik: ">3,5%",
+						// karakteristik biji
+						bentukBiji: "Oval/lonjong memanjang, pipih",
+						alurTengah: "Berkelok menyerupai huruf S, lebih tegas",
+						warnaBiji: "Lebih cerah (hijau muda), setelah sangrai → cokelat terang",
+						ukuranBiji: "Lebih besar dan seragam/proporsional",
+						ukuranBuah: "-",
+						kafein: "1,1% – 1,5% (lebih rendah dari Robusta)",
+						rasa: "Kompleks: buah-buahan, kacang-kacangan, biji-bijian, sedikit asam",
+						aroma: "Lembut, cenderung floral",
+						kadarGula: "Lebih tinggi (2x lipat Robusta)",
+						kadarLemak: "Hingga 60% lebih tinggi dari Robusta",
+						kadarAsam: "-",
+						harga: "Mahal (perawatan intensif, hasil lebih sedikit)",
+						ketahanan: "Lebih rentan terhadap hama dan penyakit",
+						keistimewaan: "-",
+						// budidaya
+						penaung: "Macadamia, jeruk keprok (jarak 6×6 m atau 8×8 m)",
+						varietas: "Gayo 1, Gayo 2, Sigarar Utang, AS 1, S 795, Kartika 1 & 2",
+						tips: "Tanam awal musim hujan. Butuh naungan 30–50%. Pupuk organik wajib karena butuh bahan organik >3,5%. Cocok di ketinggian >1.000 m dpl."
+					}
+				},
+				{
+					name: "Robusta", color: "#7b3f00", dark: "#4a2000",
+					seasons: [1.1, 1.2, 1.0, 0.9], rate: 1.2,
+					soilTop: "#8a6a3a", soilLeft: "#6a4a20", soilRight: "#5a3a10",   // tanah coklat biasa
+					dugTop:  "#9a7a40", dugLeft:  "#7a5a28", dugRight: "#6a4a18",
+					label: "Dataran Rendah", labelColor: "#ffffff",
+					info: {
+						foto: "assets/img/kopi-robusta.jpg",
+						fotoAlt: "Biji Kopi Robusta",
+						ilmiah: "Coffea canephora",
+						// syarat tumbuh
+						ketinggian: "100 – 600 m dpl",
+						suhu: "21 – 24°C",
+						curahHujan: "1.250 – 2.500 mm/tahun",
+						ph: "5,5 – 6,5",
+						bahanOrganik: "-",
+						// karakteristik biji
+						bentukBiji: "Bulat/membulat, lebih kecil dari Arabika",
+						alurTengah: "Lurus (garis tunggal)",
+						warnaBiji: "Lebih pucat dibanding Arabika",
+						ukuranBiji: "Lebih kecil dan lebih padat/keras",
+						ukuranBuah: "-",
+						kafein: "2,2% – 2,7% (2x lipat Arabika)",
+						rasa: "Pahit kuat, earthy, nutty, menyerupai kacang-kacangan",
+						aroma: "Earthy (seperti tanah sehabis hujan), nutty",
+						kadarGula: "Rendah",
+						kadarLemak: "Lebih rendah dari Arabika",
+						kadarAsam: "-",
+						harga: "Relatif lebih murah",
+						ketahanan: "Lebih tahan hama dan kondisi lingkungan ekstrem",
+						keistimewaan: "-",
+						// budidaya
+						penaung: "Petai, jengkol, pisang, alpokat, jeruk, kelapa",
+						varietas: "BP 42, BP 234, BP 288, BP 358, BP 409, SA 237",
+						tips: "Tanam poliklonal 3–4 klon. Gunakan batang bawah BP 308 yang tahan nematoda. Mendominasi 92% produksi kopi nasional Indonesia."
+					}
+				},
+				{
+					name: "Liberika", color: "#b8860b", dark: "#7a5600",
+					seasons: [1.0, 1.0, 0.9, 0.8], rate: 0.9,
+					soilTop: "#4a4a3a", soilLeft: "#2a2a20", soilRight: "#1a1a10",   // tanah gambut gelap
+					dugTop:  "#5a5040", dugLeft:  "#3a3028", dugRight: "#2a2018",
+					label: "Lahan Gambut", labelColor: "#ffffff",
+					info: {
+						foto: "assets/img/kopi-liberika.jpg",
+						fotoAlt: "Biji Kopi Liberika",
+						ilmiah: "Coffea liberica",
+						// syarat tumbuh
+						ketinggian: "0 – 900 m dpl",
+						suhu: "21 – 30°C",
+						curahHujan: "1.250 – 3.500 mm/tahun",
+						ph: "4,5 – 6,5",
+						bahanOrganik: "-",
+						// karakteristik biji
+						bentukBiji: "Lonjong, asimetris, tidak rata",
+						alurTengah: "Tidak beraturan",
+						warnaBiji: "Kehijauan",
+						ukuranBiji: "7–15 mm per biji (2 biji per buah), kulit tipis",
+						ukuranBuah: "Besar, lonjong, 18–30 mm (±2x lipat Arabika)",
+						kafein: "1,12% – 1,26%",
+						rasa: "Pahit kuat, tidak terlalu asam, kombinasi buah-buahan dan sedikit kayu",
+						aroma: "Unik: smoky (asap kayu), fruity, sedikit aroma bunga",
+						kadarGula: "-",
+						kadarLemak: "-",
+						kadarAsam: "Rendah meskipun tumbuh di lahan gambut yang asam",
+						harga: "Sedang",
+						ketahanan: "Adaptif di lahan marginal & gambut",
+						keistimewaan: "Tumbuh di lahan marginal yang tidak bisa ditanami Arabika/Robusta",
+						// budidaya
+						penaung: "Pohon kayu lokal gambut",
+						varietas: "Spesies tunggal, belum banyak varietas unggul",
+						tips: "Satu-satunya kopi yang bisa tumbuh di lahan gambut dan dekat permukaan laut. Biji terbesar di antara 3 jenis. Jarak tanam lebih lebar: 3×3 m atau 4×2,5 m."
+					},
+				},
 			];
 
 			// ─── STATE ───────────────────────────────────────────────────
@@ -389,7 +1016,13 @@
 				DAY_SEC = 35;
 			let selectedCoffee = 0,
 				selectedPlot = -1;
-			let plots = Array.from({ length: 9 }, () => ({ state: ST.EMPTY, growth: 0, coffeeType: 0, watered: false, waterAnim: 0, bloomAnim: 0, shakeAnim: 0 }));
+			
+			// 3x3 plots for each coffee type, but only one active at a time based on selectedCoffee
+			const allPlots = [0, 1, 2].map(() =>
+				Array.from({ length: 9 }, () => ({ state: ST.EMPTY, growth: 0, coffeeType: 0, watered: false, waterAnim: 0, bloomAnim: 0, shakeAnim: 0 }))
+			);
+			let plots = allPlots[0]; // aktif di lahan arabika dulu
+
 			let particles = [],
 				weatherPts = [],
 				scorePops = [];
@@ -821,19 +1454,33 @@
 						const plot = plots[idx];
 						const isSel = selectedPlot === idx;
 
-						// Tile colors based on state
-						let topC = "#6a8a3a",
-							leftC = "#4a6a20",
-							rightC = "#3a5a18";
+						// Tile colors based on selected coffee type + state
+						const cf = COFFEES[selectedCoffee];
+
+						// Default: tanah kosong pakai warna dasar kopi yang dipilih
+						let topC = cf.soilTop, leftC = cf.soilLeft, rightC = cf.soilRight;
+
+						// Sudah digali: pakai warna dugTop kopi yang ditanam di plot tsb (bukan selectedCoffee)
 						if (plot.state >= ST.DUG) {
-							topC = "#8a5a28";
-							leftC = "#6a3e14";
-							rightC = "#5a2e0a";
+							const plantedCf = COFFEES[plot.coffeeType];
+							topC = plantedCf.dugTop;
+							leftC = plantedCf.dugLeft;
+							rightC = plantedCf.dugRight;
 						}
+
+						// Tanah kosong yang belum digali: gunakan warna kopi yang sedang dipilih
+						if (plot.state === ST.EMPTY) {
+							topC = cf.soilTop;
+							leftC = cf.soilLeft;
+							rightC = cf.soilRight;
+						}
+
+						// Sudah disiram: sedikit lebih gelap/basah
 						if (plot.watered && plot.state >= ST.SEEDED) {
-							topC = "#7a5a30";
-							leftC = "#5a3e18";
-							rightC = "#4a2e08";
+							const plantedCf = COFFEES[plot.coffeeType];
+							topC = plantedCf.soilTop;
+							leftC = plantedCf.soilLeft;
+							rightC = plantedCf.soilRight;
 						}
 
 						// Selection glow
@@ -922,26 +1569,29 @@
 				initWeatherPts();
 
 				// Grow plants
-				for (let i = 0; i < 9; i++) {
-					const p = plots[i];
-					if (p.state >= ST.SEEDED && p.state < ST.RIPE) {
-						const coffee = COFFEES[p.coffeeType];
-						const w = weather;
-						const s = SEASONS[seasonIdx];
-						const mult = coffee.rate * w.g * coffee.seasons[seasonIdx];
-						const grow = (p.watered ? 18 : 6) * mult + Math.random() * 4;
-						p.growth = Math.min(100, p.growth + grow);
-						p.watered = false;
-						// State advance
-						if (p.state === ST.SEEDED && p.growth >= 20) p.state = ST.SPROUT;
-						else if (p.state === ST.SPROUT && p.growth >= 40) p.state = ST.YOUNG;
-						else if (p.state === ST.YOUNG && p.growth >= 65) p.state = ST.MATURE;
-						else if (p.state === ST.MATURE && p.growth >= 90) {
-							p.state = ST.RIPE;
-							p.bloomAnim = 1;
+				for (let lahan of allPlots) {
+					for (let i = 0; i < 9; i++) {
+						const p = plots[i];
+						if (p.state >= ST.SEEDED && p.state < ST.RIPE) {
+							const coffee = COFFEES[p.coffeeType];
+							const w = weather;
+							const s = SEASONS[seasonIdx];
+							const mult = coffee.rate * w.g * coffee.seasons[seasonIdx];
+							const grow = (p.watered ? 18 : 6) * mult + Math.random() * 4;
+							p.growth = Math.min(100, p.growth + grow);
+							p.watered = false;
+							// State advance
+							if (p.state === ST.SEEDED && p.growth >= 20) p.state = ST.SPROUT;
+							else if (p.state === ST.SPROUT && p.growth >= 40) p.state = ST.YOUNG;
+							else if (p.state === ST.YOUNG && p.growth >= 65) p.state = ST.MATURE;
+							else if (p.state === ST.MATURE && p.growth >= 90) {
+								p.state = ST.RIPE;
+								p.bloomAnim = 1;
+							}
 						}
 					}
 				}
+
 				updateUI();
 				showToast(`Hari ${totalDay} — ${weather.e} ${weather.name}`);
 			}
@@ -1034,7 +1684,7 @@
 				popupTitle.textContent = ST_LABEL[p.state];
 
 				const actions = [
-					{ id: "dig", e: "⛏", label: "Cangkul", ok: p.state === ST.EMPTY },
+					{ id: "dig", e: "⛏", label: "Gali", ok: p.state === ST.EMPTY },
 					{ id: "seed", e: "🌱", label: "Tanam", ok: p.state === ST.DUG },
 					{ id: "water", e: "💧", label: "Siram", ok: p.state >= ST.SEEDED && p.state < ST.RIPE && !p.watered },
 					{ id: "harvest", e: "🌿", label: "Panen", ok: p.state === ST.RIPE },
@@ -1064,7 +1714,14 @@
 			// ─── COFFEE SELECT ───────────────────────────────────────────
 			function selCoffee(i) {
 				selectedCoffee = i;
+				plots = allPlots[i];
+				selectedPlot = -1;
+				closePopup();
 				document.querySelectorAll(".cbtn").forEach((el, j) => el.classList.toggle("sel", j === i));
+				const cf = COFFEES[i];
+				const lbl = document.getElementById("soil-label");
+				lbl.textContent = `🌱 Lahan: ${cf.label}`;
+				lbl.style.color = cf.labelColor;
 			}
 
 			// ─── CANVAS HIT TEST ─────────────────────────────────────────
@@ -1098,6 +1755,228 @@
 					}
 				}
 			});
+
+			// ─── INFO PANEL ──────────────────────────────────────────────
+			function openInfo(i) {
+				const cf = COFFEES[i];
+				const d = cf.info;
+
+				// Judul & subjudul
+				document.getElementById("info-title").textContent = cf.name;
+				document.getElementById("info-title").style.color =
+					i === 0 ? "#ff6b6b" : i === 1 ? "#d4956a" : "#f0c040";
+				document.getElementById("info-subtitle").textContent = d.ilmiah;
+
+				// Foto — tampil jika ada path-nya
+				const fotoWrap = document.getElementById("info-foto-wrap");
+				const fotoImg = document.getElementById("info-foto");
+				if (d.foto) {
+					fotoImg.src = d.foto;
+					fotoImg.alt = d.fotoAlt;
+					document.getElementById("info-foto-alt").textContent = d.fotoAlt;
+					fotoWrap.style.display = "block";
+				} else {
+					fotoWrap.style.display = "none";
+				}
+
+				// Isi semua field
+				const fields = [
+					"ketinggian","suhu","curahHujan","ph","bahanOrganik",
+					"bentukBiji","alurTengah","warnaBiji","ukuranBiji","ukuranBuah",
+					"kafein","rasa","aroma","kadarGula","kadarLemak","kadarAsam",
+					"harga","ketahanan","keistimewaan",
+					"penaung","varietas"
+				];
+				fields.forEach(k => {
+					const el = document.getElementById("i-" + k);
+					if (el) el.textContent = d[k] || "-";
+				});
+				
+				// sembunyikan baris yg nilainya "-"
+				document.querySelectorAll(".info-row").forEach(row => {
+					const val = row.querySelector(".info-val");
+					row.style.display = (val && val.textContent === "-") ? "none" : "flex";
+				});
+				document.getElementById("i-tips").textContent = d.tips;
+				document.getElementById("infopanel").classList.add("open");
+			}
+
+			function closeInfo() {
+				document.getElementById("infopanel").classList.remove("open");
+			}
+
+			// ─── TUTORIAL ────────────────────────────────────────────────
+			const TUT_STEPS = [
+				{
+					title: "👋 Selamat Datang di KopiLand!",
+					desc: "Game simulasi budidaya kopi edukasi dari <b>Dinas Perkebunan Jawa Barat</b>. Kamu akan belajar menanam 3 jenis kopi Indonesia. Ketuk <b>Lanjut</b> untuk mulai!",
+					highlight: null,
+					bubblePos: "center",
+					arrowDir: null,
+				},
+				{
+					title: "☕ Pilih Jenis Kopi",
+					desc: "Di sini kamu bisa pilih <b>Arabika</b>, <b>Robusta</b>, atau <b>Liberika</b>. Setiap kopi punya <b>lahan berbeda</b> sesuai karakteristik tumbuhnya. Ketuk <b>ℹ️</b> untuk lihat info lengkap tiap kopi!",
+					highlight: "coffeesel",
+					bubblePos: "above-highlight",
+					arrowDir: "down",
+				},
+				{
+					title: "🌱 Label Jenis Lahan",
+					desc: "Label ini menunjukkan jenis lahan yang sedang aktif. <b>Arabika</b> = Dataran Tinggi, <b>Robusta</b> = Dataran Rendah, <b>Liberika</b> = Lahan Gambut.",
+					highlight: "botlabel",
+					bubblePos: "above-highlight",
+					arrowDir: "down",
+				},
+				{
+					title: "📅 Hari & Musim",
+					desc: "Game berjalan otomatis per hari. Setiap <b>7 hari</b> musim berganti. Cuaca dan musim mempengaruhi <b>kecepatan tumbuh</b> tanamanmu!",
+					highlight: "topbar",
+					bubblePos: "below-highlight",
+					arrowDir: "up",
+				},
+				{
+					title: "⛈ Cuaca & Pertumbuhan",
+					desc: "Indikator cuaca menampilkan <b>modifier pertumbuhan</b>. Hujan lebat = ×1.4 lebih cepat! Kemarau terik = ×0.5 lebih lambat. Perhatikan ini saat menyiram tanaman.",
+					highlight: "weatherbar",
+					bubblePos: "below-highlight",
+					arrowDir: "up",
+				},
+				{
+					title: "⛏ Cara Menanam",
+					desc: "Ketuk petak tanah untuk mulai! Urutan aksinya:<br><b>1. Gali ⛏</b> tanah dulu<br><b>2. Tanam 🌱</b> benih kopi<br><b>3. Siram 💧</b> setiap hari<br><b>4. Panen 🌿</b> saat sudah matang!",
+					highlight: null,
+					bubblePos: "center",
+					arrowDir: null,
+				},
+				{
+					title: "🏆 Kumpulkan Poin!",
+					desc: "Setiap panen menghasilkan poin ☕. Makin sering disiram dan cuaca bagus, makin besar bonus poinnya! Sekarang kamu siap bertani kopi. <b>Selamat bermain!</b>",
+					highlight: "score-txt",
+					bubblePos: "below-highlight",
+					arrowDir: "up",
+				},
+			];
+
+			let tutStep = 0;
+			let tutActive = false;
+
+			function startTutorial() {
+				tutActive = true;
+				tutStep = 0;
+				document.getElementById("tutorial").classList.add("active");
+				// buat dots
+				const dots = document.getElementById("tut-dots");
+				dots.innerHTML = TUT_STEPS.map((_, i) => `<div class="tut-dot" id="tut-dot-${i}"></div>`).join("");
+				renderTutStep();
+			}
+
+			function renderTutStep() {
+				const step = TUT_STEPS[tutStep];
+				const total = TUT_STEPS.length;
+
+				// Badge & konten
+				document.getElementById("tut-badge").textContent = `Langkah ${tutStep + 1} / ${total}`;
+				document.getElementById("tut-title").innerHTML = step.title;
+				document.getElementById("tut-desc").innerHTML = step.desc;
+
+				// Dots
+				document.querySelectorAll(".tut-dot").forEach((d, i) => {
+					d.classList.toggle("active", i === tutStep);
+				});
+
+				// Tombol terakhir
+				const nextBtn = document.getElementById("tut-next-btn");
+				nextBtn.textContent = tutStep === total - 1 ? "Mulai! 🎉" : "Lanjut →";
+
+				// Cutout highlight
+				const cutout = document.getElementById("tut-cutout");
+				const bubble = document.getElementById("tut-bubble");
+				const wrap = document.getElementById("wrap");
+				const wrapRect = wrap.getBoundingClientRect();
+
+				// Reset arrow class
+				bubble.className = "";
+
+				if (step.highlight) {
+					const el = document.getElementById(step.highlight);
+					if (el) {
+						const r = el.getBoundingClientRect();
+						const pad = 10;
+						const left = r.left - wrapRect.left - pad;
+						const top = r.top - wrapRect.top - pad;
+						const width = r.width + pad * 2;
+						const height = r.height + pad * 2;
+
+						cutout.style.cssText = `
+							position: absolute;
+							left: ${left}px; top: ${top}px;
+							width: ${width}px; height: ${height}px;
+							box-shadow: 0 0 0 9999px rgba(0,0,0,0.55);
+							border-radius: 16px;
+							pointer-events: none;
+							z-index: 500;
+							transition: all 0.4s ease;
+						`;
+						cutout.style.display = "block";
+						document.getElementById("tut-dark").style.background = "transparent";
+
+						// Posisi bubble
+						if (step.bubblePos === "above-highlight") {
+							bubble.style.left = Math.max(8, left - 20) + "px";
+							bubble.style.top = (top - 170) + "px";
+							bubble.style.bottom = "auto";
+							if (step.arrowDir === "down") bubble.className = "";
+						} else if (step.bubblePos === "below-highlight") {
+							bubble.style.left = Math.max(8, left - 20) + "px";
+							bubble.style.top = (top + height + 14) + "px";
+							bubble.style.bottom = "auto";
+							if (step.arrowDir === "up") bubble.className = "arrow-up";
+						}
+					}
+				} else {
+					// Center bubble, no cutout
+					cutout.style.display = "none";
+					document.getElementById("tut-dark").style.background = "rgba(0,0,0,0.55)";
+					bubble.style.left = "50%";
+					bubble.style.transform = "translateX(-50%)";
+					bubble.style.top = "50%";
+					bubble.style.marginTop = "-90px";
+					bubble.style.bottom = "auto";
+					bubble.className = "";
+				}
+
+				// Reset transform untuk step non-center
+				if (step.highlight) {
+					bubble.style.transform = "none";
+					bubble.style.marginTop = "0";
+				}
+			}
+
+			function tutNext() {
+				if (!tutActive) return;
+				tutStep++;
+				if (tutStep >= TUT_STEPS.length) {
+					skipTutorial();
+					return;
+				}
+				renderTutStep();
+			}
+
+			function skipTutorial() {
+				tutActive = false;
+				document.getElementById("tutorial").classList.remove("active");
+			}
+
+			// ─── SPLASH SCREEN ───────────────────────────────────────────
+			function closeSplash() {
+				const splash = document.getElementById("splash");
+				splash.classList.add("fade-out");
+				setTimeout(() => {
+					splash.style.display = "none";
+					startTutorial();
+				}, 600);
+			}
 
 			// ─── UI UPDATES ──────────────────────────────────────────────
 			function updateUI() {
