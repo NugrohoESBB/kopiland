@@ -1082,11 +1082,16 @@
 					for (let col = 0; col < 3; col++) {
 						const { x, y } = isoToScreen(col, row);
 						// Point-in-diamond test
+						// const hw = ISO_TILE_W / 2,
+						// 	hh = ISO_TILE_H / 2 + 18;
+						// const dx = sx - x,
+						// 	dy = sy - (y + hh);
+						// if (Math.abs(dx) / hw + Math.abs(dy) / hh < 1.1) {
 						const hw = ISO_TILE_W / 2,
-							hh = ISO_TILE_H / 2 + 18;
+							hh = ISO_TILE_H / 2;
 						const dx = sx - x,
 							dy = sy - (y + hh);
-						if (Math.abs(dx) / hw + Math.abs(dy) / hh < 1.1) {
+						if (Math.abs(dx) / hw + Math.abs(dy) / hh < 1.05) {
 							openPopup(plotIdx(col, row));
 							return;
 						}
