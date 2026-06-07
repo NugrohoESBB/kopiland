@@ -688,6 +688,164 @@
 				z-index: 500;
 				transition: all 0.4s ease;
 			}
+
+			/* Settings Panel */
+			#settingsbtn {
+				position: absolute;
+				top: 12px;
+				right: 12px;
+				width: 38px; height: 38px;
+				background: rgba(255,255,255,0.92);
+				border: none;
+				border-radius: 50%;
+				font-size: 18px;
+				cursor: pointer;
+				display: flex; align-items: center; justify-content: center;
+				box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+				pointer-events: all;
+				z-index: 200;
+				transition: transform 0.15s;
+			}
+			#settingsbtn:active { transform: scale(0.9); }
+
+			#settingspanel {
+				position: absolute;
+				top: 0; left: 0; right: 0; bottom: 0;
+				background: rgba(10, 4, 0, 0.88);
+				z-index: 400;
+				display: none;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				padding: 24px;
+				pointer-events: all;
+			}
+			#settingspanel.open { display: flex; }
+
+			.settings-card {
+				background: linear-gradient(160deg, #2a1200, #3a1a00);
+				border: 2px solid rgba(245,197,24,0.3);
+				border-radius: 24px;
+				padding: 24px 20px;
+				width: 100%;
+				max-width: 320px;
+				box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+			}
+			.settings-title {
+				font-family: "Nunito";
+				font-size: 20px;
+				font-weight: 900;
+				color: #f5c518;
+				text-align: center;
+				margin-bottom: 20px;
+			}
+			.settings-row {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				padding: 14px 0;
+				border-bottom: 1px solid rgba(255,255,255,0.07);
+			}
+			.settings-row:last-of-type { border-bottom: none; }
+			.settings-row-left {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+			}
+			.settings-row-icon { font-size: 22px; }
+			.settings-row-info {}
+			.settings-row-label {
+				font-family: "Nunito";
+				font-size: 14px;
+				font-weight: 800;
+				color: #fff;
+			}
+			.settings-row-sub {
+				font-family: "Nunito Sans";
+				font-size: 11px;
+				color: rgba(255,255,255,0.45);
+				margin-top: 1px;
+			}
+
+			/* Toggle switch */
+			.toggle {
+				position: relative;
+				width: 48px; height: 26px;
+				cursor: pointer;
+			}
+			.toggle input { display: none; }
+			.toggle-track {
+				position: absolute;
+				top: 0; left: 0; right: 0; bottom: 0;
+				background: rgba(255,255,255,0.15);
+				border-radius: 13px;
+				transition: background 0.25s;
+			}
+			.toggle input:checked + .toggle-track {
+				background: linear-gradient(135deg, #f5c518, #e8a030);
+			}
+			.toggle-thumb {
+				position: absolute;
+				top: 3px; left: 3px;
+				width: 20px; height: 20px;
+				background: #fff;
+				border-radius: 50%;
+				box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+				transition: left 0.25s;
+				pointer-events: none;
+			}
+			.toggle input:checked ~ .toggle-thumb { left: 25px; }
+
+			/* Volume slider */
+			.vol-row {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				padding: 8px 0 14px;
+				border-bottom: 1px solid rgba(255,255,255,0.07);
+			}
+			.vol-label {
+				font-family: "Nunito Sans";
+				font-size: 11px;
+				color: rgba(255,255,255,0.5);
+				width: 36px;
+				text-align: right;
+				flex-shrink: 0;
+			}
+			input[type=range].vol-slider {
+				flex: 1;
+				--webkit-appearance: none;
+				height: 4px;
+				border-radius: 2px;
+				background: rgba(255,255,255,0.15);
+				outline: none;
+			}
+			input[type=range].vol-slider::-webkit-slider-thumb {
+				--webkit-appearance: none;
+				width: 18px; height: 18px;
+				border-radius: 50%;
+				background: linear-gradient(135deg, #f5c518, #e8a030);
+				cursor: pointer;
+				box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+			}
+
+			.settings-close-btn {
+				margin-top: 20px;
+				background: linear-gradient(135deg, #f5c518, #e8a030);
+				border: none;
+				border-radius: 20px;
+				padding: 12px 40px;
+				font-family: "Nunito";
+				font-size: 15px;
+				font-weight: 900;
+				color: #3a1a00;
+				cursor: pointer;
+				box-shadow: 0 4px 16px rgba(245,197,24,0.35);
+				transition: transform 0.12s;
+			}
+			.settings-close-btn:active { 
+				transform: scale(0.95);
+			}
 		</style>
 	</head>
 	<body>
@@ -728,6 +886,7 @@
 				<div id="topbar">
 					<div class="topcard"><span class="icon">☕</span><span id="score-txt">0</span></div>
 					<div class="topcard"><span class="icon">📅</span><span id="day-txt">Hari 1</span></div>
+					<button id="settingsbtn" onclick="openSettings()">⚙️</button>
 				</div>
 				<div id="seasonbadge"><span id="season-txt">Musim Hujan 🌧</span></div>
 				<div id="weatherbar"><span id="weather-txt">⛈ Hujan Lebat</span><span id="growmod-txt" style="color: #2d8a2d">×1.4 tumbuh</span></div>
@@ -796,6 +955,63 @@
 						<div class="info-section-title">💡 Tips Budidaya</div>
 						<div class="info-tips" id="i-tips">-</div>
 					</div>
+				</div>
+
+				<!-- Settings Panel -->
+				<div id="settingspanel">
+					<div class="settings-card">
+						<div class="settings-title">⚙️ Pengaturan</div>
+
+						<!-- Music toggle -->
+						<div class="settings-row">
+							<div class="settings-row-left">
+								<span class="settings-row-icon">🎵</span>
+								<div class="settings-row-info">
+									<div class="settings-row-label">Musik Latar</div>
+									<div class="settings-row-sub">Ambient background music</div>
+								</div>
+							</div>
+							<label class="toggle">
+								<input type="checkbox" id="toggle-music" checked onchange="toggleMusic(this.checked)">
+								<div class="toggle-track"></div>
+								<div class="toggle-thumb"></div>
+							</label>
+						</div>
+
+						<!-- Volume musik -->
+						<div class="vol-row">
+							<span class="vol-label">🔈</span>
+							<input type="range" class="vol-slider" id="vol-music" min="0" max="100" value="40"
+								oninput="setMusicVolume(this.value)">
+							<span class="vol-label" id="vol-music-val">40</span>
+						</div>
+
+						<!-- SFX toggle -->
+						<div class="settings-row">
+							<div class="settings-row-left">
+								<span class="settings-row-icon">🔊</span>
+								<div class="settings-row-info">
+									<div class="settings-row-label">Efek Suara</div>
+									<div class="settings-row-sub">Suara aksi & interaksi</div>
+								</div>
+							</div>
+							<label class="toggle">
+								<input type="checkbox" id="toggle-sfx" checked onchange="toggleSfx(this.checked)">
+								<div class="toggle-track"></div>
+								<div class="toggle-thumb"></div>
+							</label>
+						</div>
+
+						<!-- Volume SFX -->
+						<div class="vol-row">
+							<span class="vol-label">🔈</span>
+							<input type="range" class="vol-slider" id="vol-sfx" min="0" max="100" value="70"
+								oninput="setSfxVolume(this.value)">
+							<span class="vol-label" id="vol-sfx-val">70</span>
+						</div>
+					</div>
+
+					<button class="settings-close-btn" onclick="closeSettings()">✓ Simpan</button>
 				</div>
 
 				<!-- Tutorial Overlay -->
@@ -1612,6 +1828,7 @@
 					p.shakeAnim = 1;
 					setTimeout(() => (p.shakeAnim = 0), 400);
 					showToast("Tanah berhasil digali! ⛏");
+					sfxDig();
 				} else if (action === "seed") {
 					if (p.state !== ST.DUG) {
 						showToast("Gali tanah dulu!");
@@ -1625,6 +1842,7 @@
 					p.shakeAnim = 0.6;
 					setTimeout(() => (p.shakeAnim = 0), 500);
 					showToast(`Benih ${COFFEES[selectedCoffee].name} ditanam! 🌱`);
+					sfxSeed();
 				} else if (action === "water") {
 					if (p.state < ST.SEEDED || p.state >= ST.RIPE) {
 						showToast("Tidak ada tanaman di sini!");
@@ -1640,6 +1858,7 @@
 					p.shakeAnim = 0.4;
 					setTimeout(() => (p.shakeAnim = 0), 300);
 					showToast("Tanaman disiram! 💧");
+					sfxWater();
 				} else if (action === "harvest") {
 					if (p.state !== ST.RIPE) {
 						showToast("Belum siap panen!");
@@ -1655,6 +1874,7 @@
 					p.watered = false;
 					p.bloomAnim = 0;
 					showToast(`Panen berhasil! +${gained} poin ☕`);
+					sfxHarvest();
 					updateUI();
 				}
 				closePopup();
@@ -1803,6 +2023,90 @@
 
 			function closeInfo() {
 				document.getElementById("infopanel").classList.remove("open");
+			}
+
+			// ─── AUDIO ENGINE (HTML5 Audio) ──────────────────────────────
+			let audioReady = false;
+			let musicOn = true;
+			let sfxOn = true;
+			let musicVolume = 0.4;   // 0.0 – 1.0
+			let sfxVolume = 0.7;     // 0.0 – 1.0
+
+			// ── Objek Audio ──
+			const bgMusic = new Audio("assets/audio/backsound.mp3");
+			bgMusic.loop = true;
+			bgMusic.volume = musicVolume;
+
+			const SFX = {
+				dig:     new Audio("assets/audio/sfx-dig.mp3"),
+				seed:    new Audio("assets/audio/sfx-seed.mp3"),
+				water:   new Audio("assets/audio/sfx-water.mp3"),
+				harvest: new Audio("assets/audio/sfx-harvest.mp3"),
+				click:   new Audio("assets/audio/sfx-click.mp3"),
+			};
+			// Set volume awal semua SFX
+			Object.values(SFX).forEach(a => a.volume = sfxVolume);
+
+			function initAudio() {
+				if (audioReady) return;
+				audioReady = true;
+				if (musicOn) {
+					bgMusic.play().catch(() => {
+						// autoplay diblok browser, tidak apa-apa
+					});
+				}
+			}
+
+			// ── SFX Helper ──
+			function playSfx(name) {
+				if (!sfxOn || !audioReady) return;
+				const audio = SFX[name];
+				if (!audio) return;
+				audio.currentTime = 0;   // reset ke awal agar bisa ditrigger cepat
+				audio.play().catch(() => {});
+			}
+
+			function sfxDig()     { playSfx("dig"); }
+			function sfxSeed()    { playSfx("seed"); }
+			function sfxWater()   { playSfx("water"); }
+			function sfxHarvest() { playSfx("harvest"); }
+			function sfxClick()   { playSfx("click"); }
+
+			// ── Settings Controls ──
+			function toggleMusic(on) {
+				musicOn = on;
+				if (!audioReady) return;
+				if (on) {
+					bgMusic.play().catch(() => {});
+				} else {
+					bgMusic.pause();
+				}
+			}
+
+			function toggleSfx(on) {
+				sfxOn = on;
+			}
+
+			function setMusicVolume(val) {
+				document.getElementById("vol-music-val").textContent = val;
+				musicVolume = val / 100;
+				bgMusic.volume = musicVolume;
+			}
+
+			function setSfxVolume(val) {
+				document.getElementById("vol-sfx-val").textContent = val;
+				sfxVolume = val / 100;
+				Object.values(SFX).forEach(a => a.volume = sfxVolume);
+			}
+
+			function openSettings() {
+				sfxClick();
+				document.getElementById("settingspanel").classList.add("open");
+			}
+
+			function closeSettings() {
+				sfxClick();
+				document.getElementById("settingspanel").classList.remove("open");
 			}
 
 			// ─── TUTORIAL ────────────────────────────────────────────────
@@ -1970,6 +2274,7 @@
 
 			// ─── SPLASH SCREEN ───────────────────────────────────────────
 			function closeSplash() {
+				initAudio();
 				const splash = document.getElementById("splash");
 				splash.classList.add("fade-out");
 				setTimeout(() => {
