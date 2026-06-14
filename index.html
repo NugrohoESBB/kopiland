@@ -1081,7 +1081,7 @@
 				font-weight: 800;
 				writing-mode: vertical-rl;
 			}
-			@keyframes hint-pulse {
+			/* @keyframes hint-pulse {
 				0%,
 				100% {
 					opacity: 0.6;
@@ -1090,6 +1090,16 @@
 				50% {
 					opacity: 1;
 					right: 4px;
+				}
+			} */
+			@keyframes hint-pulse {
+				0%, 100% {
+					opacity: 0.6;
+					transform: translateX(0);
+				}
+				50% {
+					opacity: 1;
+					transform: translateX(-4px);
 				}
 			}
 
