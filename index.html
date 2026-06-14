@@ -17,16 +17,67 @@
 				display: flex;
 				align-items: center;
 				justify-content: center;
+				min-height: 100vh;
 				height: 100vh;
 				overflow: hidden;
 				font-family: "Nunito Sans", sans-serif;
+				margin: 0;
+				padding: 0;
 			}
+
+			/* Background dekoratif untuk desktop */
+			body::before {
+				content: "";
+				position: fixed;
+				inset: 0;
+				background: radial-gradient(ellipse at 20% 50%, rgba(139, 90, 0, 0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 50%, rgba(80, 40, 0, 0.3) 0%, transparent 50%), linear-gradient(160deg, #1a0a00 0%, #2d1500 50%, #1a0a00 100%);
+				z-index: 0;
+			}
+
 			#wrap {
 				position: relative;
 				width: 420px;
 				height: 780px;
 				overflow: hidden;
 				background: #e8a030;
+				z-index: 1;
+				/* Scaling otomatis sesuai layar */
+				transform-origin: center center;
+				box-shadow:
+					0 0 0 1px rgba(245, 197, 24, 0.2),
+					0 32px 80px rgba(0, 0, 0, 0.8),
+					0 0 120px rgba(139, 90, 0, 0.3);
+				border-radius: 0px;
+				flex-shrink: 0;
+			}
+
+			/* Desktop: tampilkan info samping kiri & kanan */
+			#desktop-sidebar-left,
+			#desktop-sidebar-right {
+				display: none;
+				position: relative;
+				z-index: 1;
+				width: 220px;
+				flex-shrink: 0;
+			}
+
+			/* Tablet landscape & desktop kecil */
+			@media (min-width: 600px) {
+				#wrap {
+					border-radius: 32px;
+				}
+			}
+
+			/* Desktop besar: tampilkan sidebar */
+			@media (min-width: 1100px) {
+				#desktop-sidebar-left,
+				#desktop-sidebar-right {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					gap: 16px;
+					padding: 24px 0;
+				}
 			}
 			canvas {
 				position: absolute;
@@ -77,19 +128,18 @@
 			}
 			/* Day/Season badge */
 			#seasonbadge {
-				position: absolute;
-				top: 12px;
-				left: 50%;
-				transform: translateX(-50%);
 				background: linear-gradient(135deg, #ff8c00, #e05a00);
 				border-radius: 20px;
-				padding: 6px 18px;
+				padding: 6px 14px;
 				box-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
-				pointer-events: none;
+				flex: 1;
+				text-align: center;
+				margin: 0 8px;
+				cursor: pointer;
 			}
 			#seasonbadge span {
 				font-family: "Nunito";
-				font-size: 13px;
+				font-size: 12px;
 				font-weight: 800;
 				color: #fff;
 				white-space: nowrap;
@@ -292,7 +342,10 @@
 			/* Info Panel */
 			#infopanel {
 				position: absolute;
-				top: 0; left: 0; right: 0; bottom: 0;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
 				background: rgba(20, 8, 0, 0.82);
 				display: none;
 				z-index: 300;
@@ -300,7 +353,9 @@
 				padding: 16px 14px 30px;
 				pointer-events: all;
 			}
-			#infopanel.open { display: block; }
+			#infopanel.open {
+				display: block;
+			}
 			#info-header {
 				display: flex;
 				align-items: center;
@@ -322,14 +377,17 @@
 				margin-bottom: 14px;
 			}
 			#info-close {
-				background: rgba(255,255,255,0.15);
+				background: rgba(255, 255, 255, 0.15);
 				border: none;
 				border-radius: 50%;
-				width: 34px; height: 34px;
+				width: 34px;
+				height: 34px;
 				color: #fff;
 				font-size: 18px;
 				cursor: pointer;
-				display: flex; align-items: center; justify-content: center;
+				display: flex;
+				align-items: center;
+				justify-content: center;
 				font-family: "Nunito";
 				font-weight: 900;
 				pointer-events: all;
@@ -355,10 +413,12 @@
 				justify-content: space-between;
 				align-items: flex-start;
 				padding: 4px 0;
-				border-bottom: 1px solid rgba(255,255,255,0.06);
+				border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 				gap: 8px;
 			}
-			.info-row:last-child { border-bottom: none; }
+			.info-row:last-child {
+				border-bottom: none;
+			}
 			.info-key {
 				font-family: "Nunito Sans";
 				font-size: 12px;
@@ -388,7 +448,10 @@
 			/* Splash Screen */
 			#splash {
 				position: absolute;
-				top: 0; left: 0; right: 0; bottom: 0;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
 				background: linear-gradient(160deg, #1a4a0a 0%, #2d7a1a 45%, #1a5a08 100%);
 				z-index: 999;
 				display: flex;
@@ -405,13 +468,17 @@
 			}
 			.splash-top-band {
 				position: absolute;
-				top: 0; left: 0; right: 0;
+				top: 0;
+				left: 0;
+				right: 0;
 				height: 6px;
 				background: linear-gradient(90deg, #f5c518, #e8a030, #f5c518);
 			}
 			.splash-bottom-band {
 				position: absolute;
-				bottom: 0; left: 0; right: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
 				height: 6px;
 				background: linear-gradient(90deg, #f5c518, #e8a030, #f5c518);
 			}
@@ -419,14 +486,16 @@
 				width: 100px;
 				height: 100px;
 				border-radius: 50%;
-				background: rgba(255,255,255,0.12);
-				border: 3px solid rgba(245,197,24,0.6);
+				background: rgba(255, 255, 255, 0.12);
+				border: 3px solid rgba(245, 197, 24, 0.6);
 				display: flex;
 				align-items: center;
 				justify-content: center;
 				margin-bottom: 16px;
 				overflow: hidden;
-				box-shadow: 0 0 0 6px rgba(245,197,24,0.15), 0 8px 32px rgba(0,0,0,0.3);
+				box-shadow:
+					0 0 0 6px rgba(245, 197, 24, 0.15),
+					0 8px 32px rgba(0, 0, 0, 0.3);
 			}
 			.splash-logo-wrap img {
 				width: 80px;
@@ -441,7 +510,7 @@
 				font-family: "Nunito";
 				font-size: 11px;
 				font-weight: 700;
-				color: rgba(255,255,255,0.7);
+				color: rgba(255, 255, 255, 0.7);
 				text-transform: uppercase;
 				letter-spacing: 1.5px;
 				text-align: center;
@@ -460,7 +529,7 @@
 				font-family: "Nunito";
 				font-size: 13px;
 				font-weight: 800;
-				color: rgba(255,255,255,0.85);
+				color: rgba(255, 255, 255, 0.85);
 				text-align: center;
 				margin-bottom: 28px;
 			}
@@ -473,14 +542,14 @@
 			.splash-game-icon {
 				font-size: 52px;
 				margin-bottom: 8px;
-				filter: drop-shadow(0 4px 12px rgba(0,0,0,0.4));
+				filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
 			}
 			.splash-game-title {
 				font-family: "Nunito";
 				font-size: 34px;
 				font-weight: 900;
 				color: #ffffff;
-				text-shadow: 0 3px 16px rgba(0,0,0,0.4);
+				text-shadow: 0 3px 16px rgba(0, 0, 0, 0.4);
 				margin-bottom: 4px;
 				letter-spacing: -0.5px;
 			}
@@ -490,7 +559,7 @@
 			.splash-game-sub {
 				font-family: "Nunito Sans";
 				font-size: 12px;
-				color: rgba(255,255,255,0.65);
+				color: rgba(255, 255, 255, 0.65);
 				text-align: center;
 				margin-bottom: 36px;
 				line-height: 1.5;
@@ -506,38 +575,128 @@
 				font-weight: 900;
 				color: #1a3a08;
 				cursor: pointer;
-				box-shadow: 0 6px 24px rgba(245,197,24,0.4), 0 2px 8px rgba(0,0,0,0.2);
-				transition: transform 0.15s, box-shadow 0.15s;
+				box-shadow:
+					0 6px 24px rgba(245, 197, 24, 0.4),
+					0 2px 8px rgba(0, 0, 0, 0.2);
+				transition:
+					transform 0.15s,
+					box-shadow 0.15s;
 				pointer-events: all;
 				letter-spacing: 0.3px;
 			}
 			.splash-btn:active {
 				transform: scale(0.96);
-				box-shadow: 0 3px 12px rgba(245,197,24,0.3);
+				box-shadow: 0 3px 12px rgba(245, 197, 24, 0.3);
+			}
+
+			/* Splash produk kopi */
+			#splash-product {
+				display: none;
+				flex-direction: column;
+				align-items: center;
+				width: 100%;
+				max-width: 320px;
+			}
+			.splash-product-icon {
+				font-size: 44px;
+				margin-bottom: 6px;
+			}
+			.splash-product-name {
+				font-family: "Nunito";
+				font-size: 22px;
+				font-weight: 900;
+				color: #f5c518;
+				margin-bottom: 2px;
+			}
+			.splash-product-latin {
+				font-family: "Nunito Sans";
+				font-size: 11px;
+				color: rgba(255, 255, 255, 0.5);
+				font-style: italic;
+				margin-bottom: 12px;
+			}
+			.splash-product-card {
+				background: rgba(255, 255, 255, 0.07);
+				border: 1.5px solid rgba(245, 197, 24, 0.25);
+				border-radius: 18px;
+				padding: 14px 16px;
+				width: 100%;
+				margin-bottom: 10px;
+			}
+			.splash-product-row {
+				display: flex;
+				justify-content: space-between;
+				padding: 5px 0;
+				border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+				gap: 8px;
+			}
+			.splash-product-row:last-child {
+				border-bottom: none;
+			}
+			.splash-product-key {
+				font-family: "Nunito Sans";
+				font-size: 11px;
+				color: rgba(255, 255, 255, 0.5);
+				flex-shrink: 0;
+			}
+			.splash-product-val {
+				font-family: "Nunito Sans";
+				font-size: 11px;
+				color: #fff;
+				text-align: right;
+				flex: 1;
+			}
+			.splash-product-desc {
+				font-family: "Nunito Sans";
+				font-size: 12px;
+				color: rgba(255, 255, 255, 0.7);
+				line-height: 1.6;
+				text-align: center;
+				margin-top: 6px;
+			}
+			.splash-dot {
+				width: 7px;
+				height: 7px;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.25);
+				transition: all 0.2s;
+			}
+			.splash-dot.active {
+				background: #f5c518;
+				width: 20px;
+				border-radius: 4px;
 			}
 			.splash-version {
 				position: absolute;
 				bottom: 16px;
 				font-family: "Nunito Sans";
 				font-size: 10px;
-				color: rgba(255,255,255,0.35);
+				color: rgba(255, 255, 255, 0.35);
 				letter-spacing: 0.5px;
 			}
 
 			/* Tutorial Overlay */
 			#tutorial {
 				position: absolute;
-				top: 0; left: 0; right: 0; bottom: 0;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
 				z-index: 500;
 				display: none;
 				pointer-events: none;
 			}
-			#tutorial.active { display: block; }
+			#tutorial.active {
+				display: block;
+			}
 
 			/* Highlight spotlight */
 			#tut-spotlight {
 				position: absolute;
-				top: 0; left: 0; right: 0; bottom: 0;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
 				pointer-events: all;
 			}
 
@@ -548,16 +707,17 @@
 				border: 2.5px solid #e8c060;
 				border-radius: 20px;
 				padding: 14px 16px 12px;
-				box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
 				max-width: 300px;
 				min-width: 220px;
 				pointer-events: all;
 				z-index: 501;
 			}
 			#tut-bubble::before {
-				content: '';
+				content: "";
 				position: absolute;
-				width: 14px; height: 14px;
+				width: 14px;
+				height: 14px;
 				background: #fff8dc;
 				border-left: 2.5px solid #e8c060;
 				border-bottom: 2.5px solid #e8c060;
@@ -567,17 +727,22 @@
 				margin-left: -7px;
 			}
 			#tut-bubble.arrow-up::before {
-				border-left: none; border-bottom: none;
+				border-left: none;
+				border-bottom: none;
 				border-top: 2.5px solid #e8c060;
 				border-right: 2.5px solid #e8c060;
-				top: -9px; bottom: auto;
+				top: -9px;
+				bottom: auto;
 			}
 			#tut-bubble.arrow-left::before {
 				border-left: 2.5px solid #e8c060;
 				border-top: 2.5px solid #e8c060;
-				border-right: none; border-bottom: none;
-				left: -9px; top: 50%;
-				margin-left: 0; margin-top: -7px;
+				border-right: none;
+				border-bottom: none;
+				left: -9px;
+				top: 50%;
+				margin-left: 0;
+				margin-top: -7px;
 				bottom: auto;
 			}
 			.tut-step-badge {
@@ -622,7 +787,8 @@
 				align-items: center;
 			}
 			.tut-dot {
-				width: 6px; height: 6px;
+				width: 6px;
+				height: 6px;
 				border-radius: 50%;
 				background: #ddd;
 				transition: all 0.2s;
@@ -643,14 +809,16 @@
 				pointer-events: all;
 				transition: transform 0.12s;
 			}
-			.tut-btn:active { transform: scale(0.93); }
+			.tut-btn:active {
+				transform: scale(0.93);
+			}
 			.tut-btn-next {
 				background: linear-gradient(135deg, #f5c518, #e8a030);
 				color: #5a2e00;
-				box-shadow: 0 3px 10px rgba(232,160,48,0.4);
+				box-shadow: 0 3px 10px rgba(232, 160, 48, 0.4);
 			}
 			.tut-btn-skip {
-				background: rgba(0,0,0,0.08);
+				background: rgba(0, 0, 0, 0.08);
 				color: #888;
 				font-size: 11px;
 				padding: 7px 12px;
@@ -666,51 +834,705 @@
 				z-index: 502;
 			}
 			@keyframes tut-pulse {
-				0%   { box-shadow: 0 0 0 0 rgba(245,197,24,0.6); }
-				70%  { box-shadow: 0 0 0 12px rgba(245,197,24,0); }
-				100% { box-shadow: 0 0 0 0 rgba(245,197,24,0); }
+				0% {
+					box-shadow: 0 0 0 0 rgba(245, 197, 24, 0.6);
+				}
+				70% {
+					box-shadow: 0 0 0 12px rgba(245, 197, 24, 0);
+				}
+				100% {
+					box-shadow: 0 0 0 0 rgba(245, 197, 24, 0);
+				}
 			}
 
 			/* Darken overlay di luar highlight */
 			#tut-dark {
 				position: absolute;
-				top: 0; left: 0; right: 0; bottom: 0;
-				background: rgba(0,0,0,0.55);
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba(0, 0, 0, 0.55);
 				pointer-events: all;
 				z-index: 499;
 			}
 			#tut-cutout {
 				position: absolute;
 				background: transparent;
-				box-shadow: 0 0 0 9999px rgba(0,0,0,0.55);
+				box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.55);
 				border-radius: 16px;
 				pointer-events: none;
 				z-index: 500;
 				transition: all 0.4s ease;
 			}
 
+			/* ── MASKOT KARAKTER ── */
+			#maskot-wrap {
+				position: absolute;
+				bottom: -10px;
+				left: -8px;
+				width: 200px;
+				pointer-events: none;
+				z-index: 350;
+				display: none;
+				flex-direction: column;
+				align-items: center;
+				animation: maskot-bounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+			}
+			#maskot-wrap.show {
+				display: flex;
+				pointer-events: none;
+			}
+			@keyframes maskot-bounce {
+				from {
+					transform: translateY(40px);
+					opacity: 0;
+				}
+				to {
+					transform: translateY(0);
+					opacity: 1;
+				}
+			}
+			#maskot-img {
+				width: 180px;
+				height: 180px;
+				object-fit: contain;
+				filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+				transform: scaleX(-1);
+			}
+			#maskot-bubble {
+				position: absolute;
+				bottom: 160px;
+				left: 150px;
+				background: linear-gradient(160deg, #fffef5, #fff8dc);
+				border: 2.5px solid #e8c060;
+				border-radius: 18px 18px 18px 4px;
+				padding: 10px 13px;
+				box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+				max-width: 230px;
+				min-width: 160px;
+				pointer-events: all;
+				/* z-index: 351; */
+				z-index: 9999;
+				display: none;
+				animation: bubble-pop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+			}
+			#maskot-bubble.show {
+				display: block;
+			}
+			@keyframes bubble-pop {
+				from {
+					transform: scale(0.7);
+					opacity: 0;
+				}
+				to {
+					transform: scale(1);
+					opacity: 1;
+				}
+			}
+			/* Ekor bubble */
+			#maskot-bubble::before {
+				content: "";
+				position: absolute;
+				bottom: -10px;
+				left: 12px;
+				width: 16px;
+				height: 16px;
+				background: #fff8dc;
+				border-right: 2.5px solid #e8c060;
+				border-bottom: 2.5px solid #e8c060;
+				transform: rotate(45deg);
+				clip-path: polygon(0 0, 100% 100%, 0 100%);
+			}
+			.bubble-label {
+				font-family: "Nunito";
+				font-size: 10px;
+				font-weight: 900;
+				color: #fff;
+				background: linear-gradient(135deg, #e8a030, #c87010);
+				border-radius: 10px;
+				padding: 2px 8px;
+				display: inline-block;
+				margin-bottom: 5px;
+			}
+			.bubble-text {
+				font-family: "Nunito Sans";
+				font-size: 12px;
+				color: #3a1a00;
+				line-height: 1.55;
+			}
+			.bubble-text b {
+				color: #c07000;
+			}
+			.bubble-text .b-good {
+				color: #2d8a2d;
+				font-weight: 700;
+			}
+			.bubble-text .b-bad {
+				color: #cc3300;
+				font-weight: 700;
+			}
+			.bubble-text .b-info {
+				color: #0055cc;
+				font-weight: 700;
+			}
+
+			/* Tombol tutup bubble */
+			#bubble-close {
+				display: none;
+				margin-top: 8px;
+				text-align: right;
+				pointer-events: all;
+			}
+			#bubble-close button {
+				font-family: "Nunito";
+				font-size: 10px;
+				font-weight: 900;
+				background: linear-gradient(135deg, #f5c518, #e8a030);
+				border: none;
+				border-radius: 10px;
+				padding: 4px 12px;
+				color: #3a1a00;
+				cursor: pointer;
+			}
+			#bubble-close.show {
+				display: block;
+			}
+
+			/* Animasi idle maskot */
+			@keyframes maskot-idle {
+				0%,
+				100% {
+					transform: translateY(0);
+				}
+				50% {
+					transform: translateY(-5px);
+				}
+			}
+			#maskot-wrap.idle {
+				animation: maskot-idle 2s ease-in-out infinite;
+			}
+
+			/* ── SWIPE INDICATOR ── */
+			#swipe-hint {
+				position: absolute;
+				right: 0;
+				top: 50%;
+				transform: translateY(-50%);
+				background: rgba(255, 255, 255, 0.22);
+				border-radius: 20px 0 0 20px;
+				padding: 14px 8px 14px 12px;
+				pointer-events: all;
+				cursor: pointer;
+				z-index: 150;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 4px;
+				animation: hint-pulse 2.5s infinite;
+				box-shadow: -3px 0 16px rgba(0, 0, 0, 0.25);
+			}
+			#swipe-hint span {
+				font-size: 11px;
+				color: rgba(255, 255, 255, 0.75);
+				font-family: "Nunito";
+				font-weight: 800;
+				writing-mode: vertical-rl;
+			}
+			@keyframes hint-pulse {
+				0%,
+				100% {
+					opacity: 0.6;
+					right: 0;
+				}
+				50% {
+					opacity: 1;
+					right: 4px;
+				}
+			}
+
+			/* ── QUIZ PANEL ── */
+			#quizpanel {
+				position: absolute;
+				top: 0;
+				left: 100%; /* mulai dari kanan */
+				width: 100%;
+				height: 100%;
+				background: linear-gradient(160deg, #0d2b00 0%, #1a4a08 50%, #0d2b00 100%);
+				z-index: 600;
+				overflow-y: auto;
+				pointer-events: all;
+				transition: left 0.38s cubic-bezier(0.4, 0, 0.2, 1);
+				padding-bottom: 32px;
+			}
+			#quizpanel.open {
+				left: 0;
+			}
+
+			/* Header kuis */
+			#quiz-header {
+				position: sticky;
+				top: 0;
+				background: linear-gradient(180deg, #0d2b00ee, #0d2b00cc);
+				backdrop-filter: blur(8px);
+				padding: 14px 16px 12px;
+				z-index: 10;
+				border-bottom: 1.5px solid rgba(245, 197, 24, 0.2);
+				display: flex;
+				align-items: center;
+				gap: 12px;
+			}
+			#quiz-back {
+				background: rgba(255, 255, 255, 0.12);
+				border: none;
+				border-radius: 50%;
+				width: 36px;
+				height: 36px;
+				color: #fff;
+				font-size: 18px;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+				transition: background 0.15s;
+			}
+			#quiz-back:active {
+				background: rgba(255, 255, 255, 0.25);
+			}
+			.quiz-header-text {
+				flex: 1;
+			}
+			.quiz-header-title {
+				font-family: "Nunito";
+				font-size: 18px;
+				font-weight: 900;
+				color: #f5c518;
+				line-height: 1;
+			}
+			.quiz-header-sub {
+				font-family: "Nunito Sans";
+				font-size: 11px;
+				color: rgba(255, 255, 255, 0.5);
+				margin-top: 2px;
+			}
+
+			/* Progress bar kuis */
+			#quiz-progress-wrap {
+				padding: 10px 16px 0;
+			}
+			.quiz-prog-bar {
+				height: 5px;
+				background: rgba(255, 255, 255, 0.12);
+				border-radius: 3px;
+				overflow: hidden;
+				margin-top: 6px;
+			}
+			.quiz-prog-fill {
+				height: 100%;
+				background: linear-gradient(90deg, #4aaa20, #f5c518);
+				border-radius: 3px;
+				transition: width 0.4s ease;
+			}
+			.quiz-prog-label {
+				font-family: "Nunito";
+				font-size: 11px;
+				font-weight: 800;
+				color: rgba(255, 255, 255, 0.5);
+				text-align: right;
+				margin-top: 4px;
+			}
+
+			/* Area soal */
+			#quiz-body {
+				padding: 16px 16px 0;
+			}
+
+			/* Card soal */
+			.quiz-q-card {
+				background: rgba(255, 248, 220, 0.07);
+				border: 1.5px solid rgba(245, 197, 24, 0.2);
+				border-radius: 20px;
+				padding: 18px 16px 14px;
+				margin-bottom: 14px;
+				animation: quiz-slide-in 0.3s ease;
+			}
+			@keyframes quiz-slide-in {
+				from {
+					opacity: 0;
+					transform: translateY(12px);
+				}
+				to {
+					opacity: 1;
+					transform: translateY(0);
+				}
+			}
+			.quiz-q-badge {
+				display: inline-block;
+				background: linear-gradient(135deg, #e8a030, #c87010);
+				border-radius: 14px;
+				padding: 3px 12px;
+				font-family: "Nunito";
+				font-size: 10px;
+				font-weight: 900;
+				color: #fff;
+				margin-bottom: 10px;
+				letter-spacing: 0.3px;
+			}
+			.quiz-q-text {
+				font-family: "Nunito";
+				font-size: 14px;
+				font-weight: 800;
+				color: #fff;
+				line-height: 1.5;
+				margin-bottom: 14px;
+			}
+			.quiz-q-img {
+				width: 100%;
+				border-radius: 12px;
+				margin-bottom: 12px;
+				max-height: 130px;
+				object-fit: cover;
+				border: 1.5px solid rgba(245, 197, 24, 0.2);
+				display: none; /* tampil kalau ada */
+			}
+
+			/* Pilihan jawaban */
+			.quiz-options {
+				display: flex;
+				flex-direction: column;
+				gap: 8px;
+			}
+			.quiz-opt {
+				background: rgba(255, 255, 255, 0.07);
+				border: 1.8px solid rgba(255, 255, 255, 0.15);
+				border-radius: 14px;
+				padding: 11px 14px;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				transition: all 0.18s;
+				pointer-events: all;
+			}
+			.quiz-opt:active {
+				transform: scale(0.98);
+			}
+			.quiz-opt.selected {
+				border-color: #f5c518;
+				background: rgba(245, 197, 24, 0.12);
+			}
+			.quiz-opt.correct {
+				border-color: #4aaa20;
+				background: rgba(74, 170, 32, 0.18);
+			}
+			.quiz-opt.wrong {
+				border-color: #dd3333;
+				background: rgba(221, 51, 51, 0.15);
+			}
+			.quiz-opt-letter {
+				width: 26px;
+				height: 26px;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.1);
+				font-family: "Nunito";
+				font-size: 12px;
+				font-weight: 900;
+				color: #f5c518;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+				transition: background 0.18s;
+			}
+			.quiz-opt.selected .quiz-opt-letter {
+				background: #f5c518;
+				color: #1a3a08;
+			}
+			.quiz-opt.correct .quiz-opt-letter {
+				background: #4aaa20;
+				color: #fff;
+			}
+			.quiz-opt.wrong .quiz-opt-letter {
+				background: #dd3333;
+				color: #fff;
+			}
+			.quiz-opt-text {
+				font-family: "Nunito Sans";
+				font-size: 13px;
+				color: rgba(255, 255, 255, 0.88);
+				line-height: 1.4;
+				flex: 1;
+			}
+
+			/* Feedback jawaban */
+			.quiz-feedback {
+				margin-top: 10px;
+				padding: 10px 14px;
+				border-radius: 12px;
+				font-family: "Nunito Sans";
+				font-size: 12px;
+				line-height: 1.5;
+				display: none;
+			}
+			.quiz-feedback.show {
+				display: block;
+			}
+			.quiz-feedback.correct-fb {
+				background: rgba(74, 170, 32, 0.15);
+				border-left: 3px solid #4aaa20;
+				color: #a0ee60;
+			}
+			.quiz-feedback.wrong-fb {
+				background: rgba(221, 51, 51, 0.12);
+				border-left: 3px solid #dd3333;
+				color: #ffaaaa;
+			}
+			.quiz-feedback b {
+				color: #f5c518;
+			}
+
+			/* Tombol navigasi kuis */
+			#quiz-nav {
+				display: flex;
+				gap: 10px;
+				padding: 14px 16px 0;
+				align-items: center;
+				justify-content: space-between;
+			}
+			.quiz-nav-btn {
+				font-family: "Nunito";
+				font-size: 14px;
+				font-weight: 900;
+				border: none;
+				border-radius: 18px;
+				padding: 11px 24px;
+				cursor: pointer;
+				transition:
+					transform 0.12s,
+					box-shadow 0.12s;
+			}
+			.quiz-nav-btn:active {
+				transform: scale(0.95);
+			}
+			.quiz-nav-next {
+				background: linear-gradient(135deg, #f5c518, #e8a030);
+				color: #1a3a08;
+				box-shadow: 0 4px 16px rgba(245, 197, 24, 0.35);
+				flex: 1;
+			}
+			.quiz-nav-next:disabled {
+				opacity: 0.35;
+				pointer-events: none;
+			}
+			#quiz-score-mini {
+				font-family: "Nunito";
+				font-size: 13px;
+				font-weight: 800;
+				color: rgba(255, 255, 255, 0.5);
+				white-space: nowrap;
+			}
+
+			/* ── HASIL KUIS ── */
+			#quiz-result {
+				display: none;
+				padding: 16px;
+				animation: quiz-slide-in 0.4s ease;
+			}
+			#quiz-result.show {
+				display: block;
+			}
+			.result-card {
+				background: rgba(255, 248, 220, 0.07);
+				border: 1.5px solid rgba(245, 197, 24, 0.25);
+				border-radius: 24px;
+				padding: 28px 20px;
+				text-align: center;
+				margin-bottom: 14px;
+			}
+			.result-icon {
+				font-size: 56px;
+				margin-bottom: 10px;
+			}
+			.result-grade {
+				font-family: "Nunito";
+				font-size: 48px;
+				font-weight: 900;
+				line-height: 1;
+				margin-bottom: 6px;
+			}
+			.result-grade.grade-a {
+				color: #f5c518;
+			}
+			.result-grade.grade-b {
+				color: #4aaa20;
+			}
+			.result-grade.grade-c {
+				color: #ff9900;
+			}
+			.result-grade.grade-d {
+				color: #dd3333;
+			}
+			.result-label {
+				font-family: "Nunito";
+				font-size: 16px;
+				font-weight: 900;
+				color: #fff;
+				margin-bottom: 4px;
+			}
+			.result-score-detail {
+				font-family: "Nunito Sans";
+				font-size: 13px;
+				color: rgba(255, 255, 255, 0.55);
+				margin-bottom: 20px;
+			}
+			.result-stat-row {
+				display: flex;
+				gap: 10px;
+				justify-content: center;
+				margin-bottom: 20px;
+			}
+			.result-stat {
+				background: rgba(255, 255, 255, 0.06);
+				border-radius: 14px;
+				padding: 12px 16px;
+				flex: 1;
+				text-align: center;
+			}
+			.result-stat-val {
+				font-family: "Nunito";
+				font-size: 22px;
+				font-weight: 900;
+				color: #f5c518;
+				line-height: 1;
+			}
+			.result-stat-lbl {
+				font-family: "Nunito Sans";
+				font-size: 10px;
+				color: rgba(255, 255, 255, 0.45);
+				margin-top: 3px;
+			}
+			.result-advice {
+				background: rgba(245, 197, 24, 0.08);
+				border-left: 3px solid #f5c518;
+				border-radius: 0 12px 12px 0;
+				padding: 12px 14px;
+				text-align: left;
+				font-family: "Nunito Sans";
+				font-size: 12px;
+				color: #ffe8a0;
+				line-height: 1.6;
+				margin-bottom: 4px;
+			}
+
+			/* Review per soal */
+			.result-review-title {
+				font-family: "Nunito";
+				font-size: 13px;
+				font-weight: 900;
+				color: #f5c518;
+				margin-bottom: 10px;
+				padding: 0 2px;
+			}
+			.review-item {
+				background: rgba(255, 255, 255, 0.05);
+				border-radius: 14px;
+				padding: 12px 14px;
+				margin-bottom: 8px;
+				border-left: 3px solid transparent;
+			}
+			.review-item.ri-correct {
+				border-left-color: #4aaa20;
+			}
+			.review-item.ri-wrong {
+				border-left-color: #dd3333;
+			}
+			.review-item-q {
+				font-family: "Nunito";
+				font-size: 12px;
+				font-weight: 800;
+				color: rgba(255, 255, 255, 0.8);
+				margin-bottom: 5px;
+				line-height: 1.4;
+			}
+			.review-item-ans {
+				font-family: "Nunito Sans";
+				font-size: 11px;
+				color: rgba(255, 255, 255, 0.5);
+				line-height: 1.5;
+			}
+			.review-item-ans .ans-correct {
+				color: #7aee50;
+			}
+			.review-item-ans .ans-wrong {
+				color: #ff8888;
+			}
+
+			/* Tombol result */
+			.result-btns {
+				display: flex;
+				gap: 10px;
+				margin-top: 6px;
+			}
+			.result-btn-retry {
+				flex: 1;
+				background: rgba(255, 255, 255, 0.1);
+				border: 1.5px solid rgba(255, 255, 255, 0.2);
+				border-radius: 18px;
+				padding: 12px;
+				font-family: "Nunito";
+				font-size: 14px;
+				font-weight: 900;
+				color: #fff;
+				cursor: pointer;
+				transition: transform 0.12s;
+			}
+			.result-btn-game {
+				flex: 1;
+				background: linear-gradient(135deg, #f5c518, #e8a030);
+				border: none;
+				border-radius: 18px;
+				padding: 12px;
+				font-family: "Nunito";
+				font-size: 14px;
+				font-weight: 900;
+				color: #1a3a08;
+				cursor: pointer;
+				box-shadow: 0 4px 16px rgba(245, 197, 24, 0.3);
+				transition: transform 0.12s;
+			}
+			.result-btn-retry:active,
+			.result-btn-game:active {
+				transform: scale(0.95);
+			}
+
 			/* Settings Panel */
 			#settingsbtn {
-				position: absolute;
-				top: 12px;
-				right: 12px;
-				width: 38px; height: 38px;
-				background: rgba(255,255,255,0.92);
+				width: 38px;
+				height: 38px;
+				background: rgba(255, 255, 255, 0.92);
 				border: none;
 				border-radius: 50%;
 				font-size: 18px;
 				cursor: pointer;
-				display: flex; align-items: center; justify-content: center;
-				box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 				pointer-events: all;
-				z-index: 200;
+				flex-shrink: 0;
 				transition: transform 0.15s;
 			}
-			#settingsbtn:active { transform: scale(0.9); }
+			#settingsbtn:active {
+				transform: scale(0.9);
+			}
 
 			#settingspanel {
 				position: absolute;
-				top: 0; left: 0; right: 0; bottom: 0;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
 				background: rgba(10, 4, 0, 0.88);
 				z-index: 400;
 				display: none;
@@ -720,16 +1542,18 @@
 				padding: 24px;
 				pointer-events: all;
 			}
-			#settingspanel.open { display: flex; }
+			#settingspanel.open {
+				display: flex;
+			}
 
 			.settings-card {
 				background: linear-gradient(160deg, #2a1200, #3a1a00);
-				border: 2px solid rgba(245,197,24,0.3);
+				border: 2px solid rgba(245, 197, 24, 0.3);
 				border-radius: 24px;
 				padding: 24px 20px;
 				width: 100%;
 				max-width: 320px;
-				box-shadow: 0 12px 40px rgba(0,0,0,0.4);
+				box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
 			}
 			.settings-title {
 				font-family: "Nunito";
@@ -744,15 +1568,19 @@
 				align-items: center;
 				justify-content: space-between;
 				padding: 14px 0;
-				border-bottom: 1px solid rgba(255,255,255,0.07);
+				border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 			}
-			.settings-row:last-of-type { border-bottom: none; }
+			.settings-row:last-of-type {
+				border-bottom: none;
+			}
 			.settings-row-left {
 				display: flex;
 				align-items: center;
 				gap: 10px;
 			}
-			.settings-row-icon { font-size: 22px; }
+			.settings-row-icon {
+				font-size: 22px;
+			}
 			/* .settings-row-info {} */
 			.settings-row-label {
 				font-family: "Nunito";
@@ -763,21 +1591,27 @@
 			.settings-row-sub {
 				font-family: "Nunito Sans";
 				font-size: 11px;
-				color: rgba(255,255,255,0.45);
+				color: rgba(255, 255, 255, 0.45);
 				margin-top: 1px;
 			}
 
 			/* Toggle switch */
 			.toggle {
 				position: relative;
-				width: 48px; height: 26px;
+				width: 48px;
+				height: 26px;
 				cursor: pointer;
 			}
-			.toggle input { display: none; }
+			.toggle input {
+				display: none;
+			}
 			.toggle-track {
 				position: absolute;
-				top: 0; left: 0; right: 0; bottom: 0;
-				background: rgba(255,255,255,0.15);
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba(255, 255, 255, 0.15);
 				border-radius: 13px;
 				transition: background 0.25s;
 			}
@@ -786,15 +1620,19 @@
 			}
 			.toggle-thumb {
 				position: absolute;
-				top: 3px; left: 3px;
-				width: 20px; height: 20px;
+				top: 3px;
+				left: 3px;
+				width: 20px;
+				height: 20px;
 				background: #fff;
 				border-radius: 50%;
-				box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+				box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 				transition: left 0.25s;
 				pointer-events: none;
 			}
-			.toggle input:checked ~ .toggle-thumb { left: 25px; }
+			.toggle input:checked ~ .toggle-thumb {
+				left: 25px;
+			}
 
 			/* Volume slider */
 			.vol-row {
@@ -802,31 +1640,32 @@
 				align-items: center;
 				gap: 10px;
 				padding: 8px 0 14px;
-				border-bottom: 1px solid rgba(255,255,255,0.07);
+				border-bottom: 1px solid rgba(255, 255, 255, 0.07);
 			}
 			.vol-label {
 				font-family: "Nunito Sans";
 				font-size: 11px;
-				color: rgba(255,255,255,0.5);
+				color: rgba(255, 255, 255, 0.5);
 				width: 36px;
 				text-align: right;
 				flex-shrink: 0;
 			}
-			input[type=range].vol-slider {
+			input[type="range"].vol-slider {
 				flex: 1;
 				--webkit-appearance: none;
 				height: 4px;
 				border-radius: 2px;
-				background: rgba(255,255,255,0.15);
+				background: rgba(255, 255, 255, 0.15);
 				outline: none;
 			}
-			input[type=range].vol-slider::-webkit-slider-thumb {
+			input[type="range"].vol-slider::-webkit-slider-thumb {
 				--webkit-appearance: none;
-				width: 18px; height: 18px;
+				width: 18px;
+				height: 18px;
 				border-radius: 50%;
 				background: linear-gradient(135deg, #f5c518, #e8a030);
 				cursor: pointer;
-				box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+				box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 			}
 
 			.settings-close-btn {
@@ -840,15 +1679,191 @@
 				font-weight: 900;
 				color: #3a1a00;
 				cursor: pointer;
-				box-shadow: 0 4px 16px rgba(245,197,24,0.35);
+				box-shadow: 0 4px 16px rgba(245, 197, 24, 0.35);
 				transition: transform 0.12s;
 			}
-			.settings-close-btn:active { 
+			.settings-close-btn:active {
 				transform: scale(0.95);
+			}
+
+			/* ── INTRO CHARACTER SCREEN ── */
+			#intro-screen {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: linear-gradient(160deg, #1a4a0a 0%, #2d7a1a 45%, #1a5a08 100%);
+				z-index: 800;
+				display: none;
+				flex-direction: column;
+				align-items: center;
+				justify-content: flex-end;
+				padding-bottom: 40px;
+				pointer-events: all;
+				transition: opacity 0.5s ease;
+			}
+			#intro-screen.show {
+				display: flex;
+			}
+			#intro-screen.fade-out {
+				opacity: 0;
+				pointer-events: none;
+			}
+
+			.intro-top-band {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 6px;
+				background: linear-gradient(90deg, #f5c518, #e8a030, #f5c518);
+			}
+
+			#intro-char-img {
+				position: absolute;
+				bottom: 180px;
+				left: 50%;
+				transform: translateX(-50%);
+				width: 260px;
+				height: 260px;
+				object-fit: contain;
+				filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5));
+				animation: intro-char-float 2s ease-in-out infinite;
+			}
+			@keyframes intro-char-float {
+				0%,
+				100% {
+					transform: translateX(-50%) translateY(0);
+				}
+				50% {
+					transform: translateX(-50%) translateY(-10px);
+				}
+			}
+
+			#intro-bubble {
+				position: absolute;
+				bottom: 390px;
+				left: 50%;
+				transform: translateX(-50%);
+				background: linear-gradient(160deg, #fffef5, #fff8dc);
+				border: 2.5px solid #e8c060;
+				border-radius: 20px;
+				padding: 14px 16px 12px;
+				box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+				width: 320px;
+				max-width: 90%;
+				z-index: 801;
+				animation: bubble-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+			}
+			/* Ekor bubble ke bawah (mengarah ke karakter) */
+			#intro-bubble::after {
+				content: "";
+				position: absolute;
+				bottom: -10px;
+				left: 50%;
+				margin-left: -7px;
+				width: 14px;
+				height: 14px;
+				background: #fff8dc;
+				border-right: 2.5px solid #e8c060;
+				border-bottom: 2.5px solid #e8c060;
+				transform: rotate(45deg);
+			}
+
+			.intro-bubble-label {
+				font-family: "Nunito";
+				font-size: 10px;
+				font-weight: 900;
+				color: #fff;
+				background: linear-gradient(135deg, #e8a030, #c87010);
+				border-radius: 10px;
+				padding: 2px 10px;
+				display: inline-block;
+				margin-bottom: 6px;
+			}
+			.intro-bubble-title {
+				font-family: "Nunito";
+				font-size: 15px;
+				font-weight: 900;
+				color: #7a4400;
+				margin-bottom: 5px;
+			}
+			.intro-bubble-text {
+				font-family: "Nunito Sans";
+				font-size: 12px;
+				color: #3a1a00;
+				line-height: 1.6;
+			}
+			.intro-bubble-text b {
+				color: #c07000;
+			}
+
+			#intro-nav {
+				position: absolute;
+				bottom: 30px;
+				left: 0;
+				right: 0;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 12px;
+			}
+			#intro-dots {
+				display: flex;
+				gap: 6px;
+			}
+			.intro-dot {
+				width: 7px;
+				height: 7px;
+				border-radius: 50%;
+				background: rgba(255, 255, 255, 0.3);
+				transition: all 0.2s;
+			}
+			.intro-dot.active {
+				background: #f5c518;
+				width: 20px;
+				border-radius: 4px;
+			}
+			#intro-next-btn {
+				background: linear-gradient(135deg, #f5c518, #e8a030);
+				border: none;
+				border-radius: 28px;
+				padding: 13px 44px;
+				font-family: "Nunito";
+				font-size: 15px;
+				font-weight: 900;
+				color: #1a3a08;
+				cursor: pointer;
+				box-shadow: 0 6px 20px rgba(245, 197, 24, 0.4);
+				transition: transform 0.15s;
+				pointer-events: all;
+			}
+			#intro-next-btn:active {
+				transform: scale(0.96);
 			}
 		</style>
 	</head>
 	<body>
+		<!-- Sidebar kiri (desktop only) -->
+		<div id="desktop-sidebar-left">
+			<div style="background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(245, 197, 24, 0.2); border-radius: 20px; padding: 20px 16px; color: #fff">
+				<div style="font-family: &quot;Nunito&quot;; font-size: 13px; font-weight: 900; color: #f5c518; margin-bottom: 12px">☕ Tentang KopiLand</div>
+				<div style="font-family: &quot;Nunito Sans&quot;; font-size: 12px; color: rgba(255, 255, 255, 0.6); line-height: 1.7">
+					Media pembelajaran budidaya kopi interaktif dari<br />
+					<b style="color: #ffcc88">Dinas Perkebunan<br />Jawa Barat</b>
+				</div>
+			</div>
+			<div style="background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(245, 197, 24, 0.2); border-radius: 20px; padding: 20px 16px; color: #fff">
+				<div style="font-family: &quot;Nunito&quot;; font-size: 13px; font-weight: 900; color: #f5c518; margin-bottom: 12px">🌱 3 Jenis Kopi</div>
+				<div style="font-family: &quot;Nunito Sans&quot;; font-size: 12px; color: rgba(255, 255, 255, 0.6); line-height: 2">
+					🫘 <b style="color: #ff9999">Arabika</b> — Dataran Tinggi<br />
+					☕ <b style="color: #d4956a">Robusta</b> — Dataran Rendah<br />
+					🌿 <b style="color: #f0c040">Liberika</b> — Lahan Gambut
+				</div>
+			</div>
+		</div>
+
 		<div id="wrap">
 			<!-- Splash Screen -->
 			<div id="splash">
@@ -857,40 +1872,175 @@
 
 				<!-- Logo & Identitas Dinas -->
 				<div class="splash-logo-wrap">
-					<img src="assets/img/logo-dinas.webp" alt="Logo Dinas">
+					<img src="assets/img/logo-dinas.webp" alt="Logo Dinas" />
 				</div>
-				<div class="splash-instansi">Pemerintah Provinsi Jawa Barat</div>
-				<div class="splash-dinas">Dinas Perkebunan</div>
+				<div class="splash-instansi" id="splash-instansi">Pemerintah Provinsi Jawa Barat</div>
+				<div class="splash-dinas" id="splash-dinas">Dinas Perkebunan</div>
 				<div class="splash-wilayah">Provinsi Jawa Barat</div>
 
-				<div class="splash-divider"></div>
+				<div class="splash-divider" id="splash-divider-1"></div>
+
+				<!-- Konten produk kopi (muncul di step 2-4) -->
+				<div id="splash-product">
+					<div class="splash-product-icon" id="sp-icon">🫘</div>
+					<div class="splash-product-name" id="sp-name">Arabika</div>
+					<div class="splash-product-latin" id="sp-latin">Coffea arabica</div>
+					<div class="splash-product-card">
+						<div class="splash-product-row">
+							<span class="splash-product-key">Ketinggian</span>
+							<span class="splash-product-val" id="sp-ketinggian">-</span>
+						</div>
+						<div class="splash-product-row">
+							<span class="splash-product-key">Suhu Ideal</span>
+							<span class="splash-product-val" id="sp-suhu">-</span>
+						</div>
+						<div class="splash-product-row">
+							<span class="splash-product-key">Kadar Kafein</span>
+							<span class="splash-product-val" id="sp-kafein">-</span>
+						</div>
+						<div class="splash-product-row">
+							<span class="splash-product-key">Rasa</span>
+							<span class="splash-product-val" id="sp-rasa">-</span>
+						</div>
+						<div class="splash-product-row">
+							<span class="splash-product-key">Lahan</span>
+							<span class="splash-product-val" id="sp-lahan">-</span>
+						</div>
+					</div>
+					<div class="splash-product-desc" id="sp-desc"></div>
+				</div>
 
 				<!-- Judul Game -->
-				<div class="splash-game-icon">☕</div>
-				<div class="splash-game-title">Kopi<span>Land</span></div>
-				<div class="splash-game-sub">
-					Media pembelajaran budidaya kopi interaktif<br>
+				<div class="splash-game-icon" id="splash-game-icon">☕</div>
+				<div class="splash-game-title" id="splash-game-title">Kopi<span>Land</span></div>
+				<div class="splash-game-sub" id="splash-game-sub">
+					Media pembelajaran budidaya kopi interaktif<br />
 					Arabika · Robusta · Liberika
 				</div>
 
 				<!-- Tombol Mulai -->
-				<button class="splash-btn" onclick="closeSplash()">
-					🌱 Mulai Bermain
-				</button>
+				<button class="splash-btn" onclick="closeSplash()">🌱 Mulai Bermain</button>
 
 				<div class="splash-version">v1.0.0 · Edukasi Perkebunan</div>
+			</div>
+
+			<!-- Intro Character Screen -->
+			<div id="intro-screen">
+				<div class="intro-top-band"></div>
+
+				<!-- Bubble chat -->
+				<div id="intro-bubble">
+					<div class="intro-bubble-label" id="intro-bubble-label">Perkenalan</div>
+					<div class="intro-bubble-title" id="intro-bubble-title">Halo, Petani Kopi! 👋</div>
+					<div class="intro-bubble-text" id="intro-bubble-text">Selamat datang di <b>KopiLand</b>! Aku akan menemanimu belajar membudidaya kopi. Yuk, kenalan dulu dengan 3 jenis kopi yang akan kita tanam!</div>
+				</div>
+
+				<!-- Karakter besar -->
+				<img id="intro-char-img" src="assets/img/char_game.png" alt="Maskot KopiLand" />
+
+				<!-- Navigasi -->
+				<div id="intro-nav">
+					<div id="intro-dots"></div>
+					<button id="intro-next-btn" onclick="introNext()">Lanjut →</button>
+				</div>
+			</div>
+
+			<!-- Swipe hint indicator -->
+			<div id="swipe-hint" onclick="openQuiz()">
+				<span>K U I S</span>
+				<span style="font-size: 16px; writing-mode: horizontal-tb; color: white">‹</span>
+			</div>
+
+			<!-- Quiz Panel -->
+			<div id="quizpanel">
+				<!-- Header -->
+				<div id="quiz-header">
+					<button id="quiz-back" onclick="closeQuiz()">‹</button>
+					<div class="quiz-header-text">
+						<div class="quiz-header-title">📝 Kuis Budidaya Kopi</div>
+						<div class="quiz-header-sub">Uji pemahaman materi</div>
+					</div>
+					<button id="quiz-level-btn" onclick="backToLevelSelect()" style="display: none; background: rgba(245, 197, 24, 0.15); border: 1.5px solid rgba(245, 197, 24, 0.4); border-radius: 14px; padding: 6px 12px; font-family: &quot;Nunito&quot;; font-size: 11px; font-weight: 900; color: #f5c518; cursor: pointer; flex-shrink: 0">Pilih Level</button>
+				</div>
+
+				<!-- Progress -->
+				<div id="quiz-progress-wrap">
+					<div class="quiz-prog-bar"><div class="quiz-prog-fill" id="quiz-prog-fill" style="width: 0%"></div></div>
+					<div class="quiz-prog-label" id="quiz-prog-label">0 / 10</div>
+				</div>
+
+				<!-- Body soal -->
+				<div id="quiz-body">
+					<div id="quiz-q-area"></div>
+
+					<!-- Feedback -->
+					<div class="quiz-feedback" id="quiz-feedback"></div>
+
+					<!-- Navigasi -->
+					<div id="quiz-nav">
+						<span id="quiz-score-mini">✅ 0 benar</span>
+						<button class="quiz-nav-btn quiz-nav-next" id="quiz-next-btn" onclick="quizNext()" disabled>Pilih Jawaban</button>
+					</div>
+				</div>
+
+				<!-- Hasil -->
+				<div id="quiz-result">
+					<div class="result-card">
+						<div class="result-icon" id="res-icon">🏆</div>
+						<div class="result-grade" id="res-grade">A</div>
+						<div class="result-label" id="res-label">Luar Biasa!</div>
+						<div class="result-score-detail" id="res-detail">10 dari 10 soal benar</div>
+						<div class="result-stat-row">
+							<div class="result-stat">
+								<div class="result-stat-val" id="res-correct">0</div>
+								<div class="result-stat-lbl">Benar</div>
+							</div>
+							<div class="result-stat">
+								<div class="result-stat-val" id="res-wrong">0</div>
+								<div class="result-stat-lbl">Salah</div>
+							</div>
+							<div class="result-stat">
+								<div class="result-stat-val" id="res-pct">0%</div>
+								<div class="result-stat-lbl">Skor</div>
+							</div>
+						</div>
+						<div class="result-advice" id="res-advice"></div>
+					</div>
+
+					<!-- Review per soal -->
+					<div class="result-review-title">📋 Review Jawaban</div>
+					<div id="res-review-list"></div>
+
+					<div class="result-btns">
+						<button class="result-btn-retry" onclick="retryQuiz()">🔄 Ulangi</button>
+						<button class="result-btn-retry" onclick="showLevelSelect()" style="background: rgba(245, 197, 24, 0.15); border-color: rgba(245, 197, 24, 0.4)">🎯 Ganti Level</button>
+						<button class="result-btn-game" onclick="closeQuiz()">🎮 Main</button>
+					</div>
+				</div>
 			</div>
 
 			<canvas id="c"></canvas>
 			<div id="ui">
 				<div id="topbar">
 					<div class="topcard"><span class="icon">☕</span><span id="score-txt">0</span></div>
-					<div class="topcard"><span class="icon">📅</span><span id="day-txt">Hari 1</span></div>
-					<button id="settingsbtn" onclick="openSettings()">⚙️</button>
+					<div id="seasonbadge" onclick="showSeasonInfo()" style="cursor: pointer"><span id="season-txt">Musim Hujan 🌧</span></div>
+					<div style="display: flex; align-items: center; gap: 8px">
+						<div class="topcard"><span class="icon">📅</span><span id="day-txt">Hari 1</span></div>
+						<button id="settingsbtn" onclick="openSettings()">⚙️</button>
+					</div>
 				</div>
-				<div id="seasonbadge"><span id="season-txt">Musim Hujan 🌧</span></div>
 				<div id="weatherbar"><span id="weather-txt">⛈ Hujan Lebat</span><span id="growmod-txt" style="color: #2d8a2d">×1.4 tumbuh</span></div>
 				<div id="daybar"><div id="daybarfill" style="width: 0%"></div></div>
+
+				<!-- Maskot karakter -->
+				<div id="maskot-wrap">
+					<img id="maskot-img" src="assets/img/char_game.png" alt="Maskot KopiLand" />
+				</div>
+				<div id="maskot-bubble">
+					<div class="bubble-label" id="bubble-label">Info</div>
+					<div class="bubble-text" id="bubble-text">Halo!</div>
+					<div id="bubble-close"><button onclick="closeMaskot()">Oke! 👍</button></div>
+				</div>
 
 				<div id="popup">
 					<div id="popup-inner">
@@ -909,9 +2059,9 @@
 					<div id="info-subtitle">Coffea arabica</div>
 
 					<!-- Foto Kopi -->
-					<div id="info-foto-wrap" style="display:none; margin-bottom:12px; border-radius:16px; overflow:hidden; border:2px solid rgba(255,200,80,0.3);">
-						<img id="info-foto" src="" alt="" style="width:100%; max-height:180px; object-fit:cover; display:block;" />
-						<div id="info-foto-alt" style="text-align:center; font-family:'Nunito'; font-size:11px; color:#ffcc88; padding:6px; background:rgba(0,0,0,0.3);"></div>
+					<div id="info-foto-wrap" style="display: none; margin-bottom: 12px; border-radius: 16px; overflow: hidden; border: 2px solid rgba(255, 200, 80, 0.3)">
+						<img id="info-foto" src="" alt="" style="width: 100%; max-height: 180px; object-fit: cover; display: block" />
+						<div id="info-foto-alt" style="text-align: center; font-family: &quot;Nunito&quot;; font-size: 11px; color: #ffcc88; padding: 6px; background: rgba(0, 0, 0, 0.3)"></div>
 					</div>
 
 					<!-- Syarat Tumbuh -->
@@ -972,7 +2122,7 @@
 								</div>
 							</div>
 							<label class="toggle">
-								<input type="checkbox" id="toggle-music" checked onchange="toggleMusic(this.checked)">
+								<input type="checkbox" id="toggle-music" checked onchange="toggleMusic(this.checked)" />
 								<div class="toggle-track"></div>
 								<div class="toggle-thumb"></div>
 							</label>
@@ -981,8 +2131,7 @@
 						<!-- Volume musik -->
 						<div class="vol-row">
 							<span class="vol-label">🔈</span>
-							<input type="range" class="vol-slider" id="vol-music" min="0" max="100" value="40"
-								oninput="setMusicVolume(this.value)">
+							<input type="range" class="vol-slider" id="vol-music" min="0" max="100" value="40" oninput="setMusicVolume(this.value)" />
 							<span class="vol-label" id="vol-music-val">40</span>
 						</div>
 
@@ -996,7 +2145,7 @@
 								</div>
 							</div>
 							<label class="toggle">
-								<input type="checkbox" id="toggle-sfx" checked onchange="toggleSfx(this.checked)">
+								<input type="checkbox" id="toggle-sfx" checked onchange="toggleSfx(this.checked)" />
 								<div class="toggle-track"></div>
 								<div class="toggle-thumb"></div>
 							</label>
@@ -1005,8 +2154,7 @@
 						<!-- Volume SFX -->
 						<div class="vol-row">
 							<span class="vol-label">🔈</span>
-							<input type="range" class="vol-slider" id="vol-sfx" min="0" max="100" value="70"
-								oninput="setSfxVolume(this.value)">
+							<input type="range" class="vol-slider" id="vol-sfx" min="0" max="100" value="70" oninput="setSfxVolume(this.value)" />
 							<span class="vol-label" id="vol-sfx-val">70</span>
 						</div>
 					</div>
@@ -1034,24 +2182,69 @@
 					<div class="cbtn sel" onclick="selCoffee(0)">
 						<span class="cicon">🫘</span>
 						<span class="cname">Arabika</span>
-						<span style="font-size:11px; color:#a06000;" onclick="event.stopPropagation(); openInfo(0)">ℹ️</span>
+						<span
+							style="font-size: 11px; color: #a06000"
+							onclick="
+								event.stopPropagation();
+								openInfo(0);
+							"
+							>ℹ️</span
+						>
 					</div>
 					<div class="cbtn" onclick="selCoffee(1)">
 						<span class="cicon">☕</span>
 						<span class="cname">Robusta</span>
-						<span style="font-size:11px; color:#a06000;" onclick="event.stopPropagation(); openInfo(1)">ℹ️</span>
+						<span
+							style="font-size: 11px; color: #a06000"
+							onclick="
+								event.stopPropagation();
+								openInfo(1);
+							"
+							>ℹ️</span
+						>
 					</div>
 					<div class="cbtn" onclick="selCoffee(2)">
 						<span class="cicon">🌿</span>
 						<span class="cname">Liberika</span>
-						<span style="font-size:11px; color:#a06000;" onclick="event.stopPropagation(); openInfo(2)">ℹ️</span>
+						<span
+							style="font-size: 11px; color: #a06000"
+							onclick="
+								event.stopPropagation();
+								openInfo(2);
+							"
+							>ℹ️</span
+						>
 					</div>
 				</div>
-				
+
 				<div id="botlabel">
 					<span id="soil-label">🌱 Lahan: Dataran Tinggi</span>
 				</div>
 				<div id="toast"><span id="toast-msg"></span></div>
+			</div>
+		</div>
+
+		<!-- Sidebar kanan (desktop only) -->
+		<div id="desktop-sidebar-right">
+			<div style="background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(245, 197, 24, 0.2); border-radius: 20px; padding: 20px 16px; color: #fff">
+				<div style="font-family: &quot;Nunito&quot;; font-size: 13px; font-weight: 900; color: #f5c518; margin-bottom: 12px">⛏ Cara Bermain</div>
+				<div style="font-family: &quot;Nunito Sans&quot;; font-size: 12px; color: rgba(255, 255, 255, 0.6); line-height: 2.1">
+					1️⃣ Pilih jenis kopi<br />
+					2️⃣ Ketuk petak → <b>Gali</b><br />
+					3️⃣ Ketuk lagi → <b>Tanam</b><br />
+					4️⃣ Siram tiap hari 💧<br />
+					5️⃣ Tunggu matang → <b>Panen</b> 🌿
+				</div>
+			</div>
+			<div style="background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(245, 197, 24, 0.2); border-radius: 20px; padding: 20px 16px; color: #fff">
+				<div style="font-family: &quot;Nunito&quot;; font-size: 13px; font-weight: 900; color: #f5c518; margin-bottom: 12px">🗓 Tips Musim</div>
+				<div style="font-family: &quot;Nunito Sans&quot;; font-size: 12px; color: rgba(255, 255, 255, 0.6); line-height: 2.1">
+					🌧 Hujan Lebat = <b style="color: #4aaa20">×1.4</b><br />
+					🌧 Gerimis = <b style="color: #4aaa20">×1.2</b><br />
+					⛅ Cerah = <b style="color: #886600">×1.0</b><br />
+					🌤 Panas = <b style="color: #cc3300">×0.7</b><br />
+					☀ Terik = <b style="color: #cc3300">×0.5</b>
+				</div>
 			</div>
 		</div>
 
@@ -1110,11 +2303,19 @@
 			];
 			const COFFEES = [
 				{
-					name: "Arabika", color: "#c0392b", dark: "#8b1a0e",
-					seasons: [1.3, 1.1, 0.7, 0.8], rate: 1.0,
-					soilTop: "#5a7a3a", soilLeft: "#3a5a20", soilRight: "#2a4a18",   // tanah subur hijau gelap
-					dugTop:  "#6a8a3a", dugLeft:  "#4a6a20", dugRight: "#3a5a18",
-					label: "Dataran Tinggi", labelColor: "#ffffff",
+					name: "Arabika",
+					color: "#c0392b",
+					dark: "#8b1a0e",
+					seasons: [1.3, 1.1, 0.7, 0.8],
+					rate: 1.0,
+					soilTop: "#5a7a3a",
+					soilLeft: "#3a5a20",
+					soilRight: "#2a4a18", // tanah subur hijau gelap
+					dugTop: "#6a8a3a",
+					dugLeft: "#4a6a20",
+					dugRight: "#3a5a18",
+					label: "Dataran Tinggi",
+					labelColor: "#ffffff",
 					info: {
 						foto: "assets/img/kopi-arabika.jpg",
 						fotoAlt: "Biji Kopi Arabika",
@@ -1143,15 +2344,23 @@
 						// budidaya
 						penaung: "Macadamia, jeruk keprok (jarak 6×6 m atau 8×8 m)",
 						varietas: "Gayo 1, Gayo 2, Sigarar Utang, AS 1, S 795, Kartika 1 & 2",
-						tips: "Tanam awal musim hujan. Butuh naungan 30–50%. Pupuk organik wajib karena butuh bahan organik >3,5%. Cocok di ketinggian >1.000 m dpl."
-					}
+						tips: "Tanam awal musim hujan. Butuh naungan 30–50%. Pupuk organik wajib karena butuh bahan organik >3,5%. Cocok di ketinggian >1.000 m dpl.",
+					},
 				},
 				{
-					name: "Robusta", color: "#7b3f00", dark: "#4a2000",
-					seasons: [1.1, 1.2, 1.0, 0.9], rate: 1.2,
-					soilTop: "#8a6a3a", soilLeft: "#6a4a20", soilRight: "#5a3a10",   // tanah coklat biasa
-					dugTop:  "#9a7a40", dugLeft:  "#7a5a28", dugRight: "#6a4a18",
-					label: "Dataran Rendah", labelColor: "#ffffff",
+					name: "Robusta",
+					color: "#7b3f00",
+					dark: "#4a2000",
+					seasons: [1.1, 1.2, 1.0, 0.9],
+					rate: 1.2,
+					soilTop: "#8a6a3a",
+					soilLeft: "#6a4a20",
+					soilRight: "#5a3a10", // tanah coklat biasa
+					dugTop: "#9a7a40",
+					dugLeft: "#7a5a28",
+					dugRight: "#6a4a18",
+					label: "Dataran Rendah",
+					labelColor: "#ffffff",
 					info: {
 						foto: "assets/img/kopi-robusta.jpg",
 						fotoAlt: "Biji Kopi Robusta",
@@ -1180,15 +2389,23 @@
 						// budidaya
 						penaung: "Petai, jengkol, pisang, alpokat, jeruk, kelapa",
 						varietas: "BP 42, BP 234, BP 288, BP 358, BP 409, SA 237",
-						tips: "Tanam poliklonal 3–4 klon. Gunakan batang bawah BP 308 yang tahan nematoda. Mendominasi 92% produksi kopi nasional Indonesia."
-					}
+						tips: "Tanam poliklonal 3–4 klon. Gunakan batang bawah BP 308 yang tahan nematoda. Mendominasi 92% produksi kopi nasional Indonesia.",
+					},
 				},
 				{
-					name: "Liberika", color: "#b8860b", dark: "#7a5600",
-					seasons: [1.0, 1.0, 0.9, 0.8], rate: 0.9,
-					soilTop: "#4a4a3a", soilLeft: "#2a2a20", soilRight: "#1a1a10",   // tanah gambut gelap
-					dugTop:  "#5a5040", dugLeft:  "#3a3028", dugRight: "#2a2018",
-					label: "Lahan Gambut", labelColor: "#ffffff",
+					name: "Liberika",
+					color: "#b8860b",
+					dark: "#7a5600",
+					seasons: [1.0, 1.0, 0.9, 0.8],
+					rate: 0.9,
+					soilTop: "#4a4a3a",
+					soilLeft: "#2a2a20",
+					soilRight: "#1a1a10", // tanah gambut gelap
+					dugTop: "#5a5040",
+					dugLeft: "#3a3028",
+					dugRight: "#2a2018",
+					label: "Lahan Gambut",
+					labelColor: "#ffffff",
 					info: {
 						foto: "assets/img/kopi-liberika.jpg",
 						fotoAlt: "Biji Kopi Liberika",
@@ -1217,7 +2434,7 @@
 						// budidaya
 						penaung: "Pohon kayu lokal gambut",
 						varietas: "Spesies tunggal, belum banyak varietas unggul",
-						tips: "Satu-satunya kopi yang bisa tumbuh di lahan gambut dan dekat permukaan laut. Biji terbesar di antara 3 jenis. Jarak tanam lebih lebar: 3×3 m atau 4×2,5 m."
+						tips: "Satu-satunya kopi yang bisa tumbuh di lahan gambut dan dekat permukaan laut. Biji terbesar di antara 3 jenis. Jarak tanam lebih lebar: 3×3 m atau 4×2,5 m.",
 					},
 				},
 			];
@@ -1230,13 +2447,12 @@
 			let weather = pickWeather(SEASONS[0]);
 			let dayTimer = 0,
 				DAY_SEC = 35;
+			let gameStarted = false;
 			let selectedCoffee = 0,
 				selectedPlot = -1;
-			
+
 			// 3x3 plots for each coffee type, but only one active at a time based on selectedCoffee
-			const allPlots = [0, 1, 2].map(() =>
-				Array.from({ length: 9 }, () => ({ state: ST.EMPTY, growth: 0, coffeeType: 0, watered: false, waterAnim: 0, bloomAnim: 0, shakeAnim: 0 }))
-			);
+			const allPlots = [0, 1, 2].map(() => Array.from({ length: 9 }, () => ({ state: ST.EMPTY, growth: 0, coffeeType: 0, watered: false, waterAnim: 0, bloomAnim: 0, shakeAnim: 0 })));
 			let plots = allPlots[0]; // aktif di lahan arabika dulu
 
 			let particles = [],
@@ -1674,7 +2890,9 @@
 						const cf = COFFEES[selectedCoffee];
 
 						// Default: tanah kosong pakai warna dasar kopi yang dipilih
-						let topC = cf.soilTop, leftC = cf.soilLeft, rightC = cf.soilRight;
+						let topC = cf.soilTop,
+							leftC = cf.soilLeft,
+							rightC = cf.soilRight;
 
 						// Sudah digali: pakai warna dugTop kopi yang ditanam di plot tsb (bukan selectedCoffee)
 						if (plot.state >= ST.DUG) {
@@ -1809,7 +3027,8 @@
 				}
 
 				updateUI();
-				showToast(`Hari ${totalDay} — ${weather.e} ${weather.name}`);
+				showNarasi();
+				updateSiramReminder();
 			}
 
 			function doAction(plotI, action) {
@@ -1859,6 +3078,7 @@
 					setTimeout(() => (p.shakeAnim = 0), 300);
 					showToast("Tanaman disiram! 💧");
 					sfxWater();
+					updateSiramReminder();
 				} else if (action === "harvest") {
 					if (p.state !== ST.RIPE) {
 						showToast("Belum siap panen!");
@@ -1942,6 +3162,7 @@
 				const lbl = document.getElementById("soil-label");
 				lbl.textContent = `🌱 Lahan: ${cf.label}`;
 				lbl.style.color = cf.labelColor;
+				updateSiramReminder();
 			}
 
 			// ─── CANVAS HIT TEST ─────────────────────────────────────────
@@ -1983,8 +3204,7 @@
 
 				// Judul & subjudul
 				document.getElementById("info-title").textContent = cf.name;
-				document.getElementById("info-title").style.color =
-					i === 0 ? "#ff6b6b" : i === 1 ? "#d4956a" : "#f0c040";
+				document.getElementById("info-title").style.color = i === 0 ? "#ff6b6b" : i === 1 ? "#d4956a" : "#f0c040";
 				document.getElementById("info-subtitle").textContent = d.ilmiah;
 
 				// Foto — tampil jika ada path-nya
@@ -2000,22 +3220,16 @@
 				}
 
 				// Isi semua field
-				const fields = [
-					"ketinggian","suhu","curahHujan","ph","bahanOrganik",
-					"bentukBiji","alurTengah","warnaBiji","ukuranBiji","ukuranBuah",
-					"kafein","rasa","aroma","kadarGula","kadarLemak","kadarAsam",
-					"harga","ketahanan","keistimewaan",
-					"penaung","varietas"
-				];
-				fields.forEach(k => {
+				const fields = ["ketinggian", "suhu", "curahHujan", "ph", "bahanOrganik", "bentukBiji", "alurTengah", "warnaBiji", "ukuranBiji", "ukuranBuah", "kafein", "rasa", "aroma", "kadarGula", "kadarLemak", "kadarAsam", "harga", "ketahanan", "keistimewaan", "penaung", "varietas"];
+				fields.forEach((k) => {
 					const el = document.getElementById("i-" + k);
 					if (el) el.textContent = d[k] || "-";
 				});
-				
+
 				// sembunyikan baris yg nilainya "-"
-				document.querySelectorAll(".info-row").forEach(row => {
+				document.querySelectorAll(".info-row").forEach((row) => {
 					const val = row.querySelector(".info-val");
-					row.style.display = (val && val.textContent === "-") ? "none" : "flex";
+					row.style.display = val && val.textContent === "-" ? "none" : "flex";
 				});
 				document.getElementById("i-tips").textContent = d.tips;
 				document.getElementById("infopanel").classList.add("open");
@@ -2029,8 +3243,8 @@
 			let audioReady = false;
 			let musicOn = true;
 			let sfxOn = true;
-			let musicVolume = 0.4;   // 0.0 – 1.0
-			let sfxVolume = 0.7;     // 0.0 – 1.0
+			let musicVolume = 0.4; // 0.0 – 1.0
+			let sfxVolume = 0.7; // 0.0 – 1.0
 
 			// ── Objek Audio ──
 			const bgMusic = new Audio("assets/audio/backsound.mp3");
@@ -2038,14 +3252,14 @@
 			bgMusic.volume = musicVolume;
 
 			const SFX = {
-				dig:     new Audio("assets/audio/sfx-dig.mp3"),
-				seed:    new Audio("assets/audio/sfx-seed.mp3"),
-				water:   new Audio("assets/audio/sfx-water.mp3"),
+				dig: new Audio("assets/audio/sfx-dig.mp3"),
+				seed: new Audio("assets/audio/sfx-seed.mp3"),
+				water: new Audio("assets/audio/sfx-water.mp3"),
 				harvest: new Audio("assets/audio/sfx-harvest.mp3"),
-				click:   new Audio("assets/audio/sfx-click.mp3"),
+				click: new Audio("assets/audio/sfx-click.mp3"),
 			};
 			// Set volume awal semua SFX
-			Object.values(SFX).forEach(a => a.volume = sfxVolume);
+			Object.values(SFX).forEach((a) => (a.volume = sfxVolume));
 
 			function initAudio() {
 				if (audioReady) return;
@@ -2062,15 +3276,25 @@
 				if (!sfxOn || !audioReady) return;
 				const audio = SFX[name];
 				if (!audio) return;
-				audio.currentTime = 0;   // reset ke awal agar bisa ditrigger cepat
+				audio.currentTime = 0; // reset ke awal agar bisa ditrigger cepat
 				audio.play().catch(() => {});
 			}
 
-			function sfxDig()     { playSfx("dig"); }
-			function sfxSeed()    { playSfx("seed"); }
-			function sfxWater()   { playSfx("water"); }
-			function sfxHarvest() { playSfx("harvest"); }
-			function sfxClick()   { playSfx("click"); }
+			function sfxDig() {
+				playSfx("dig");
+			}
+			function sfxSeed() {
+				playSfx("seed");
+			}
+			function sfxWater() {
+				playSfx("water");
+			}
+			function sfxHarvest() {
+				playSfx("harvest");
+			}
+			function sfxClick() {
+				playSfx("click");
+			}
 
 			// ── Settings Controls ──
 			function toggleMusic(on) {
@@ -2096,7 +3320,7 @@
 			function setSfxVolume(val) {
 				document.getElementById("vol-sfx-val").textContent = val;
 				sfxVolume = val / 100;
-				Object.values(SFX).forEach(a => a.volume = sfxVolume);
+				Object.values(SFX).forEach((a) => (a.volume = sfxVolume));
 			}
 
 			function openSettings() {
@@ -2228,12 +3452,12 @@
 						// Posisi bubble
 						if (step.bubblePos === "above-highlight") {
 							bubble.style.left = Math.max(8, left - 20) + "px";
-							bubble.style.top = (top - 170) + "px";
+							bubble.style.top = top - 170 + "px";
 							bubble.style.bottom = "auto";
 							if (step.arrowDir === "down") bubble.className = "";
 						} else if (step.bubblePos === "below-highlight") {
 							bubble.style.left = Math.max(8, left - 20) + "px";
-							bubble.style.top = (top + height + 14) + "px";
+							bubble.style.top = top + height + 14 + "px";
 							bubble.style.bottom = "auto";
 							if (step.arrowDir === "up") bubble.className = "arrow-up";
 						}
@@ -2270,16 +3494,68 @@
 			function skipTutorial() {
 				tutActive = false;
 				document.getElementById("tutorial").classList.remove("active");
+
+				// Maskot muncul kasih panduan awal
+				setTimeout(() => {
+					showMaskot(
+						"🌱 Yuk Mulai!",
+						`Ketuk <b>petak tanah</b> untuk mulai menanam!<br><br>
+            Urutannya:<br>
+            ⛏ <b>Gali</b> → 🌱 <b>Tanam</b> → 💧 <b>Siram</b> → 🌿 <b>Panen</b><br><br>
+            Cek panel <b>ℹ️</b> tiap kopi untuk tips budidaya!`,
+						0, // 0 = tidak auto-hide
+						true, // tampilkan tombol "Oke!"
+					);
+				}, 400);
 			}
 
-			// ─── SPLASH SCREEN ───────────────────────────────────────────
+			// ─── SPLASH SCREEN MULTI-STEP ────────────────────────────────
+			const SPLASH_PRODUCTS = [
+				{
+					icon: "🫘",
+					name: "Arabika",
+					latin: "Coffea arabica",
+					ketinggian: "1.000 – 2.000 m dpl",
+					suhu: "15 – 25°C",
+					kafein: "1,1% – 1,5%",
+					rasa: "Kompleks, floral, sedikit asam",
+					lahan: "Dataran Tinggi",
+					desc: "Kopi premium unggulan dengan cita rasa kompleks. Butuh perawatan intensif di dataran tinggi Jawa Barat.",
+					color: "#ff6b6b",
+				},
+				{
+					icon: "☕",
+					name: "Robusta",
+					latin: "Coffea canephora",
+					ketinggian: "100 – 600 m dpl",
+					suhu: "21 – 24°C",
+					kafein: "2,2% – 2,7%",
+					rasa: "Pahit kuat, earthy, nutty",
+					lahan: "Dataran Rendah",
+					desc: "Tulang punggung produksi kopi Indonesia (92%). Tahan hama, mudah dibudidayakan di dataran rendah.",
+					color: "#d4956a",
+				},
+				{
+					icon: "🌿",
+					name: "Liberika",
+					latin: "Coffea liberica",
+					ketinggian: "0 – 900 m dpl",
+					suhu: "21 – 30°C",
+					kafein: "1,12% – 1,26%",
+					rasa: "Pahit, smoky, fruity, sedikit kayu",
+					lahan: "Lahan Gambut",
+					desc: "Satu-satunya kopi yang bisa tumbuh di lahan gambut. Biji terbesar, aroma unik, cocok untuk lahan marginal.",
+					color: "#f0c040",
+				},
+			];
+
 			function closeSplash() {
 				initAudio();
 				const splash = document.getElementById("splash");
 				splash.classList.add("fade-out");
 				setTimeout(() => {
 					splash.style.display = "none";
-					startTutorial();
+					openIntroScreen();
 				}, 600);
 			}
 
@@ -2295,7 +3571,358 @@
 				gt.style.color = gm >= 1.2 ? "#2d8a2d" : gm < 0.7 ? "#cc3300" : "#886600";
 			}
 
+			// ─── INFO MUSIM (MULTI-STEP BUBBLE) ──────────────────────────
+			const SEASON_SLIDES = [
+				{
+					label: "🗓 Musim & Cuaca",
+					title: "Ada 4 Musim di KopiLand!",
+					html: `Musim berganti setiap <b>7 hari</b>. Setiap musim punya cuaca berbeda yang mempengaruhi <b>kecepatan tumbuh</b> tanamanmu.<br><br>
+        Geser untuk lihat detail tiap musim! 👉`,
+				},
+				{
+					label: "🌧 Musim Hujan",
+					title: "Musim Hujan 🌧",
+					html: `Curah hujan tinggi, cocok untuk sebagian besar kopi.<br><br>
+        <b>⛈ Hujan Lebat</b> <span style="color:#2d8a2d;font-weight:700;">×1.4</span> — Pertumbuhan sangat cepat!<br>
+        <b>🌧 Gerimis</b> <span style="color:#2d8a2d;font-weight:700;">×1.2</span> — Pertumbuhan cepat.<br>
+        <b>🌫 Berkabut</b> <span style="color:#886600;font-weight:700;">×0.9</span> — Sedikit lambat, wajib siram!<br>
+        <b>⛅ Cerah</b> <span style="color:#886600;font-weight:700;">×1.0</span> — Normal, jangan lupa siram.`,
+				},
+				{
+					label: "🌤 Pancaroba",
+					title: "Pancaroba 🌤",
+					html: `Peralihan musim, cuaca tidak menentu.<br><br>
+        <b>⛅ Cerah</b> <span style="color:#2d8a2d;font-weight:700;">×1.1</span> — Lebih cepat dari normal.<br>
+        <b>🌧 Gerimis</b> <span style="color:#886600;font-weight:700;">×1.0</span> — Pertumbuhan normal.<br>
+        <b>🌤 Panas</b> <span style="color:#886600;font-weight:700;">×0.9</span> — Mulai melambat, rajin siram!<br>
+        <b>⛈ Badai</b> <span style="color:#cc3300;font-weight:700;">×0.7</span> — Lambat, wajib siram semua!`,
+				},
+				{
+					label: "☀ Kemarau",
+					title: "Kemarau ☀",
+					html: `Curah hujan sangat sedikit, tanaman butuh banyak air.<br><br>
+        <b>🌤 Panas</b> <span style="color:#cc3300;font-weight:700;">×0.7</span> — Lambat, siram setiap hari!<br>
+        <b>☀ Terik</b> <span style="color:#cc3300;font-weight:700;">×0.5</span> — Sangat lambat! Prioritas siram.<br>
+        <b>⛅ Cerah</b> <span style="color:#886600;font-weight:700;">×0.8</span> — Lumayan, tetap harus siram.<br>
+        <b>⛈ Badai</b> <span style="color:#cc3300;font-weight:700;">×0.6</span> — Angin kencang, pertumbuhan terhambat.`,
+				},
+				{
+					label: "❄ Musim Dingin",
+					title: "Musim Dingin ❄",
+					html: `Suhu rendah, pertumbuhan kopi melambat.<br><br>
+        <b>🌫 Berkabut</b> <span style="color:#cc3300;font-weight:700;">×0.6</span> — Sangat lambat, kabut tebal.<br>
+        <b>🌧 Gerimis</b> <span style="color:#cc3300;font-weight:700;">×0.8</span> — Sedikit lebih baik, tetap lambat.<br>
+        <b>⛅ Cerah</b> <span style="color:#cc3300;font-weight:700;">×0.7</span> — Cerah tapi dingin, siram tetap perlu.<br>
+        <b>⛈ Badai</b> <span style="color:#cc3300;font-weight:700;">×0.5</span> — Terburuk! Siram semua segera.`,
+				},
+				{
+					label: "💡 Tips",
+					title: "Tips Bertani Cerdas!",
+					html: `💧 Siram tanaman saat cuaca buruk untuk mengimbangi pertumbuhan lambat.<br><br>
+        ☕ Musim terbaik tiap kopi:<br>
+        <b>Arabika</b> → Musim Hujan 🌧<br>
+        <b>Robusta</b> → Pancaroba 🌤<br>
+        <b>Liberika</b> → Hujan & Pancaroba<br><br>
+        🏆 Makin sering siram + cuaca bagus = <b>poin panen makin besar!</b>`,
+				},
+			];
+
+			let seasonSlideIdx = 0;
+
+			function showSeasonInfo() {
+				sfxClick();
+				seasonSlideIdx = seasonIdx + 1; // langsung ke musim yg aktif sekarang
+				renderSeasonSlide();
+			}
+
+			function renderSeasonSlide() {
+				const slide = SEASON_SLIDES[seasonSlideIdx];
+				const total = SEASON_SLIDES.length;
+
+				const dots = SEASON_SLIDES.map(
+					(_, i) =>
+						`<span style="
+						display:inline-block;
+						width:${i === seasonSlideIdx ? "18px" : "7px"};
+						height:7px;
+						border-radius:4px;
+						background:${i === seasonSlideIdx ? "#e8a030" : "rgba(0,0,0,0.2)"};
+						margin:0 2px;
+						transition:all 0.2s;
+					"></span>`,
+				).join("");
+
+				const prevHTML =
+					seasonSlideIdx > 0
+						? `<button id="season-prev-btn" style="
+						font-family:'Nunito';font-size:12px;font-weight:900;
+						background:rgba(0,0,0,0.08);color:#7a4400;
+						border:none;border-radius:14px;padding:7px 14px;cursor:pointer;">
+						← Prev
+					</button>`
+						: `<span></span>`;
+
+				const nextHTML =
+					seasonSlideIdx < total - 1
+						? `<button id="season-next-btn" style="
+						font-family:'Nunito';font-size:12px;font-weight:900;
+						background:linear-gradient(135deg,#f5c518,#e8a030);color:#5a2e00;
+						border:none;border-radius:14px;padding:7px 16px;cursor:pointer;
+						box-shadow:0 3px 10px rgba(232,160,48,0.4);">
+						Lanjut →
+					</button>`
+						: `<button id="season-close-btn" style="
+						font-family:'Nunito';font-size:12px;font-weight:900;
+						background:linear-gradient(135deg,#f5c518,#e8a030);color:#5a2e00;
+						border:none;border-radius:14px;padding:7px 16px;cursor:pointer;
+						box-shadow:0 3px 10px rgba(232,160,48,0.4);">
+						Oke! 👍
+					</button>`;
+
+				const html = `
+					${slide.html}
+					<div style="margin-top:12px;display:flex;align-items:center;justify-content:space-between;">
+						${prevHTML}
+						<div style="display:flex;align-items:center;gap:2px;">${dots}</div>
+						${nextHTML}
+					</div>
+				`;
+
+				document.getElementById("bubble-label").textContent = slide.label;
+				document.getElementById("bubble-text").innerHTML = html;
+				document.getElementById("bubble-close").className = "";
+
+				document.getElementById("maskot-wrap").className = "show idle";
+				document.getElementById("maskot-bubble").className = "show";
+
+				// Pasang event listener setelah elemen ada di DOM
+				const prevBtn = document.getElementById("season-prev-btn");
+				const nextBtn = document.getElementById("season-next-btn");
+				const closeBtn = document.getElementById("season-close-btn");
+
+				if (prevBtn)
+					prevBtn.addEventListener("click", () => {
+						sfxClick();
+						seasonSlideIdx--;
+						renderSeasonSlide();
+					});
+				if (nextBtn)
+					nextBtn.addEventListener("click", () => {
+						sfxClick();
+						seasonSlideIdx++;
+						renderSeasonSlide();
+					});
+				if (closeBtn)
+					closeBtn.addEventListener("click", () => {
+						closeMaskot();
+					});
+			}
+
+			function seasonNext() {
+				sfxClick();
+				if (seasonSlideIdx < SEASON_SLIDES.length - 1) {
+					seasonSlideIdx++;
+					renderSeasonSlide();
+				}
+			}
+
+			function seasonPrev() {
+				sfxClick();
+				if (seasonSlideIdx > 0) {
+					seasonSlideIdx--;
+					renderSeasonSlide();
+				}
+			}
+
+			// ─── SISTEM MASKOT ───────────────────────────────────────────
+			let maskotTO = null;
+
+			function showMaskot(label, html, duration = 5000, showClose = false) {
+				const wrap = document.getElementById("maskot-wrap");
+				const bubble = document.getElementById("maskot-bubble");
+				const lbl = document.getElementById("bubble-label");
+				const txt = document.getElementById("bubble-text");
+				const closeBtn = document.getElementById("bubble-close");
+
+				lbl.textContent = label;
+				txt.innerHTML = html;
+				closeBtn.className = showClose ? "show" : "";
+
+				// Reset animasi
+				wrap.className = "show";
+				bubble.className = "show";
+
+				if (maskotTO) clearTimeout(maskotTO);
+
+				if (duration > 0 && !showClose) {
+					maskotTO = setTimeout(() => hideMaskot(), duration);
+				}
+
+				// Idle bounce setelah 0.5s
+				setTimeout(() => {
+					if (wrap.classList.contains("show")) wrap.classList.add("idle");
+				}, 500);
+			}
+
+			function hideMaskot() {
+				const wrap = document.getElementById("maskot-wrap");
+				const bubble = document.getElementById("maskot-bubble");
+				wrap.className = "";
+				bubble.className = "";
+				if (maskotTO) {
+					clearTimeout(maskotTO);
+					maskotTO = null;
+				}
+			}
+
+			function closeMaskot() {
+				hideMaskot();
+				gameStarted = true;
+			}
+
+			// ─── NARASI CUACA (pakai maskot) ─────────────────────────────
+			let narasiTO = null;
+			function showNarasi() {
+				const s = SEASONS[seasonIdx];
+				const w = weather;
+				const gm = w.g;
+
+				let growClass, growWord;
+				if (gm >= 1.3) {
+					growClass = "b-good";
+					growWord = `sangat cepat (×${gm.toFixed(1)})`;
+				} else if (gm >= 1.1) {
+					growClass = "b-good";
+					growWord = `lebih cepat (×${gm.toFixed(1)})`;
+				} else if (gm >= 0.9) {
+					growClass = "";
+					growWord = `normal (×${gm.toFixed(1)})`;
+				} else if (gm >= 0.7) {
+					growClass = "b-bad";
+					growWord = `lebih lambat (×${gm.toFixed(1)})`;
+				} else {
+					growClass = "b-bad";
+					growWord = `sangat lambat (×${gm.toFixed(1)})`;
+				}
+
+				let siramSaran;
+				if (gm >= 1.2) siramSaran = `<span class="b-good">Cuaca bagus!</span> Tetap siram ya.`;
+				else if (gm >= 0.9) siramSaran = `Siram tanamanmu agar tumbuh optimal.`;
+				else siramSaran = `<span class="b-bad">Cuaca buruk!</span> <b>Wajib siram</b> semua tanaman!`;
+
+				const musimBerganti = dayInSeason === 0 && totalDay > 1;
+				const musimTxt = musimBerganti ? `🍂 <b>Musim berganti ke ${s.name}!</b><br>` : "";
+
+				const html = `
+        ${musimTxt}
+        ${w.e} <b>${w.name}</b> — tumbuh 
+        <span class="${growClass}">${growWord}</span>.<br>
+        💧 ${siramSaran}
+    `;
+
+				showMaskot(`📅 Hari ${totalDay}`, html, 5500);
+			}
+
+			// ─── CEK REMINDER SIRAM ──────────────────────────────────────
+			let siramTO = null;
+			function updateSiramReminder() {
+				let totalBelumSiram = 0;
+				for (let lahan of allPlots) {
+					for (let p of lahan) {
+						if (p.state >= ST.SEEDED && p.state < ST.RIPE && !p.watered) {
+							totalBelumSiram++;
+						}
+					}
+				}
+
+				// Hanya tampilkan jika ada tanaman yang perlu disiram & maskot tidak sedang tampil narasi
+				if (totalBelumSiram > 0 && !maskotTO) {
+					showMaskot("💧 Reminder Siram", `<b>${totalBelumSiram} tanaman</b> belum disiram hari ini!<br> Ketuk petak → pilih <b>Siram 💧</b> sekarang.`, 4000);
+				}
+			}
+
 			let toastTO = null;
+			// ─── INTRO CHARACTER SCREEN ──────────────────────────────
+			const INTRO_STEPS = [
+				{
+					label: "Selamat Datang!",
+					title: "Halo, Petani Kopi! 👋",
+					text: "Selamat datang di <b>KopiLand</b>! Aku akan menemanimu belajar membudidaya kopi secara interaktif. Yuk kenalan dulu dengan 3 jenis kopi pilihan!",
+				},
+				{
+					label: "Kopi 1 dari 3 · Arabika",
+					title: "🫘 Arabika",
+					text: '<i style="color:#888;font-size:11px;">Coffea arabica</i><br><br>🏔 <b>Lahan:</b> Dataran Tinggi (1.000–2.000 m dpl)<br>🌡 <b>Suhu:</b> 15–25°C<br>☕ <b>Kafein:</b> 1,1%–1,5%<br>👅 <b>Rasa:</b> Kompleks, floral, sedikit asam<br><br><span style="color:#2d7a1a;font-size:11px;">Kopi premium dengan cita rasa terbaik, butuh perawatan intensif di dataran tinggi.</span>',
+				},
+				{
+					label: "Kopi 2 dari 3 · Robusta",
+					title: "☕ Robusta",
+					text: '<i style="color:#888;font-size:11px;">Coffea canephora</i><br><br>🏔 <b>Lahan:</b> Dataran Rendah (100–600 m dpl)<br>🌡 <b>Suhu:</b> 21–24°C<br>☕ <b>Kafein:</b> 2,2%–2,7%<br>👅 <b>Rasa:</b> Pahit kuat, earthy, nutty<br><br><span style="color:#2d7a1a;font-size:11px;">Mendominasi 92% produksi kopi Indonesia. Tahan hama & mudah dirawat.</span>',
+				},
+				{
+					label: "Kopi 3 dari 3 · Liberika",
+					title: "🌿 Liberika",
+					text: '<i style="color:#888;font-size:11px;">Coffea liberica</i><br><br>🏔 <b>Lahan:</b> Lahan Gambut (0–900 m dpl)<br>🌡 <b>Suhu:</b> 21–30°C<br>☕ <b>Kafein:</b> 1,12%–1,26%<br>👅 <b>Rasa:</b> Pahit, smoky, fruity, sedikit kayu<br><br><span style="color:#2d7a1a;font-size:11px;">Satu-satunya kopi yang tumbuh di lahan gambut. Biji terbesar di antara ketiganya!</span>',
+				},
+				{
+					label: "Siap Bermain!",
+					title: "🌱 Ayo Mulai Bertani!",
+					text: "Kamu sudah mengenal ketiga jenis kopi kita! Sekarang aku akan mengajarkan cara bermain. Ikuti tutorialnya ya, dan jangan lupa siram tanaman setiap hari! 💧",
+				},
+			];
+
+			let introStep = 0;
+
+			function openIntroScreen() {
+				introStep = 0;
+				const screen = document.getElementById("intro-screen");
+				screen.classList.add("show");
+
+				// Buat dots
+				const dotsEl = document.getElementById("intro-dots");
+				dotsEl.innerHTML = INTRO_STEPS.map((_, i) => `<div class="intro-dot ${i === 0 ? "active" : ""}" id="idot-${i}"></div>`).join("");
+
+				renderIntroStep();
+			}
+
+			function renderIntroStep() {
+				const step = INTRO_STEPS[introStep];
+				const total = INTRO_STEPS.length;
+
+				document.getElementById("intro-bubble-label").textContent = step.label;
+				document.getElementById("intro-bubble-title").textContent = step.title;
+				document.getElementById("intro-bubble-text").innerHTML = step.text;
+
+				// Update dots
+				document.querySelectorAll(".intro-dot").forEach((d, i) => d.classList.toggle("active", i === introStep));
+
+				// Tombol terakhir
+				const btn = document.getElementById("intro-next-btn");
+				btn.textContent = introStep === total - 1 ? "Mulai Tutorial! 🎉" : "Lanjut →";
+			}
+
+			function introNext() {
+				sfxClick();
+				introStep++;
+				if (introStep >= INTRO_STEPS.length) {
+					// Selesai intro → tutup & mulai tutorial
+					const screen = document.getElementById("intro-screen");
+					screen.classList.add("fade-out");
+					setTimeout(() => {
+						screen.classList.remove("show", "fade-out");
+						startTutorial();
+					}, 500);
+					return;
+				}
+				// Animasi bubble ganti
+				const bubble = document.getElementById("intro-bubble");
+				bubble.style.animation = "none";
+				void bubble.offsetWidth; // force reflow
+				bubble.style.animation = "bubble-pop 0.3s cubic-bezier(0.34,1.56,0.64,1)";
+
+				renderIntroStep();
+			}
+
 			function showToast(msg) {
 				const el = document.getElementById("toast");
 				document.getElementById("toast-msg").textContent = msg;
@@ -2310,9 +3937,11 @@
 				const dt = (ts - last) / 1000;
 				last = ts;
 				animTime += dt;
-				dayTimer += dt;
+				if (gameStarted) {
+					dayTimer += dt;
+				}
 
-				if (dayTimer >= DAY_SEC) {
+				if (gameStarted && dayTimer >= DAY_SEC) {
 					dayTimer -= DAY_SEC;
 					advanceDay();
 				}
@@ -2352,8 +3981,619 @@
 				requestAnimationFrame(loop);
 			}
 
+			// ─── QUIZ DATA PER LEVEL ──────────────────────────────────────
+			const QUIZ_LEVELS = {
+				pemula: {
+					label: "Pemula",
+					icon: "🌱",
+					color: "#4aaa20",
+					desc: "Pertanyaan dasar seputar jenis kopi dan cara bermain",
+					questions: [
+						{
+							category: "Jenis Kopi",
+							q: "Ada berapa jenis kopi yang bisa ditanam dalam game KopiLand?",
+							opts: ["1 jenis", "2 jenis", "3 jenis", "4 jenis"],
+							ans: 2,
+							feedback: "KopiLand memiliki <b>3 jenis kopi</b> yang bisa ditanam: <b>Arabika, Robusta, dan Liberika</b>. Masing-masing punya lahan dan karakteristik berbeda.",
+						},
+						{
+							category: "Arabika",
+							q: "Kopi Arabika cocok ditanam di jenis lahan apa?",
+							opts: ["Lahan Gambut", "Dataran Rendah", "Dataran Tinggi", "Tepi Pantai"],
+							ans: 2,
+							feedback: "Kopi <b>Arabika</b> tumbuh di <b>Dataran Tinggi</b> (1.000–2.000 m dpl) karena membutuhkan suhu dingin 15–25°C.",
+						},
+						{
+							category: "Robusta",
+							q: "Kopi Robusta cocok ditanam di jenis lahan apa?",
+							opts: ["Dataran Tinggi", "Dataran Rendah", "Lahan Gambut", "Pegunungan Bersalju"],
+							ans: 1,
+							feedback: "Kopi <b>Robusta</b> tumbuh optimal di <b>Dataran Rendah</b> (100–600 m dpl) dengan suhu 21–24°C.",
+						},
+						{
+							category: "Liberika",
+							q: "Kopi Liberika cocok ditanam di jenis lahan apa?",
+							opts: ["Dataran Tinggi", "Dataran Rendah", "Lahan Gambut", "Semua lahan"],
+							ans: 2,
+							feedback: "Kopi <b>Liberika</b> adalah satu-satunya kopi yang tumbuh di <b>Lahan Gambut</b> (0–900 m dpl), termasuk dekat permukaan laut.",
+						},
+						{
+							category: "Cara Bermain",
+							q: "Apa urutan aksi yang benar untuk menanam kopi di KopiLand?",
+							opts: ["Tanam → Gali → Siram → Panen", "Gali → Tanam → Siram → Panen", "Siram → Gali → Tanam → Panen", "Panen → Siram → Tanam → Gali"],
+							ans: 1,
+							feedback: "Urutan benar: <b>Gali ⛏ → Tanam 🌱 → Siram 💧 → Panen 🌿</b>. Tanah harus digali dulu sebelum bisa ditanami benih!",
+						},
+						{
+							category: "Cuaca",
+							q: "Cuaca apa yang paling mempercepat pertumbuhan tanaman kopi di KopiLand?",
+							opts: ["Terik ☀", "Berkabut 🌫", "Hujan Lebat ⛈", "Badai"],
+							ans: 2,
+							feedback: "<b>Hujan Lebat ⛈</b> memberikan modifier pertumbuhan <b>×1.4</b>, paling tinggi dibanding cuaca lainnya!",
+						},
+						{
+							category: "Cuaca",
+							q: "Setiap berapa hari musim berganti di game KopiLand?",
+							opts: ["3 hari", "5 hari", "7 hari", "10 hari"],
+							ans: 2,
+							feedback: "Musim berganti setiap <b>7 hari</b> dalam game. Ada 4 musim: Hujan, Pancaroba, Kemarau, dan Musim Dingin.",
+						},
+						{
+							category: "Cara Bermain",
+							q: "Apa yang terjadi jika tanaman disiram setiap hari?",
+							opts: ["Tidak ada pengaruh", "Tanaman mati", "Pertumbuhan lebih cepat", "Tanaman layu"],
+							ans: 2,
+							feedback: "Menyiram tanaman setiap hari membuat pertumbuhannya <b>jauh lebih cepat</b>. Tanaman yang disiram mendapat bonus pertumbuhan ×3 dibanding yang tidak disiram!",
+						},
+					],
+				},
+				sedang: {
+					label: "Sedang",
+					icon: "☕",
+					color: "#ff9900",
+					desc: "Perbandingan karakteristik dan ciri fisik antar jenis kopi",
+					questions: [
+						{
+							category: "Kafein",
+							q: "Kopi mana yang memiliki kadar kafein paling tinggi?",
+							opts: ["Arabika (1,1–1,5%)", "Liberika (1,12–1,26%)", "Robusta (2,2–2,7%)", "Ketiganya sama"],
+							ans: 2,
+							feedback: "<b>Robusta</b> memiliki kadar kafein tertinggi yaitu <b>2,2%–2,7%</b>, hampir 2× lipat Arabika. Itulah kenapa Robusta terasa lebih pahit.",
+						},
+						{
+							category: "Ciri Fisik",
+							q: "Bagaimana bentuk alur tengah biji kopi Arabika?",
+							opts: ["Lurus (garis tunggal)", "Tidak beraturan", "Berkelok seperti huruf S", "Berbentuk lingkaran"],
+							ans: 2,
+							feedback: "Biji Arabika memiliki alur tengah yang <b>berkelok menyerupai huruf S</b>, lebih tegas dibanding Robusta yang alurnya lurus.",
+						},
+						{
+							category: "Ciri Fisik",
+							q: "Bagaimana bentuk alur tengah biji kopi Robusta?",
+							opts: ["Berkelok seperti huruf S", "Lurus (garis tunggal)", "Tidak beraturan", "Berbentuk zigzag"],
+							ans: 1,
+							feedback: "Biji Robusta memiliki alur tengah yang <b>lurus (garis tunggal)</b>, berbeda dengan Arabika yang berkelok seperti huruf S.",
+						},
+						{
+							category: "Perbandingan",
+							q: "Dibanding Arabika, kadar gula kopi Robusta adalah...",
+							opts: ["Sama tingginya", "2× lebih tinggi", "Lebih rendah", "Tidak mengandung gula"],
+							ans: 2,
+							feedback: "Kadar gula Robusta <b>lebih rendah</b> dari Arabika. Arabika memiliki kadar gula hingga 2× lipat Robusta, itulah yang membuat rasanya lebih kompleks dan kurang pahit.",
+						},
+						{
+							category: "Penaung",
+							q: "Pohon penaung apa yang cocok untuk kopi Arabika?",
+							opts: ["Petai dan jengkol", "Pisang dan kelapa", "Macadamia dan jeruk keprok", "Pohon kayu lokal gambut"],
+							ans: 2,
+							feedback: "Kopi Arabika cocok dinaungi <b>Macadamia dan jeruk keprok</b> dengan jarak tanam 6×6 m atau 8×8 m untuk naungan 30–50%.",
+						},
+						{
+							category: "Penaung",
+							q: "Pohon penaung apa yang cocok untuk kopi Robusta?",
+							opts: ["Macadamia dan jeruk keprok", "Petai, jengkol, pisang, alpokat", "Pohon kayu lokal gambut", "Cemara dan pinus"],
+							ans: 1,
+							feedback: "Kopi Robusta cocok dinaungi <b>petai, jengkol, pisang, alpokat, jeruk, dan kelapa</b> — pohon serbaguna yang juga bisa dipanen hasilnya!",
+						},
+						{
+							category: "Musim",
+							q: "Kopi Arabika tumbuh paling baik di musim apa?",
+							opts: ["Kemarau ☀", "Musim Dingin ❄", "Musim Hujan 🌧", "Pancaroba 🌤"],
+							ans: 2,
+							feedback: "Arabika tumbuh paling baik di <b>Musim Hujan 🌧</b> (modifier ×1.3). Curah hujan yang cukup sangat dibutuhkan tanaman dataran tinggi ini.",
+						},
+						{
+							category: "Ukuran",
+							q: "Kopi mana yang memiliki ukuran buah paling besar?",
+							opts: ["Arabika", "Robusta", "Liberika", "Ketiganya sama"],
+							ans: 2,
+							feedback: "<b>Liberika</b> memiliki buah terbesar: <b>18–30 mm</b>, sekitar 2× lipat ukuran Arabika. Bijinya pun terbesar (7–15 mm per biji) di antara ketiganya.",
+						},
+					],
+				},
+				mahir: {
+					label: "Mahir",
+					icon: "🏆",
+					color: "#f5c518",
+					desc: "Teknis budidaya mendalam dari panel Info tiap kopi",
+					questions: [
+						{
+							category: "Varietas",
+							q: "Varietas kopi Arabika unggul yang berasal dari Indonesia adalah...",
+							opts: ["BP 42 dan BP 234", "Gayo 1, Gayo 2, Sigarar Utang", "Spesies tunggal belum banyak varietas", "SA 237 dan BP 409"],
+							ans: 1,
+							feedback: "Varietas Arabika unggul Indonesia antara lain <b>Gayo 1, Gayo 2, Sigarar Utang, AS 1, S 795, Kartika 1 & 2</b>. Nama-nama ini terkenal di pasar kopi specialty dunia.",
+						},
+						{
+							category: "Varietas",
+							q: "Varietas kopi Robusta yang direkomendasikan untuk ketahanan nematoda adalah...",
+							opts: ["Gayo 1 dan Gayo 2", "SA 237 dengan batang bawah BP 308", "Sigarar Utang", "Kartika 1 dan 2"],
+							ans: 1,
+							feedback: "Robusta ditanam poliklonal 3–4 klon, menggunakan <b>batang bawah BP 308</b> yang tahan nematoda. Varietas unggulannya: BP 42, BP 234, BP 288, BP 358, BP 409, SA 237.",
+						},
+						{
+							category: "Tanah",
+							q: "Berapa pH tanah ideal untuk budidaya kopi Liberika?",
+							opts: ["4,0 – 5,0", "4,5 – 6,5", "6,0 – 7,5", "7,0 – 8,0"],
+							ans: 1,
+							feedback: "Liberika dapat tumbuh di pH tanah <b>4,5–6,5</b>, lebih toleran terhadap keasaman dibanding Arabika (5,5–6,5). Ini cocok dengan kondisi lahan gambut yang asam.",
+						},
+						{
+							category: "Tanah",
+							q: "Berapa kadar bahan organik minimal yang dibutuhkan kopi Arabika?",
+							opts: ["> 1,5%", "> 2,0%", "> 3,5%", "> 5,0%"],
+							ans: 2,
+							feedback: "Arabika membutuhkan bahan organik <b>> 3,5%</b> dalam tanah. Itulah kenapa pupuk organik wajib diberikan saat membudidayakan Arabika di dataran tinggi.",
+						},
+						{
+							category: "Curah Hujan",
+							q: "Berapa curah hujan ideal per tahun untuk kopi Liberika?",
+							opts: ["500 – 1.000 mm/tahun", "1.000 – 1.500 mm/tahun", "1.250 – 3.500 mm/tahun", "4.000 – 5.000 mm/tahun"],
+							ans: 2,
+							feedback: "Liberika membutuhkan curah hujan <b>1.250–3.500 mm/tahun</b>, rentang paling lebar di antara ketiga kopi. Ini mencerminkan adaptasinya di lahan gambut yang lembab.",
+						},
+						{
+							category: "Keistimewaan",
+							q: "Apa aroma khas yang dimiliki kopi Liberika?",
+							opts: ["Floral dan lembut", "Earthy dan nutty", "Smoky, fruity, sedikit bunga", "Manis seperti cokelat"],
+							ans: 2,
+							feedback: "Liberika memiliki aroma unik: <b>smoky (asap kayu), fruity, dan sedikit bunga</b>. Kombinasi ini sangat berbeda dari Arabika (floral) maupun Robusta (earthy/nutty).",
+						},
+						{
+							category: "Budidaya",
+							q: "Berapa jarak tanam yang direkomendasikan untuk kopi Liberika?",
+							opts: ["1×1 m atau 2×1 m", "3×3 m atau 4×2,5 m", "6×6 m atau 8×8 m", "10×10 m atau 12×8 m"],
+							ans: 1,
+							feedback: "Liberika membutuhkan jarak tanam <b>3×3 m atau 4×2,5 m</b> karena pohonnya lebih besar. Arabika membutuhkan 6×6 m atau 8×8 m untuk pohon penaunngnya.",
+						},
+						{
+							category: "Produksi",
+							q: "Berapa persen produksi kopi nasional Indonesia yang didominasi oleh Robusta?",
+							opts: ["45%", "67%", "80%", "92%"],
+							ans: 3,
+							feedback: "Robusta mendominasi <b>92%</b> produksi kopi nasional Indonesia! Hal ini karena Robusta lebih mudah dirawat, tahan hama, dan dapat tumbuh luas di dataran rendah.",
+						},
+					],
+				},
+			};
+
+			// ─── QUIZ STATE ───────────────────────────────────────────────
+			let quizActive = false;
+			let quizQuestions = []; // soal yang diacak
+			let quizIdx = 0; // soal ke-berapa sekarang
+			let quizScore = 0; // jumlah benar
+			let quizAnswered = false; // sudah jawab soal ini?
+			let quizUserAnswers = []; // rekam jawaban user per soal
+			let currentLevel = null; // 'pemula' | 'sedang' | 'mahir'
+
+			function shuffleArray(arr) {
+				const a = [...arr];
+				for (let i = a.length - 1; i > 0; i--) {
+					const j = Math.floor(Math.random() * (i + 1));
+					[a[i], a[j]] = [a[j], a[i]];
+				}
+				return a;
+			}
+
+			// ─── QUIZ OPEN / CLOSE ────────────────────────────────────────
+			function openQuiz() {
+				sfxClick();
+				document.getElementById("quizpanel").classList.add("open");
+				document.getElementById("swipe-hint").style.display = "none";
+				if (!quizActive) showLevelSelect();
+			}
+
+			function closeQuiz() {
+				sfxClick();
+				document.getElementById("quizpanel").classList.remove("open");
+				document.getElementById("swipe-hint").style.display = "flex";
+			}
+
+			function showLevelSelect() {
+				// Sembunyikan tombol level saat di halaman pilih level
+				document.getElementById("quiz-level-btn").style.display = "none";
+				// Sembunyikan area soal & hasil, tampilkan pemilih level
+				document.getElementById("quiz-body").style.display = "none";
+				document.getElementById("quiz-result").classList.remove("show");
+
+				const area = document.getElementById("quiz-q-area");
+				const fb = document.getElementById("quiz-feedback");
+				fb.className = "quiz-feedback";
+
+				// Reset progress bar
+				document.getElementById("quiz-prog-fill").style.width = "0%";
+				document.getElementById("quiz-prog-label").textContent = "Pilih Level";
+				document.getElementById("quiz-score-mini").textContent = "";
+				document.getElementById("quiz-next-btn").style.display = "none";
+
+				document.getElementById("quiz-body").style.display = "block";
+				area.innerHTML = `
+        <div style="padding: 8px 0 16px;">
+            <div style="font-family:'Nunito';font-size:14px;font-weight:900;color:#f5c518;margin-bottom:6px;">🎯 Pilih Level Kuis</div>
+            <div style="font-family:'Nunito Sans';font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:18px;">Setiap level memiliki 8 soal dengan tingkat kesulitan berbeda</div>
+            ${Object.entries(QUIZ_LEVELS)
+				.map(
+					([key, lv]) => `
+                <div onclick="startQuiz('${key}')" style="
+                    background: rgba(255,255,255,0.06);
+                    border: 2px solid ${lv.color}44;
+                    border-radius: 18px;
+                    padding: 16px;
+                    margin-bottom: 12px;
+                    cursor: pointer;
+                    transition: all 0.18s;
+                    display: flex;
+                    align-items: center;
+                    gap: 14px;
+                " onmouseover="this.style.background='rgba(255,255,255,0.12)'"
+                   onmouseout="this.style.background='rgba(255,255,255,0.06)'">
+                    <div style="font-size:36px;line-height:1;">${lv.icon}</div>
+                    <div style="flex:1;">
+                        <div style="font-family:'Nunito';font-size:16px;font-weight:900;color:${lv.color};margin-bottom:3px;">Level ${lv.label}</div>
+                        <div style="font-family:'Nunito Sans';font-size:11px;color:rgba(255,255,255,0.55);line-height:1.5;">${lv.desc}</div>
+                    </div>
+                    <div style="font-size:20px;color:${lv.color};opacity:0.7;">›</div>
+                </div>
+            `,
+				)
+				.join("")}
+        </div>
+    `;
+			}
+
+			function backToLevelSelect() {
+				sfxClick();
+				quizActive = false;
+				currentLevel = null;
+				showLevelSelect();
+			}
+
+			function startQuiz(level) {
+				currentLevel = level;
+				const lv = QUIZ_LEVELS[level];
+
+				quizActive = true;
+				quizIdx = 0;
+				quizScore = 0;
+				quizAnswered = false;
+				quizUserAnswers = [];
+				quizQuestions = shuffleArray(lv.questions);
+
+				document.getElementById("quiz-next-btn").style.display = "";
+				document.getElementById("quiz-body").style.display = "block";
+				document.getElementById("quiz-result").classList.remove("show");
+				document.getElementById("quiz-feedback").classList.remove("show", "correct-fb", "wrong-fb");
+
+				// Update header sub sesuai level
+				document.querySelector(".quiz-header-sub").textContent = `${lv.icon} Level ${lv.label} · ${lv.questions.length} soal`;
+				document.getElementById("quiz-level-btn").style.display = "block";
+
+				renderQuizQuestion();
+			}
+
+			function retryQuiz() {
+				startQuiz(currentLevel);
+			}
+
+			// ─── RENDER SOAL ──────────────────────────────────────────────
+			function renderQuizQuestion() {
+				const total = quizQuestions.length;
+				const q = quizQuestions[quizIdx];
+
+				// Progress bar
+				const pct = (quizIdx / total) * 100;
+				document.getElementById("quiz-prog-fill").style.width = pct + "%";
+				document.getElementById("quiz-prog-label").textContent = `${quizIdx + 1} / ${total}`;
+				document.getElementById("quiz-score-mini").textContent = `✅ ${quizScore} benar`;
+
+				// Reset feedback & tombol
+				const fb = document.getElementById("quiz-feedback");
+				fb.className = "quiz-feedback";
+				fb.textContent = "";
+
+				const nextBtn = document.getElementById("quiz-next-btn");
+				nextBtn.textContent = "Pilih Jawaban";
+				nextBtn.disabled = true;
+
+				quizAnswered = false;
+
+				// Render kartu soal
+				const letters = ["A", "B", "C", "D"];
+				const area = document.getElementById("quiz-q-area");
+				area.innerHTML = `
+        <div class="quiz-q-card">
+            <div class="quiz-q-badge">${q.category} · Soal ${quizIdx + 1}</div>
+            <div class="quiz-q-text">${q.q}</div>
+            <div class="quiz-options">
+                ${q.opts
+					.map(
+						(opt, i) => `
+                    <div class="quiz-opt" id="qopt-${i}" onclick="selectAnswer(${i})">
+                        <div class="quiz-opt-letter">${letters[i]}</div>
+                        <div class="quiz-opt-text">${opt}</div>
+                    </div>
+                `,
+					)
+					.join("")}
+            </div>
+        </div>
+    `;
+			}
+
+			// ─── PILIH JAWABAN ────────────────────────────────────────────
+			function selectAnswer(optIdx) {
+				if (quizAnswered) return; // sudah dijawab, abaikan
+				quizAnswered = true;
+
+				const q = quizQuestions[quizIdx];
+				const correct = q.ans;
+				const isRight = optIdx === correct;
+
+				if (isRight) quizScore++;
+				quizUserAnswers.push({ q, chosen: optIdx, correct: isRight });
+
+				// Warna pilihan
+				for (let i = 0; i < q.opts.length; i++) {
+					const el = document.getElementById("qopt-" + i);
+					if (!el) continue;
+					el.style.pointerEvents = "none";
+					if (i === correct) el.classList.add("correct");
+					else if (i === optIdx) el.classList.add("wrong");
+				}
+
+				// Feedback
+				const fb = document.getElementById("quiz-feedback");
+				fb.innerHTML = (isRight ? "✅ <b>Benar!</b> " : "❌ <b>Belum tepat.</b> ") + q.feedback;
+				fb.className = "quiz-feedback show " + (isRight ? "correct-fb" : "wrong-fb");
+
+				// Update skor mini & tombol lanjut
+				document.getElementById("quiz-score-mini").textContent = `✅ ${quizScore} benar`;
+				const nextBtn = document.getElementById("quiz-next-btn");
+				const isLast = quizIdx >= quizQuestions.length - 1;
+				nextBtn.textContent = isLast ? "Lihat Hasil 🏆" : "Soal Berikutnya →";
+				nextBtn.disabled = false;
+
+				// SFX sederhana
+				if (isRight) sfxHarvest();
+				else sfxDig();
+			}
+
+			// ─── TOMBOL NEXT ──────────────────────────────────────────────
+			function quizNext() {
+				if (!quizAnswered) return;
+				quizIdx++;
+				if (quizIdx >= quizQuestions.length) {
+					showQuizResult();
+				} else {
+					renderQuizQuestion();
+				}
+			}
+
+			// ─── TAMPILKAN HASIL ──────────────────────────────────────────
+			function showQuizResult() {
+				const total = quizQuestions.length;
+				const pct = Math.round((quizScore / total) * 100);
+
+				// Progress bar penuh
+				document.getElementById("quiz-prog-fill").style.width = "100%";
+				document.getElementById("quiz-prog-label").textContent = `${total} / ${total}`;
+
+				// Sembunyikan area soal
+				document.getElementById("quiz-body").style.display = "none";
+
+				// Tentukan grade
+				let grade, icon, label, advice, gradeClass;
+				if (pct >= 90) {
+					grade = "A";
+					icon = "🏆";
+					label = "Luar Biasa!";
+					gradeClass = "grade-a";
+					advice = "Kamu sudah sangat memahami materi budidaya kopi. Pertahankan dan terus eksplorasi varietas kopi Indonesia lainnya!";
+				} else if (pct >= 70) {
+					grade = "B";
+					icon = "🌟";
+					label = "Bagus!";
+					gradeClass = "grade-b";
+					advice = "Pemahamanmu sudah baik. Pelajari lagi perbedaan karakteristik Arabika, Robusta, dan Liberika untuk hasil sempurna.";
+				} else if (pct >= 50) {
+					grade = "C";
+					icon = "☕";
+					label = "Cukup Baik";
+					gradeClass = "grade-c";
+					advice = "Kamu sudah mengenal dasar-dasar kopi. Coba buka panel Info (ℹ️) di setiap jenis kopi untuk memperdalam materi.";
+				} else {
+					grade = "D";
+					icon = "🌱";
+					label = "Perlu Belajar Lagi";
+					gradeClass = "grade-d";
+					advice = "Jangan menyerah! Main lagi dan perhatikan tips di setiap panel Info kopi. Kamu pasti bisa mendapat nilai lebih tinggi!";
+				}
+
+				document.getElementById("res-icon").textContent = icon;
+				document.getElementById("res-grade").textContent = grade;
+				document.getElementById("res-grade").className = "result-grade " + gradeClass;
+				document.getElementById("res-label").textContent = label;
+				document.getElementById("res-detail").textContent = `${quizScore} dari ${total} soal benar`;
+				document.getElementById("res-correct").textContent = quizScore;
+				document.getElementById("res-wrong").textContent = total - quizScore;
+				document.getElementById("res-pct").textContent = pct + "%";
+				document.getElementById("res-advice").textContent = advice;
+
+				// Review tiap soal
+				const reviewList = document.getElementById("res-review-list");
+				const letters = ["A", "B", "C", "D"];
+				reviewList.innerHTML = quizUserAnswers
+					.map(
+						(ua, i) => `
+        <div class="review-item ${ua.correct ? "ri-correct" : "ri-wrong"}">
+            <div class="review-item-q">${i + 1}. ${ua.q.q}</div>
+            <div class="review-item-ans">
+                Jawabanmu: <span class="${ua.correct ? "ans-correct" : "ans-wrong"}">${letters[ua.chosen]}. ${ua.q.opts[ua.chosen]}</span><br>
+                ${!ua.correct ? `Jawaban benar: <span class="ans-correct">${letters[ua.q.ans]}. ${ua.q.opts[ua.q.ans]}</span>` : ""}
+            </div>
+        </div>
+    `,
+					)
+					.join("");
+
+				// Bonus poin game jika nilai bagus
+				if (pct >= 70) {
+					const bonus = pct >= 90 ? 50 : 20;
+					score += bonus;
+					updateUI();
+					showToast(`Kuis selesai! Bonus +${bonus} poin karena nilai ${grade} 🎉`);
+				} else {
+					showToast("Kuis selesai! Ayo belajar lagi 📖");
+				}
+
+				document.getElementById("quiz-result").classList.add("show");
+				quizActive = false;
+			}
+
+			// ─── SWIPE GESTURE ────────────────────────────────────────────
+			(function initSwipe() {
+				// Pasang listener di document level, bukan wrap,
+				// agar tidak di-block oleh canvas atau elemen lain
+				let touchStartX = 0;
+				let touchStartY = 0;
+				let touchStartTime = 0;
+				let swipeLocked = false;
+
+				document.addEventListener(
+					"touchstart",
+					(e) => {
+						touchStartX = e.touches[0].clientX;
+						touchStartY = e.touches[0].clientY;
+						touchStartTime = Date.now();
+						swipeLocked = false;
+					},
+					{ passive: true },
+				);
+
+				document.addEventListener(
+					"touchmove",
+					(e) => {
+						if (swipeLocked) return;
+						const dx = e.touches[0].clientX - touchStartX;
+						const dy = e.touches[0].clientY - touchStartY;
+						// Lock arah: kalau gerak vertikal lebih besar, bukan swipe horizontal
+						if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 8) {
+							swipeLocked = true;
+						}
+					},
+					{ passive: true },
+				);
+
+				document.addEventListener(
+					"touchend",
+					(e) => {
+						if (swipeLocked) return;
+
+						const dx = e.changedTouches[0].clientX - touchStartX;
+						const dy = e.changedTouches[0].clientY - touchStartY;
+						const elapsed = Date.now() - touchStartTime;
+
+						// Syarat swipe: horizontal > 50px, vertikal < 80px, durasi < 400ms
+						if (Math.abs(dx) < 50) return;
+						if (Math.abs(dy) > 80) return;
+						if (elapsed > 400) return;
+
+						const panelOpen = document.getElementById("quizpanel").classList.contains("open");
+
+						// Cek apakah ada panel lain yg sedang terbuka (jangan trigger kalau popup lain aktif)
+						const settingsOpen = document.getElementById("settingspanel").classList.contains("open");
+						const infoOpen = document.getElementById("infopanel").classList.contains("open");
+						const tutOpen = document.getElementById("tutorial").classList.contains("active");
+						if (settingsOpen || infoOpen || tutOpen) return;
+
+						if (!panelOpen && dx < -50) {
+							// Swipe KIRI → buka kuis
+							openQuiz();
+						} else if (panelOpen && dx > 50) {
+							// Swipe KANAN → tutup kuis
+							closeQuiz();
+						}
+					},
+					{ passive: true },
+				);
+			})();
+
 			updateUI();
 			requestAnimationFrame(loop);
+
+			// ─── AUTO SCALE WRAP ─────────────────────────────────────────
+			function scaleWrap() {
+				const wrap = document.getElementById("wrap");
+				const GAME_W = 420;
+				const GAME_H = 780;
+				const vw = window.innerWidth;
+				const vh = window.innerHeight;
+
+				// Hitung scale berdasarkan dimensi terkecil
+				const scaleX = vw / GAME_W;
+				const scaleY = vh / GAME_H;
+				let scale = Math.min(scaleX, scaleY);
+
+				// Di mobile: boleh scale up sampai full layar
+				// Di desktop: batasi max scale agar tidak terlalu besar
+				const isDesktop = vw >= 1100;
+				const isTablet = vw >= 600 && vw < 1100;
+
+				if (isDesktop) {
+					scale = Math.min(scale, 1.0); // desktop: max 100% ukuran asli
+				} else if (isTablet) {
+					scale = Math.min(scale, 0.95); // tablet: sedikit margin
+				} else {
+					// Mobile: fit full layar dengan sedikit padding
+					scale = Math.min(scaleX, scaleY, 1.0);
+				}
+
+				wrap.style.transform = `scale(${scale})`;
+
+				// Update sidebar visibility
+				updateSidebars();
+			}
+
+			function updateSidebars() {
+				const vw = window.innerWidth;
+				const leftSidebar = document.getElementById("desktop-sidebar-left");
+				const rightSidebar = document.getElementById("desktop-sidebar-right");
+				if (!leftSidebar || !rightSidebar) return;
+
+				if (vw >= 1100) {
+					leftSidebar.style.display = "flex";
+					rightSidebar.style.display = "flex";
+				} else {
+					leftSidebar.style.display = "none";
+					rightSidebar.style.display = "none";
+				}
+			}
+
+			window.addEventListener("resize", scaleWrap);
+			window.addEventListener("orientationchange", () => {
+				setTimeout(scaleWrap, 150); // delay untuk orientasi
+			});
+			scaleWrap(); // panggil sekali saat load
 		</script>
 	</body>
 </html>
