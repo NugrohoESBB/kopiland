@@ -2372,10 +2372,10 @@
 						ph: "5,5 – 6,5",
 						bahanOrganik: "-",
 						// karakteristik biji
-						bentukBiji: "Bulat/membulat, lebih kecil dari Arabika",
+						bentukBiji: "Bulat / membulat, lebih kecil dari Arabika",
 						alurTengah: "Lurus (garis tunggal)",
 						warnaBiji: "Lebih pucat dibanding Arabika",
-						ukuranBiji: "Lebih kecil dan lebih padat/keras",
+						ukuranBiji: "Lebih kecil dan lebih padat / keras",
 						ukuranBuah: "-",
 						kafein: "2,2% – 2,7% (2x lipat Arabika)",
 						rasa: "Pahit kuat, earthy, nutty, menyerupai kacang-kacangan",
@@ -3163,6 +3163,139 @@
 				lbl.textContent = `🌱 Lahan: ${cf.label}`;
 				lbl.style.color = cf.labelColor;
 				updateSiramReminder();
+				showKopiInfo(i);
+			}
+
+			// ─── INFO KOPI SAAT GANTI LAHAN ───────────────────────────────
+			const KOPI_VISUAL = {
+				0: { // Arabika
+					warna: "#c0392b",
+					warnaTerang: "#e74c3c",
+					bentuk: "oval",
+					alur: "S",
+					ukuran: 1.0,
+					deskAlur: "Berkelok ≈ huruf S",
+				},
+				1: { // Robusta
+					warna: "#7b3f00",
+					warnaTerang: "#a0522d",
+					bentuk: "bulat",
+					alur: "lurus",
+					ukuran: 0.85,
+					deskAlur: "Lurus / garis tunggal",
+				},
+				2: { // Liberika
+					warna: "#b8860b",
+					warnaTerang: "#daa520",
+					bentuk: "lonjong",
+					alur: "tidak beraturan",
+					ukuran: 1.35,
+					deskAlur: "Tidak beraturan",
+				},
+			};
+
+			function buatSVGBiji(idx) {
+				const v = KOPI_VISUAL[idx];
+				const w = 110, h = 90;
+
+				// Dimensi biji sesuai jenis
+				let rx, ry;
+				if (v.bentuk === "oval") { rx = 28 * v.ukuran; ry = 38 * v.ukuran; }
+				else if (v.bentuk === "bulat") { rx = 30 * v.ukuran; ry = 30 * v.ukuran; }
+				else { rx = 22 * v.ukuran; ry = 42 * v.ukuran; } // lonjong
+
+				const cx = w / 2, cy = h / 2;
+
+				// Alur tengah sesuai jenis
+				let alurPath = "";
+				if (v.alur === "S") {
+					alurPath = `<path d="M${cx} ${cy - ry * 0.6} Q${cx + 10} ${cy - ry * 0.2} ${cx} ${cy} Q${cx - 10} ${cy + ry * 0.2} ${cx} ${cy + ry * 0.6}"
+						stroke="rgba(0,0,0,0.35)" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+				} else if (v.alur === "lurus") {
+					alurPath = `<line x1="${cx}" y1="${cy - ry * 0.6}" x2="${cx}" y2="${cy + ry * 0.6}"
+						stroke="rgba(0,0,0,0.3)" stroke-width="2" stroke-linecap="round"/>`;
+				} else {
+					alurPath = `<path d="M${cx - 4} ${cy - ry * 0.5} Q${cx + 8} ${cy - ry * 0.15} ${cx - 3} ${cy + ry * 0.1} Q${cx + 6} ${cy + ry * 0.35} ${cx - 2} ${cy + ry * 0.55}"
+						stroke="rgba(0,0,0,0.3)" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+				}
+
+				return `
+				<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">
+					<defs>
+						<radialGradient id="bijig${idx}" cx="38%" cy="35%" r="60%">
+							<stop offset="0%" stop-color="${v.warnaTerang}"/>
+							<stop offset="100%" stop-color="${v.warna}"/>
+						</radialGradient>
+						<filter id="shadow${idx}">
+							<feDropShadow dx="2" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.35)"/>
+						</filter>
+					</defs>
+					<!-- Biji utama -->
+					<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}"
+						fill="url(#bijig${idx})" filter="url(#shadow${idx})"/>
+					<!-- Highlight -->
+					<ellipse cx="${cx - rx * 0.25}" cy="${cy - ry * 0.25}" rx="${rx * 0.3}" ry="${ry * 0.2}"
+						fill="rgba(255,255,255,0.22)" transform="rotate(-20,${cx},${cy})"/>
+					<!-- Alur tengah -->
+					${alurPath}
+				</svg>`;
+			}
+
+			function showKopiInfo(i) {
+				const cf = COFFEES[i];
+				const d = cf.info;
+				const v = KOPI_VISUAL[i];
+
+				const svgBiji = buatSVGBiji(i);
+				const warnaNama = i === 0 ? "#ff8888" : i === 1 ? "#d4956a" : "#f5c518";
+
+				const html = `
+					<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+						<div style="
+							background:rgba(0,0,0,0.08);
+							border-radius:12px;
+							padding:4px 8px;
+							display:flex;
+							align-items:center;
+							justify-content:center;
+						">${svgBiji}</div>
+						<div style="flex:1;">
+							<div style="font-family:'Nunito';font-size:15px;font-weight:900;color:${warnaNama};margin-bottom:2px;">
+								${cf.name}
+							</div>
+							<div style="font-family:'Nunito Sans';font-size:10px;color:#888;font-style:italic;margin-bottom:4px;">
+								${d.ilmiah}
+							</div>
+							<div style="font-family:'Nunito Sans';font-size:11px;color:#5a3200;line-height:1.5;">
+								📐 Biji: <b>${d.bentukBiji.split(',')[0]}</b><br>
+								〰️ Alur: <b>${v.deskAlur}</b>
+							</div>
+						</div>
+					</div>
+					<div style="
+						background:rgba(0,0,0,0.05);
+						border-radius:10px;
+						padding:7px 10px;
+						font-family:'Nunito Sans';
+						font-size:11px;
+						color:#4a2800;
+						line-height:1.7;
+					">
+						🏔 <b>Lahan:</b> ${cf.label} &nbsp;|&nbsp; 🌡 <b>Suhu:</b> ${d.suhu}<br>
+						☕ <b>Kafein:</b> ${d.kafein.split('(')[0].trim()}<br>
+						👅 <b>Rasa:</b> ${d.rasa.split(':').pop().trim().split(',').slice(0,2).join(', ')}
+					</div>
+					<div style="
+						margin-top:7px;
+						font-family:'Nunito Sans';
+						font-size:10px;
+						color:#888;
+						text-align:right;
+					">Ketuk ℹ️ untuk info lengkap</div>
+				`;
+
+				if (maskotTO) clearTimeout(maskotTO);
+				showMaskot(`${i === 0 ? "🫘" : i === 1 ? "☕" : "🌿"} Beralih ke ${cf.name}`, html, 6000);
 			}
 
 			// ─── CANVAS HIT TEST ─────────────────────────────────────────
