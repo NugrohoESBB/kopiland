@@ -2317,7 +2317,7 @@
 					label: "Dataran Tinggi",
 					labelColor: "#ffffff",
 					info: {
-						foto: "assets/img/kopi-arabika.jpg",
+						foto: "assets/img/kopi-arabika.webp",
 						fotoAlt: "Biji Kopi Arabika",
 						ilmiah: "Coffea arabica",
 						// syarat tumbuh
@@ -2362,7 +2362,7 @@
 					label: "Dataran Rendah",
 					labelColor: "#ffffff",
 					info: {
-						foto: "assets/img/kopi-robusta.jpg",
+						foto: "assets/img/kopi-robusta.webp",
 						fotoAlt: "Biji Kopi Robusta",
 						ilmiah: "Coffea canephora",
 						// syarat tumbuh
@@ -2407,7 +2407,7 @@
 					label: "Lahan Gambut",
 					labelColor: "#ffffff",
 					info: {
-						foto: "assets/img/kopi-liberika.jpg",
+						foto: "assets/img/kopi-liberika.webp",
 						fotoAlt: "Biji Kopi Liberika",
 						ilmiah: "Coffea liberica",
 						// syarat tumbuh
@@ -3168,7 +3168,8 @@
 
 			// ─── INFO KOPI SAAT GANTI LAHAN ───────────────────────────────
 			const KOPI_VISUAL = {
-				0: { // Arabika
+				0: {
+					// Arabika
 					warna: "#c0392b",
 					warnaTerang: "#e74c3c",
 					bentuk: "oval",
@@ -3176,7 +3177,8 @@
 					ukuran: 1.0,
 					deskAlur: "Berkelok ≈ huruf S",
 				},
-				1: { // Robusta
+				1: {
+					// Robusta
 					warna: "#7b3f00",
 					warnaTerang: "#a0522d",
 					bentuk: "bulat",
@@ -3184,7 +3186,8 @@
 					ukuran: 0.85,
 					deskAlur: "Lurus / garis tunggal",
 				},
-				2: { // Liberika
+				2: {
+					// Liberika
 					warna: "#b8860b",
 					warnaTerang: "#daa520",
 					bentuk: "lonjong",
@@ -3196,15 +3199,24 @@
 
 			function buatSVGBiji(idx) {
 				const v = KOPI_VISUAL[idx];
-				const w = 110, h = 90;
+				const w = 110,
+					h = 90;
 
 				// Dimensi biji sesuai jenis
 				let rx, ry;
-				if (v.bentuk === "oval") { rx = 28 * v.ukuran; ry = 38 * v.ukuran; }
-				else if (v.bentuk === "bulat") { rx = 30 * v.ukuran; ry = 30 * v.ukuran; }
-				else { rx = 22 * v.ukuran; ry = 42 * v.ukuran; } // lonjong
+				if (v.bentuk === "oval") {
+					rx = 28 * v.ukuran;
+					ry = 38 * v.ukuran;
+				} else if (v.bentuk === "bulat") {
+					rx = 30 * v.ukuran;
+					ry = 30 * v.ukuran;
+				} else {
+					rx = 22 * v.ukuran;
+					ry = 42 * v.ukuran;
+				} // lonjong
 
-				const cx = w / 2, cy = h / 2;
+				const cx = w / 2,
+					cy = h / 2;
 
 				// Alur tengah sesuai jenis
 				let alurPath = "";
@@ -3267,7 +3279,7 @@
 								${d.ilmiah}
 							</div>
 							<div style="font-family:'Nunito Sans';font-size:11px;color:#5a3200;line-height:1.5;">
-								📐 Biji: <b>${d.bentukBiji.split(',')[0]}</b><br>
+								📐 Biji: <b>${d.bentukBiji.split(",")[0]}</b><br>
 								〰️ Alur: <b>${v.deskAlur}</b>
 							</div>
 						</div>
@@ -3282,8 +3294,8 @@
 						line-height:1.7;
 					">
 						🏔 <b>Lahan:</b> ${cf.label} &nbsp;|&nbsp; 🌡 <b>Suhu:</b> ${d.suhu}<br>
-						☕ <b>Kafein:</b> ${d.kafein.split('(')[0].trim()}<br>
-						👅 <b>Rasa:</b> ${d.rasa.split(':').pop().trim().split(',').slice(0,2).join(', ')}
+						☕ <b>Kafein:</b> ${d.kafein.split("(")[0].trim()}<br>
+						👅 <b>Rasa:</b> ${d.rasa.split(":").pop().trim().split(",").slice(0, 2).join(", ")}
 					</div>
 					<div style="
 						margin-top:7px;
@@ -3871,6 +3883,11 @@
 			let maskotTO = null;
 
 			function showMaskot(label, html, duration = 5000, showClose = false) {
+				// Jangan tampilkan maskot/bubble kalau panel kuis sedang terbuka
+				if (document.getElementById("quizpanel").classList.contains("open")) {
+					return;
+				}
+
 				const wrap = document.getElementById("maskot-wrap");
 				const bubble = document.getElementById("maskot-bubble");
 				const lbl = document.getElementById("bubble-label");
@@ -4333,6 +4350,7 @@
 				sfxClick();
 				document.getElementById("quizpanel").classList.add("open");
 				document.getElementById("swipe-hint").style.display = "none";
+				hideMaskot();
 				if (!quizActive) showLevelSelect();
 			}
 
