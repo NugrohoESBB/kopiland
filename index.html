@@ -1648,6 +1648,161 @@
 				margin-top: 1px;
 			}
 
+			/* Quest button */
+			#questbtn {
+				position: absolute;
+				top: 114px;
+				right: 16px;
+				width: 38px;
+				height: 38px;
+				background: rgba(255, 255, 255, 0.92);
+				border: none;
+				border-radius: 50%;
+				font-size: 18px;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+				pointer-events: all;
+				z-index: 60;
+				transition: transform 0.15s;
+			}
+			#questbtn:active {
+				transform: scale(0.9);
+			}
+			#quest-badge {
+				position: absolute;
+				top: -4px;
+				right: -4px;
+				min-width: 18px;
+				height: 18px;
+				background: #ff3333;
+				border: 2px solid #fff;
+				border-radius: 10px;
+				font-family: "Nunito";
+				font-size: 10px;
+				font-weight: 900;
+				color: #fff;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 0 3px;
+			}
+			#quest-badge.hide {
+				display: none;
+			}
+
+			/* Quest panel */
+			#questpanel {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba(20, 8, 0, 0.88);
+				display: none;
+				z-index: 320;
+				overflow-y: auto;
+				padding: 16px 14px 30px;
+				pointer-events: all;
+			}
+			#questpanel.open {
+				display: block;
+			}
+			#quest-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				margin-top: 8px;
+				margin-bottom: 4px;
+			}
+			#quest-title {
+				font-family: "Nunito";
+				font-size: 19px;
+				font-weight: 900;
+				color: #ffd700;
+			}
+			#quest-close {
+				background: rgba(255, 255, 255, 0.15);
+				border: none;
+				border-radius: 50%;
+				width: 34px;
+				height: 34px;
+				color: #fff;
+				font-size: 18px;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				font-family: "Nunito";
+				font-weight: 900;
+			}
+			#quest-subtitle {
+				font-family: "Nunito Sans";
+				font-size: 12px;
+				color: #ffcc88;
+				font-style: italic;
+				margin-bottom: 14px;
+			}
+			.quest-card {
+				background: rgba(255, 248, 220, 0.08);
+				border: 1.5px solid rgba(255, 200, 80, 0.25);
+				border-radius: 16px;
+				padding: 14px;
+				margin-bottom: 10px;
+				transition: all 0.2s;
+			}
+			.quest-card.q-done {
+				border-color: rgba(74, 170, 32, 0.5);
+				background: rgba(74, 170, 32, 0.1);
+			}
+			.quest-card-top {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				margin-bottom: 8px;
+			}
+			.quest-card-icon {
+				font-size: 24px;
+			}
+			.quest-card-label {
+				font-family: "Nunito";
+				font-size: 13px;
+				font-weight: 800;
+				color: #fff;
+				flex: 1;
+			}
+			.quest-card-check {
+				font-size: 18px;
+				color: #4aaa20;
+			}
+			.quest-prog-bar {
+				height: 8px;
+				background: rgba(255, 255, 255, 0.12);
+				border-radius: 4px;
+				overflow: hidden;
+			}
+			.quest-prog-fill {
+				height: 100%;
+				background: linear-gradient(90deg, #f5c518, #e8a030);
+				border-radius: 4px;
+				transition: width 0.3s;
+			}
+			.quest-prog-label {
+				font-family: "Nunito Sans";
+				font-size: 11px;
+				color: rgba(255, 255, 255, 0.6);
+				text-align: right;
+				margin-top: 4px;
+			}
+			.quest-reward {
+				font-family: "Nunito Sans";
+				font-size: 11px;
+				color: #ffd700;
+				margin-top: 4px;
+			}
+
 			/* Toggle switch */
 			.toggle {
 				position: relative;
@@ -2085,6 +2240,12 @@
 				<div id="weatherbar"><span id="weather-txt">⛈ Hujan Lebat</span><span id="growmod-txt" style="color: #2d8a2d">×1.4 tumbuh</span></div>
 				<div id="daybar"><div id="daybarfill" style="width: 0%"></div></div>
 
+				<!-- Quest button + badge -->
+				<button id="questbtn" onclick="openQuestPanel()">
+					<span id="questbtn-icon">📜</span>
+					<span id="quest-badge">0</span>
+				</button>
+
 				<!-- Maskot karakter -->
 				<div id="maskot-wrap">
 					<img id="maskot-img" src="assets/img/char_game.png" alt="Maskot KopiLand" />
@@ -2158,6 +2319,16 @@
 						<div class="info-section-title">💡 Tips Budidaya</div>
 						<div class="info-tips" id="i-tips">-</div>
 					</div>
+				</div>
+
+				<!-- Quest Panel -->
+				<div id="questpanel">
+					<div id="quest-header">
+						<div id="quest-title">📜 Daftar Quest</div>
+						<button id="quest-close" onclick="closeQuestPanel()">✕</button>
+					</div>
+					<div id="quest-subtitle">Selesaikan quest untuk dapat bonus poin!</div>
+					<div id="quest-list"></div>
 				</div>
 
 				<!-- Settings Panel -->
@@ -3121,6 +3292,7 @@
 					setTimeout(() => (p.shakeAnim = 0), 400);
 					showToast("Tanah berhasil digali! ⛏");
 					sfxDig();
+					incrementQuest("dig");
 				} else if (action === "seed") {
 					if (p.state !== ST.DUG) {
 						showToast("Gali tanah dulu!");
@@ -3135,6 +3307,7 @@
 					setTimeout(() => (p.shakeAnim = 0), 500);
 					showToast(`Benih ${COFFEES[selectedCoffee].name} ditanam! 🌱`);
 					sfxSeed();
+					incrementQuest("plant", 1, selectedCoffee);
 				} else if (action === "water") {
 					if (p.state < ST.SEEDED || p.state >= ST.RIPE) {
 						showToast("Tidak ada tanaman di sini!");
@@ -3151,6 +3324,7 @@
 					setTimeout(() => (p.shakeAnim = 0), 300);
 					showToast("Tanaman disiram! 💧");
 					sfxWater();
+					incrementQuest("water", 1, p.coffeeType);
 					updateSiramReminder();
 
 					if (!waitGuideShown) {
@@ -3174,6 +3348,7 @@
 					showToast(`Panen berhasil! +${gained} poin ☕`);
 					sfxHarvest();
 					updateUI();
+					incrementQuest("harvest", 1, p.coffeeType);
 				}
 				closePopup();
 			}
@@ -3277,10 +3452,13 @@
 
 			let harvestQueue = [];
 			let harvestIdx = 0;
+			let harvestNotifActive = false;
+			let harvestNotifTO = null;
 
 			function showHarvestNotif(queue) {
 				harvestQueue = queue;
 				harvestIdx = 0;
+				harvestNotifActive = true;
 				renderHarvestNotif();
 			}
 
@@ -3311,19 +3489,39 @@
 		Kopi <b>${cf.name}</b> di <b>Baris ${row + 1}, Kolom ${col + 1}</b> sudah siap dipanen! 🌿<br><br>
 		Ketuk petak yang berkilau, lalu pilih <b>Panen 🌿</b>.
 		${total > 1 ? `<div style="margin-top:6px;font-size:11px;color:#888;">(${harvestIdx + 1}/${total})</div>` : ""}
+		<div style="margin-top:8px;text-align:right;">
+			<button onclick="skipHarvestNotif()" style="
+				font-family:'Nunito';font-size:11px;font-weight:900;
+				background:rgba(0,0,0,0.08);color:#7a4400;
+				border:none;border-radius:12px;padding:6px 12px;cursor:pointer;">
+				Lewati ⏭
+			</button>
+		</div>
 	`;
 
-				showMaskot("✨ Siap Panen!", html, 4500);
+				showMaskot("✨ Siap Panen!", html, 0);
 
 				harvestIdx++;
-				setTimeout(() => {
+				harvestNotifTO = setTimeout(() => {
 					if (harvestIdx < harvestQueue.length) renderHarvestNotif();
 					else closeHarvestSpot();
 				}, 4800);
 			}
 
+			function skipHarvestNotif() {
+				sfxClick();
+				if (harvestNotifTO) {
+					clearTimeout(harvestNotifTO);
+					harvestNotifTO = null;
+				}
+				harvestIdx = harvestQueue.length; // anggap semua antrian sudah ditampilkan
+				hideMaskot();
+				closeHarvestSpot();
+			}
+
 			function closeHarvestSpot() {
 				document.getElementById("harvest-cutout").style.display = "none";
+				harvestNotifActive = false;
 			}
 
 			// ─── INFO KOPI SAAT GANTI LAHAN ───────────────────────────────
@@ -3884,6 +4082,11 @@
 						true, // tampilkan tombol "Oke!"
 					);
 				}, 400);
+
+				createQuestSet();
+				setTimeout(() => {
+					announceNewQuests();
+				}, 500);
 			}
 
 			// ─── SPLASH SCREEN MULTI-STEP ────────────────────────────────
@@ -4223,6 +4426,145 @@
 				}
 			}
 
+			// ─── QUEST SYSTEM ──────────────────────────────────────────────
+			let quests = [];
+			let questIdCounter = 0;
+			let questPanelOpen = false;
+			const QUEST_SET_SIZE = 4; // jumlah quest aktif per sesi, bebas diubah
+
+			// Pool semua kemungkinan quest. "coffeeType: null" = berlaku untuk semua jenis kopi.
+			const QUEST_POOL = [
+				{ type: "dig", coffeeType: null, icon: "⛏", min: 2, max: 5, rewardMin: 10, rewardMax: 20, label: (n) => `Gali ${n} petak tanah` },
+				{ type: "plant", coffeeType: null, icon: "🌱", min: 2, max: 5, rewardMin: 10, rewardMax: 20, label: (n) => `Tanam ${n} benih kopi (jenis apa saja)` },
+				{ type: "plant", coffeeType: 0, icon: "🫘", min: 1, max: 3, rewardMin: 15, rewardMax: 25, label: (n) => `Tanam ${n} benih Arabika` },
+				{ type: "plant", coffeeType: 1, icon: "☕", min: 1, max: 3, rewardMin: 15, rewardMax: 25, label: (n) => `Tanam ${n} benih Robusta` },
+				{ type: "plant", coffeeType: 2, icon: "🌿", min: 1, max: 3, rewardMin: 15, rewardMax: 25, label: (n) => `Tanam ${n} benih Liberika` },
+				{ type: "water", coffeeType: null, icon: "💧", min: 3, max: 6, rewardMin: 10, rewardMax: 18, label: (n) => `Siram ${n} tanaman` },
+				{ type: "harvest", coffeeType: null, icon: "🌿", min: 1, max: 3, rewardMin: 20, rewardMax: 30, label: (n) => `Panen ${n} kopi (jenis apa saja)` },
+				{ type: "harvest", coffeeType: 0, icon: "🫘", min: 1, max: 2, rewardMin: 25, rewardMax: 35, label: (n) => `Panen ${n} kopi Arabika` },
+				{ type: "harvest", coffeeType: 1, icon: "☕", min: 1, max: 2, rewardMin: 25, rewardMax: 35, label: (n) => `Panen ${n} kopi Robusta` },
+				{ type: "harvest", coffeeType: 2, icon: "🌿", min: 1, max: 2, rewardMin: 25, rewardMax: 35, label: (n) => `Panen ${n} kopi Liberika` },
+				{ type: "quiz", coffeeType: null, icon: "📝", min: 1, max: 1, rewardMin: 20, rewardMax: 20, label: () => `Selesaikan 1 kuis` },
+			];
+
+			function pickRandomQuests(n = QUEST_SET_SIZE) {
+				const pool = shuffleArray(QUEST_POOL); // reuse fungsi shuffleArray yang sudah ada di sistem kuis
+				const chosen = pool.slice(0, n);
+				return chosen.map((t) => {
+					const target = Math.floor(Math.random() * (t.max - t.min + 1)) + t.min;
+					const reward = Math.floor(Math.random() * (t.rewardMax - t.rewardMin + 1)) + t.rewardMin;
+					return {
+						id: questIdCounter++,
+						type: t.type,
+						coffeeType: t.coffeeType,
+						icon: t.icon,
+						label: t.label(target),
+						target,
+						progress: 0,
+						reward,
+						done: false,
+					};
+				});
+			}
+
+			function createQuestSet() {
+				questIdCounter = 0;
+				quests = pickRandomQuests();
+				updateQuestBadge();
+			}
+
+			function refreshQuestsIfAllDone() {
+				if (quests.length > 0 && quests.every((q) => q.done)) {
+					setTimeout(() => {
+						quests = pickRandomQuests();
+						updateQuestBadge();
+						if (questPanelOpen) renderQuestList();
+						announceNewQuests();
+					}, 2500); // delay sedikit biar notif quest terakhir kebaca dulu
+				}
+			}
+
+			function incrementQuest(type, amount = 1, coffeeType = null) {
+				let anyJustDone = null;
+				quests.forEach((q) => {
+					const cocokJenis = q.coffeeType === null || q.coffeeType === coffeeType;
+					if (q.type === type && !q.done && cocokJenis) {
+						q.progress = Math.min(q.target, q.progress + amount);
+						if (q.progress >= q.target) {
+							q.done = true;
+							anyJustDone = q;
+						}
+					}
+				});
+				updateQuestBadge();
+				if (questPanelOpen) renderQuestList();
+				if (anyJustDone) onQuestCompleted(anyJustDone);
+				refreshQuestsIfAllDone(); // ⬅️ tambahan: cek apakah semua quest sudah kelar
+			}
+
+			function onQuestCompleted(q) {
+				score += q.reward;
+				updateUI();
+				spawnScorePop(CW / 2, 200, `Quest selesai! +${q.reward} ☕`, "#ffd700");
+				showMaskot("🎉 Quest Selesai!", `Kamu menyelesaikan quest <b>${q.label}</b>!<br>Dapat bonus <b>+${q.reward} poin</b> ☕`, 4500);
+			}
+
+			function updateQuestBadge() {
+				const sisa = quests.filter((q) => !q.done).length;
+				const badge = document.getElementById("quest-badge");
+				badge.textContent = sisa;
+				badge.classList.toggle("hide", sisa === 0);
+			}
+
+			function openQuestPanel() {
+				sfxClick();
+				questPanelOpen = true;
+				document.getElementById("questpanel").classList.add("open");
+				renderQuestList();
+			}
+
+			function closeQuestPanel() {
+				sfxClick();
+				questPanelOpen = false;
+				document.getElementById("questpanel").classList.remove("open");
+			}
+
+			function renderQuestList() {
+				const list = document.getElementById("quest-list");
+				list.innerHTML = quests
+					.map((q) => {
+						const pct = Math.min(100, (q.progress / q.target) * 100);
+						return `
+			<div class="quest-card ${q.done ? "q-done" : ""}">
+				<div class="quest-card-top">
+					<div class="quest-card-icon">${q.icon}</div>
+					<div class="quest-card-label">${q.label}</div>
+					${q.done ? '<div class="quest-card-check">✅</div>' : ""}
+				</div>
+				<div class="quest-prog-bar"><div class="quest-prog-fill" style="width:${pct}%"></div></div>
+				<div class="quest-prog-label">${q.progress} / ${q.target}</div>
+				<div class="quest-reward">🎁 Reward: +${q.reward} poin</div>
+			</div>
+		`;
+					})
+					.join("");
+			}
+
+			function announceNewQuests() {
+				const html = `
+		Ada <b>${quests.length} quest</b> baru untukmu hari ini!<br><br>
+		⛏ Gali, 🌱 Tanam, 🌿 Panen, dan 📝 Kuis — selesaikan semua untuk dapat bonus poin.<br><br>
+		<button onclick="closeMaskot(); openQuestPanel();" style="
+			font-family:'Nunito';font-size:12px;font-weight:900;
+			background:linear-gradient(135deg,#f5c518,#e8a030);color:#5a2e00;
+			border:none;border-radius:14px;padding:8px 16px;cursor:pointer;
+			margin-top:6px;">
+			📜 Lihat Quest
+		</button>
+	`;
+				showMaskot("📜 Quest Baru!", html, 0, true);
+			}
+
 			let toastTO = null;
 			// ─── INTRO CHARACTER SCREEN ──────────────────────────────
 			const INTRO_STEPS = [
@@ -4319,11 +4661,11 @@
 				const dt = (ts - last) / 1000;
 				last = ts;
 				animTime += dt;
-				if (gameStarted && !tutActive) {
+				if (gameStarted && !tutActive && !harvestNotifActive) {
 					dayTimer += dt;
 				}
 
-				if (gameStarted && !tutActive && dayTimer >= DAY_SEC) {
+				if (gameStarted && !tutActive && !harvestNotifActive && dayTimer >= DAY_SEC) {
 					dayTimer -= DAY_SEC;
 					advanceDay();
 				}
@@ -4851,6 +5193,7 @@
 
 				document.getElementById("quiz-result").classList.add("show");
 				quizActive = false;
+				incrementQuest("quiz");
 			}
 
 			// ─── SWIPE GESTURE ────────────────────────────────────────────
