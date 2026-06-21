@@ -908,6 +908,17 @@
 				transition: all 0.4s ease;
 			}
 
+			#harvest-cutout {
+				position: absolute;
+				background: transparent;
+				box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+				border-radius: 16px;
+				pointer-events: none; /* biar gameplay tetap bisa disentuh, nggak diblokir overlay */
+				z-index: 341;
+				display: none;
+				transition: all 0.4s ease;
+			}
+
 			/* ── MASKOT KARAKTER ── */
 			#maskot-wrap {
 				position: absolute;
@@ -2220,6 +2231,9 @@
 					</div>
 				</div>
 
+				<!-- Spotlight notifikasi siap panen -->
+				<div id="harvest-cutout"></div>
+
 				<div id="coffeesel">
 					<div class="cbtn sel" onclick="selCoffee(0)">
 						<span class="cicon">🫘</span>
@@ -3044,10 +3058,12 @@
 				weather = pickWeather(SEASONS[seasonIdx]);
 				initWeatherPts();
 
+				const readyHarvestQueue = []; // semua petak siap panen yang belum dipanen (baru ATAU lama)
+
 				// Grow plants
-				for (let lahan of allPlots) {
+				allPlots.forEach((lahan, landIdx) => {
 					for (let i = 0; i < 9; i++) {
-						const p = plots[i];
+						const p = lahan[i]; // ⬅️ sebelumnya "plots[i]" — bug: lahan lain tidak ikut tumbuh
 						if (p.state >= ST.SEEDED && p.state < ST.RIPE) {
 							const coffee = COFFEES[p.coffeeType];
 							const w = weather;
@@ -3066,11 +3082,26 @@
 							}
 						}
 					}
-				}
+				});
+
+				// ⬅️ TAMBAHAN: setiap hari, kumpulkan SEMUA petak yang statusnya RIPE,
+				// baik yang baru jadi RIPE hari ini maupun yang sudah RIPE dari hari sebelumnya
+				// tapi belum dipanen oleh player.
+				allPlots.forEach((lahan, landIdx) => {
+					lahan.forEach((p, i) => {
+						if (p.state === ST.RIPE) {
+							readyHarvestQueue.push({ landIdx, plotIdx: i });
+						}
+					});
+				});
 
 				updateUI();
 				showNarasi();
 				updateSiramReminder();
+
+				if (readyHarvestQueue.length > 0) {
+					setTimeout(() => showHarvestNotif(readyHarvestQueue), 6000); // tunggu narasi musim selesai dulu
+				}
 			}
 
 			function doAction(plotI, action) {
@@ -3121,6 +3152,11 @@
 					showToast("Tanaman disiram! 💧");
 					sfxWater();
 					updateSiramReminder();
+
+					if (!waitGuideShown) {
+						waitGuideShown = true;
+						setTimeout(() => startWaitGuide(), 700); // delay biar popup & toast kelihatan dulu
+					}
 				} else if (action === "harvest") {
 					if (p.state !== ST.RIPE) {
 						showToast("Belum siap panen!");
@@ -3131,8 +3167,8 @@
 					score += gained;
 					spawnParticles(sx, sy, "#ffd700", 18, 40);
 					spawnScorePop(sx, sy - 30, `+${gained} ☕`, "#ffd700");
-					p.state = ST.DUG;
-					p.growth = 0;
+					p.state = ST.MATURE;
+					p.growth = 65;
 					p.watered = false;
 					p.bloomAnim = 0;
 					showToast(`Panen berhasil! +${gained} poin ☕`);
@@ -3206,6 +3242,88 @@
 				lbl.style.color = cf.labelColor;
 				updateSiramReminder();
 				showKopiInfo(i);
+			}
+
+			// ─── NOTIFIKASI SIAP PANEN (spotlight + maskot) ───────────────
+			function selCoffeeSilent(i) {
+				// sama seperti selCoffee(), tapi tanpa memicu showKopiInfo (biar nggak menimpa pesan panen)
+				selectedCoffee = i;
+				plots = allPlots[i];
+				selectedPlot = -1;
+				closePopup();
+				document.querySelectorAll(".cbtn").forEach((el, j) => el.classList.toggle("sel", j === i));
+				const cf = COFFEES[i];
+				const lbl = document.getElementById("soil-label");
+				lbl.textContent = `🌱 Lahan: ${cf.label}`;
+				lbl.style.color = cf.labelColor;
+			}
+
+			function getPlotScreenBox(col, row) {
+				const { x, y } = isoToScreen(col, row);
+				const rect = document.getElementById("wrap").getBoundingClientRect();
+				const scaleX = rect.width / CW,
+					scaleY = rect.height / CH;
+
+				const boxW = ISO_TILE_W + 20;
+				const boxH = ISO_TILE_H + 90; // termasuk tinggi pohon di atas petak
+
+				return {
+					left: (x - boxW / 2) * scaleX,
+					top: (y - 70) * scaleY,
+					width: boxW * scaleX,
+					height: boxH * scaleY,
+				};
+			}
+
+			let harvestQueue = [];
+			let harvestIdx = 0;
+
+			function showHarvestNotif(queue) {
+				harvestQueue = queue;
+				harvestIdx = 0;
+				renderHarvestNotif();
+			}
+
+			function renderHarvestNotif() {
+				if (harvestIdx >= harvestQueue.length) {
+					closeHarvestSpot();
+					return;
+				}
+
+				const { landIdx, plotIdx } = harvestQueue[harvestIdx];
+				const col = plotIdx % 3,
+					row = Math.floor(plotIdx / 3);
+
+				selCoffeeSilent(landIdx); // pindah otomatis ke lahan yang dimaksud biar petaknya tampil di canvas
+
+				const box = getPlotScreenBox(col, row);
+				const cutout = document.getElementById("harvest-cutout");
+				cutout.style.left = box.left + "px";
+				cutout.style.top = box.top + "px";
+				cutout.style.width = box.width + "px";
+				cutout.style.height = box.height + "px";
+				cutout.style.display = "block";
+
+				const cf = COFFEES[landIdx];
+				const total = harvestQueue.length;
+
+				const html = `
+		Kopi <b>${cf.name}</b> di <b>Baris ${row + 1}, Kolom ${col + 1}</b> sudah siap dipanen! 🌿<br><br>
+		Ketuk petak yang berkilau, lalu pilih <b>Panen 🌿</b>.
+		${total > 1 ? `<div style="margin-top:6px;font-size:11px;color:#888;">(${harvestIdx + 1}/${total})</div>` : ""}
+	`;
+
+				showMaskot("✨ Siap Panen!", html, 4500);
+
+				harvestIdx++;
+				setTimeout(() => {
+					if (harvestIdx < harvestQueue.length) renderHarvestNotif();
+					else closeHarvestSpot();
+				}, 4800);
+			}
+
+			function closeHarvestSpot() {
+				document.getElementById("harvest-cutout").style.display = "none";
 			}
 
 			// ─── INFO KOPI SAAT GANTI LAHAN ───────────────────────────────
@@ -3573,22 +3691,87 @@
 				},
 			];
 
+			const WAIT_STEPS = [
+				{
+					title: "💧 Tanaman Sudah Disiram!",
+					desc: "Sekarang waktunya menunggu sampai kopinya tumbuh dan <b>siap panen</b>. Sambil menunggu, ada beberapa hal seru yang bisa kamu lakukan!",
+					highlight: null,
+					bubblePos: "center",
+					arrowDir: null,
+				},
+				{
+					title: "☕ Pelajari Info Kopi",
+					desc: "Ketuk <b>ℹ️</b> di salah satu jenis kopi untuk belajar syarat tumbuh, ciri biji, dan tips budidayanya.",
+					highlight: "coffeesel",
+					bubblePos: "above-highlight",
+					arrowDir: "down",
+				},
+				{
+					title: "🗓 Cek Info Musim",
+					desc: "Ketuk badge musim di atas untuk lihat <b>perkiraan cuaca</b> dan pengaruhnya ke pertumbuhan tanamanmu.",
+					highlight: "seasonbadge",
+					bubblePos: "below-highlight",
+					arrowDir: "up",
+				},
+				{
+					title: "📝 Uji Pemahamanmu!",
+					desc: "Geser dari kanan atau ketuk tombol <b>KUIS</b> untuk main kuis seputar budidaya kopi sambil menunggu panen.",
+					highlight: "swipe-hint",
+					bubblePos: "above-highlight",
+					arrowDir: "down",
+				},
+				{
+					title: "🌱 Tanam di Lahan Lain",
+					desc: "Lahan tiap jenis kopi terpisah! Selagi menunggu, kamu bisa pindah ke jenis kopi lain dan tanam di petak yang masih kosong.",
+					highlight: "coffeesel",
+					bubblePos: "above-highlight",
+					arrowDir: "down",
+				},
+			];
+
+			let waitGuideShown = false; // hanya tampil sekali per sesi (lihat catatan di bawah kalau mau diubah)
+
+			function hasEmptySpaceElsewhere(excludeIdx) {
+				return allPlots.some((lahan, i) => i !== excludeIdx && lahan.some((p) => p.state === ST.EMPTY));
+			}
+
+			function startWaitGuide() {
+				let steps = WAIT_STEPS;
+				// kalau lahan lain semua penuh, hilangkan step terakhir ("Tanam di Lahan Lain")
+				if (!hasEmptySpaceElsewhere(selectedCoffee)) {
+					steps = WAIT_STEPS.slice(0, -1);
+				}
+				startTutorial(steps, () => {
+					showToast("Selamat menunggu! 🌱");
+				});
+			}
+
+			const BUBBLE_MAX_W = 300; // samakan dengan max-width #tut-bubble di CSS
+			function clampBubbleLeft(left) {
+				// pastikan bubble selalu fit di dalam wrap (CW = lebar logis game)
+				return Math.min(Math.max(8, left), CW - BUBBLE_MAX_W - 8);
+			}
+
 			let tutStep = 0;
 			let tutActive = false;
+			let activeTutSteps = TUT_STEPS;
+			let onTutFinish = null; // callback dijalankan saat panduan ditutup
 
-			function startTutorial() {
+			function startTutorial(steps = TUT_STEPS, onFinish = null) {
 				tutActive = true;
 				tutStep = 0;
+				activeTutSteps = steps;
+				onTutFinish = onFinish;
 				document.getElementById("tutorial").classList.add("active");
 				// buat dots
 				const dots = document.getElementById("tut-dots");
-				dots.innerHTML = TUT_STEPS.map((_, i) => `<div class="tut-dot" id="tut-dot-${i}"></div>`).join("");
+				dots.innerHTML = activeTutSteps.map((_, i) => `<div class="tut-dot" id="tut-dot-${i}"></div>`).join("");
 				renderTutStep();
 			}
 
 			function renderTutStep() {
-				const step = TUT_STEPS[tutStep];
-				const total = TUT_STEPS.length;
+				const step = activeTutSteps[tutStep];
+				const total = activeTutSteps.length;
 
 				// Badge & konten
 				document.getElementById("tut-badge").textContent = `Langkah ${tutStep + 1} / ${total}`;
@@ -3638,12 +3821,12 @@
 
 						// Posisi bubble
 						if (step.bubblePos === "above-highlight") {
-							bubble.style.left = Math.max(8, left - 20) + "px";
+							bubble.style.left = clampBubbleLeft(left - 20) + "px";
 							bubble.style.top = top - 170 + "px";
 							bubble.style.bottom = "auto";
 							if (step.arrowDir === "down") bubble.className = "";
 						} else if (step.bubblePos === "below-highlight") {
-							bubble.style.left = Math.max(8, left - 20) + "px";
+							bubble.style.left = clampBubbleLeft(left - 20) + "px";
 							bubble.style.top = top + height + 14 + "px";
 							bubble.style.bottom = "auto";
 							if (step.arrowDir === "up") bubble.className = "arrow-up";
@@ -3671,7 +3854,7 @@
 			function tutNext() {
 				if (!tutActive) return;
 				tutStep++;
-				if (tutStep >= TUT_STEPS.length) {
+				if (tutStep >= activeTutSteps.length) {
 					skipTutorial();
 					return;
 				}
@@ -3681,6 +3864,13 @@
 			function skipTutorial() {
 				tutActive = false;
 				document.getElementById("tutorial").classList.remove("active");
+
+				if (onTutFinish) {
+					const fn = onTutFinish;
+					onTutFinish = null;
+					fn();
+					return;
+				}
 
 				// Maskot muncul kasih panduan awal
 				setTimeout(() => {
@@ -4129,11 +4319,11 @@
 				const dt = (ts - last) / 1000;
 				last = ts;
 				animTime += dt;
-				if (gameStarted) {
+				if (gameStarted && !tutActive) {
 					dayTimer += dt;
 				}
 
-				if (gameStarted && dayTimer >= DAY_SEC) {
+				if (gameStarted && !tutActive && dayTimer >= DAY_SEC) {
 					dayTimer -= DAY_SEC;
 					advanceDay();
 				}
