@@ -489,13 +489,13 @@
 
 			/* Ad Popup */
 			#adpopup {
-				position: absolute;
+				position: fixed;
 				top: 0;
 				left: 0;
 				right: 0;
 				bottom: 0;
 				background: rgba(0, 0, 0, 0.85);
-				z-index: 1000;
+				z-index: 9999; /* harus lebih tinggi dari #wrap & sidebar */
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -2117,6 +2117,14 @@
 		</style>
 	</head>
 	<body>
+		<!-- Ad Popup -->
+		<div id="adpopup">
+			<div id="adpopup-inner">
+				<button id="adpopup-close" onclick="closeAdPopup()">✕</button>
+				<img id="adpopup-img" src="assets/img/Ad-banner.jpeg" alt="Iklan" onclick="onAdClick()" />
+			</div>
+		</div>
+
 		<!-- Sidebar kiri (desktop only) -->
 		<div id="desktop-sidebar-left">
 			<div style="background: rgba(255, 255, 255, 0.05); border: 1.5px solid rgba(245, 197, 24, 0.2); border-radius: 20px; padding: 20px 16px; color: #fff">
@@ -2137,14 +2145,6 @@
 		</div>
 
 		<div id="wrap">
-			<!-- Ad Popup -->
-			<div id="adpopup">
-				<div id="adpopup-inner">
-					<button id="adpopup-close" onclick="closeAdPopup()">✕</button>
-					<img id="adpopup-img" src="assets/img/Ad-banner.jpeg" alt="Iklan" onclick="onAdClick()" />
-				</div>
-			</div>
-
 			<!-- Splash Screen -->
 			<div id="splash">
 				<div class="splash-top-band"></div>
