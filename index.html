@@ -487,6 +487,62 @@
 				margin-top: 2px;
 			}
 
+			/* Ad Popup */
+			#adpopup {
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba(0, 0, 0, 0.75);
+				z-index: 1000;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				padding: 24px;
+				pointer-events: all;
+				transition: opacity 0.3s ease;
+			}
+			#adpopup.hide {
+				opacity: 0;
+				pointer-events: none;
+			}
+			#adpopup-inner {
+				position: relative;
+				width: 100%;
+				max-width: 340px;
+				border-radius: 20px;
+				overflow: hidden;
+				box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+			}
+			#adpopup-img {
+				width: 100%;
+				display: block;
+				border-radius: 20px;
+				cursor: pointer;
+			}
+			#adpopup-close {
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				width: 32px;
+				height: 32px;
+				background: rgba(0, 0, 0, 0.55);
+				border: 2px solid rgba(255, 255, 255, 0.7);
+				border-radius: 50%;
+				color: #fff;
+				font-size: 16px;
+				font-weight: 900;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				z-index: 2;
+			}
+			#adpopup-close:active {
+				transform: scale(0.9);
+			}
+
 			/* Splash Screen */
 			#splash {
 				position: absolute;
@@ -2073,6 +2129,14 @@
 		</div>
 
 		<div id="wrap">
+			<!-- Ad Popup -->
+			<div id="adpopup">
+				<div id="adpopup-inner">
+					<button id="adpopup-close" onclick="closeAdPopup()">✕</button>
+					<img id="adpopup-img" src="assets/img/Ad-banner.jpeg" alt="Iklan" onclick="onAdClick()" />
+				</div>
+			</div>
+
 			<!-- Splash Screen -->
 			<div id="splash">
 				<div class="splash-top-band"></div>
@@ -3514,7 +3578,7 @@
 					clearTimeout(harvestNotifTO);
 					harvestNotifTO = null;
 				}
-				harvestIdx = harvestQueue.length; // anggap semua antrian sudah ditampilkanx
+				harvestIdx = harvestQueue.length; // anggap semua antrian sudah ditampilkan
 				hideMaskot();
 				closeHarvestSpot();
 			}
@@ -5263,6 +5327,20 @@
 					{ passive: true },
 				);
 			})();
+
+			// ─── AD POPUP ────────────────────────────────────────────────
+			function closeAdPopup() {
+				const ad = document.getElementById("adpopup");
+				ad.classList.add("hide");
+				setTimeout(() => {
+					ad.style.display = "none";
+				}, 300);
+			}
+
+			function onAdClick() {
+				// Opsional: kalau mau iklan bisa diklik untuk buka link tertentu
+				// window.open("https://link-tujuan-iklan.com", "_blank");
+			}
 
 			updateUI();
 			requestAnimationFrame(loop);
